@@ -4,8 +4,7 @@ module org.ciclo {
     requires java.sql;
     requires javafx.graphics;
 
-    //opens org.ciclo.model to mysql.connector.java;
-    //exports org.ciclo;
+    opens org.ciclo.model to mysql.connector.java;
     opens org.ciclo to javafx.fxml;
     exports org.ciclo to javafx.graphics;
 
