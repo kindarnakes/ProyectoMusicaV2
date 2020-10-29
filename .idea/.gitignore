@@ -7,4 +7,4 @@
 # Editor-based HTTP Client requests
 /httpRequests/
 /target/*
-dependency-reduced-pom.xml
+/dependency-reduced-pom.xml
