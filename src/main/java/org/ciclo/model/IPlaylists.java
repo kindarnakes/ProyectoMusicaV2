@@ -3,7 +3,7 @@ package org.ciclo.model;
 import java.io.Serializable;
 import java.util.Set;
 
-public interface IReproducionList extends  Comparable<IReproducionList>, Serializable { //Santos
+public interface IPlaylists extends  Comparable<IPlaylists>, Serializable { //Santos
 
     abstract public String getName();
     abstract public Integer getId();

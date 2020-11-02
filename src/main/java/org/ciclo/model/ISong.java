@@ -9,7 +9,7 @@ public interface ISong extends Comparable<ISong>, Serializable { //Agustin
     abstract public String getName();
     abstract public Integer getDuration();
     abstract public IGenre getGenre();
-    abstract public Set<IReproducionList> getLists(); //Lazy
+    abstract public Set<IPlaylists> getLists(); //Lazy
     abstract public IDisc getDisc();
     abstract public Set<IReproduction> getReproductions(); //Lazy
 
