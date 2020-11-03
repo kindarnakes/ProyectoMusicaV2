@@ -3,7 +3,7 @@ package org.ciclo.model;
 import java.io.Serializable;
 import java.util.Set;
 
-public interface ISong extends Comparable<ISong>, Serializable { //Agustin
+public interface ISong extends Comparable<ISong>, Serializable { //Santos
 
     abstract public Integer getId();
     abstract public String getName();
