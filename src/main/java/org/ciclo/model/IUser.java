@@ -10,7 +10,7 @@ public interface IUser extends Comparable<IUser>, Serializable { //Angel
     abstract public String getName();
     abstract public String getPhoto();
     abstract public String getEmail();
-    abstract public Set<IPlaylists> getCrated();  //Lazy
+    abstract public Set<IPlaylists> getCreated();  //Lazy
     abstract public Set<IPlaylists> getSubscribed(); //Lazy
     abstract public Set<IComments> getComments(); //Lazy
     abstract public Set<IReproduction> getReproductions(); //Lazy

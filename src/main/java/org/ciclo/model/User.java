@@ -97,7 +97,7 @@ public class User implements IUser{
      * Created getter
      * @return Set of playlist created
      */
-    public Set<IPlaylists> getCrated() {
+    public Set<IPlaylists> getCreated() {
         return this._created;
     }
 
