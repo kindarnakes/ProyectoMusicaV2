@@ -2,10 +2,13 @@ package org.ciclo.model.connect;
 
 import javax.xml.bind.*;
 import java.io.*;
+import java.sql.DriverManager;
+import java.sql.SQLException;
 
 public class Connection {
     private static final String XML = "UserConf.xml";
     public static UserConnection CONNECTION_DATA = loadConfig();
+    public static String error;
 
     public static UserConnection loadConfig() {
         UserConnection user = null;
@@ -47,8 +50,20 @@ public class Connection {
         }
     }
 
+    static java.sql.Connection getConnect() {
 
+        java.sql.Connection conn = null;
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            conn = DriverManager.getConnection("jdbc:mysql://" + CONNECTION_DATA.get_bd_ip() + ":" + CONNECTION_DATA.get_bd_port()
+                    + "/" + CONNECTION_DATA.get_bd_name() + CONNECTION_DATA.get_timezone(), CONNECTION_DATA.get_user(), CONNECTION_DATA.get_pass());
+            return conn;
+        } catch (SQLException ex) {
+            error = "No se ha podido conectar a la Base de Datos: " + ex;
+        } catch (ClassNotFoundException ex) {
+            error = "No se ha podido iniciar el conector: " + ex;
+        }
 
-
-
+        return conn;
+    }
 }

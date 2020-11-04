@@ -32,14 +32,6 @@ public class Song implements ISong {
      * Song reproduction
      */
 	private Set<IReproduction> Reproductions;
-	
-	
-	
-	
-	
-	
-	
-	
 
 	
 /**
