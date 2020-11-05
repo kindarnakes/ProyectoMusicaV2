@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 29-10-2020 a las 11:01:23
+-- Tiempo de generación: 05-11-2020 a las 10:46:48
 -- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.11
+-- Versión de PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -66,7 +66,7 @@ INSERT INTO `cancion` (`id`, `nombre`, `duracion`, `id_genero`, `id_disco`) VALU
 (3, 'afafasf', 685, 2, 2),
 (4, 'sdgsdgsdgsdg', 785, 1, 4),
 (5, 'fgsghegshfhfdh', 85, 3, 2),
-(6, 'dsgsgsgsdg', 858, 1, 4);
+(6, '19 dias y 500 noches', 858, 1, 4);
 
 -- --------------------------------------------------------
 
@@ -104,6 +104,7 @@ CREATE TABLE `disco` (
   `id` int(11) NOT NULL,
   `nombre` varchar(120) NOT NULL,
   `fecha_publicacion` date NOT NULL,
+  `foto` varchar(255) NOT NULL,
   `id_artista` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -111,11 +112,11 @@ CREATE TABLE `disco` (
 -- Volcado de datos para la tabla `disco`
 --
 
-INSERT INTO `disco` (`id`, `nombre`, `fecha_publicacion`, `id_artista`) VALUES
-(1, '19 dias y 500 noches', '2020-05-21', 1),
-(2, 'Esta boca es mia', '2019-07-12', 1),
-(3, 'Maldito Duende', '2019-07-09', 2),
-(4, 'Tierra', '2019-08-12', 2);
+INSERT INTO `disco` (`id`, `nombre`, `fecha_publicacion`, `foto`, `id_artista`) VALUES
+(1, '19 dias y 500 noches', '2020-05-21', 'http://', 1),
+(2, 'Esta boca es mia', '2019-07-12', 'http://', 1),
+(3, 'Maldito Duende', '2019-07-09', 'http://', 2),
+(4, 'Tierra', '2019-08-12', 'http://', 2);
 
 -- --------------------------------------------------------
 
