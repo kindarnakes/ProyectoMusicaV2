@@ -53,6 +53,7 @@ public class DiscDAO extends Disc {
                 aux.setArtist(artists.get(index));
                 disc.add(aux);
             }
+            rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
@@ -94,17 +95,24 @@ public class DiscDAO extends Disc {
         ) {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
+            List<Artist> artists = ArtistDAO.List_All_Artist();
             while (rs != null && rs.next()) {
-            	Artist art =ArtistDAO.List_Artist_By_Id(rs.getInt("id_artista")).get(0);
+            	
                 Disc aux = new Disc();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
-                aux.setPhoto(rs.getNString("foto"));
-                aux.setArtist(art);
-               
+                boolean find = false;
+                int index = 0;
+                for(int i = 0; i<artists.size() && !find; i++){
+                    if(artists.get(i).getId() == rs.getInt("id_artista")){
+                        find = true;
+                        index = i;
+                    }
+                }
+                aux.setArtist(artists.get(index));
                 disc.add(aux);
-            }
+                }
             rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
