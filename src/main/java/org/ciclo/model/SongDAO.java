@@ -17,6 +17,16 @@ public class SongDAO extends Song {
         super();
     }
 
+    public SongDAO(Song s){
+        this.setId(s.getId());
+        this.setDuration(s.getDuration());
+        this.setName(s.getName());
+        this.setGenre(null);
+        this.setDisc(s.getDisc()); //Pointer to same object
+        this.setList(s.getLists()); //Pointer to same object
+        this.setReproductions(null);
+    }
+
     public static List<Song> listAll() {
         List<Song> songs = new ArrayList<>();
         String sql = "SELECT id, nombre, duracion FROM cancion";

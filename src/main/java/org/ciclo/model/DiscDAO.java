@@ -23,12 +23,22 @@ public class DiscDAO extends Disc {
                 PreparedStatement st = conn.prepareStatement(sql);
                 ResultSet rs = st.executeQuery()
         ) {
+            List<Artist> artists = ArtistDAO.List_All_Artist();
             while (rs != null && rs.next()) {
                 Disc aux = new Disc();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
                 aux.setPhoto(rs.getNString("foto"));
+                boolean find = false;
+                int index = 0;
+                for(int i = 0; i<artists.size() && !find; i++){
+                    if(artists.get(i).getId() == rs.getInt("id_artista")){
+                        find = true;
+                        index = i;
+                    }
+                }
+                aux.setArtist(artists.get(index));
                 disc.add(aux);
             }
         } catch (SQLException ex) {
@@ -60,6 +70,7 @@ public class DiscDAO extends Disc {
         }
         return disc;
     }
+
     public static List<Disc> listByName(String name) {
         List<Disc> disc = new ArrayList<>();
         String sql = "SELECT id, nombre, fecha_publicacion, id_artista, foto FROM disco WHERE nombre = ?";
@@ -85,6 +96,7 @@ public class DiscDAO extends Disc {
         }
         return disc;
     }
+
     public boolean update(){
         boolean update =false;
         String sql = "UPDATE disco SET nombre = ?, fecha_publicacion = ?, id_artista = ?, foto = ? FROM disco WHERE id = ?";
