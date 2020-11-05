@@ -1,8 +1,5 @@
 package org.ciclo.model;
 
-import org.ciclo.model.IGenre;
-import org.ciclo.model.ISong;
-
 import java.util.Set;
 
 /**
@@ -31,7 +28,8 @@ public class Genre implements IGenre {
 
     /**
      * Parametrized constructor
-     * @param _name Name to assign
+     *
+     * @param _name  Name to assign
      * @param _songs Songs to assign
      */
     public Genre(String _name, Set<ISong> _songs) {
@@ -41,6 +39,7 @@ public class Genre implements IGenre {
 
     /**
      * Name getter
+     *
      * @return Name of genre
      */
     public String getName() {
@@ -49,6 +48,7 @@ public class Genre implements IGenre {
 
     /**
      * Name Setter
+     *
      * @param _name name to assign
      */
     public void setName(String _name) {
@@ -57,6 +57,7 @@ public class Genre implements IGenre {
 
     /**
      * Id getter
+     *
      * @return Id of genre
      */
     public Integer getId() {
@@ -65,6 +66,7 @@ public class Genre implements IGenre {
 
     /**
      * Id setter
+     *
      * @param _id Id to assign
      */
     public void setId(Integer _id) {
@@ -73,6 +75,7 @@ public class Genre implements IGenre {
 
     /**
      * Songs getter
+     *
      * @return Songs of a genre
      */
     public Set<ISong> getSongs() {
@@ -81,6 +84,7 @@ public class Genre implements IGenre {
 
     /**
      * Songs setter
+     *
      * @param _songs Set of songs belong to a genre
      */
     public void setSongs(Set<ISong> _songs) {
@@ -90,19 +94,21 @@ public class Genre implements IGenre {
 
     /**
      * Add a song in a genre
+     *
      * @param song Song to add
      * @return True if add, false if not
      */
-    public boolean addSong(ISong song){
+    public boolean addSong(ISong song) {
         return this._songs.add(song);
     }
 
     /**
      * Song to remove in a genre
+     *
      * @param song Song to remove
      * @return True if remove, false if not
      */
-    public boolean removeSong(ISong song){
+    public boolean removeSong(ISong song) {
         return this._songs.remove(song);
     }
 

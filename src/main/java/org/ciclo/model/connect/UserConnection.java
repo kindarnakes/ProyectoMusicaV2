@@ -1,12 +1,12 @@
 package org.ciclo.model.connect;
 
-import java.io.Serializable;
 import javax.xml.bind.annotation.XmlAccessType;
 import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.XmlRootElement;
+import java.io.Serializable;
 
 @XmlAccessorType(XmlAccessType.FIELD)
-@XmlRootElement(name= "connection")
+@XmlRootElement(name = "connection")
 public class UserConnection implements Serializable {
     private String _bd_name;
     private String _bd_ip;

@@ -6,12 +6,19 @@ import java.util.Set;
 
 public interface IUser extends Comparable<IUser>, Serializable { //Angel
 
-    abstract public Integer getId();
-    abstract public String getName();
-    abstract public String getPhoto();
-    abstract public String getEmail();
-    abstract public Set<IPlaylists> getCreated();  //Lazy
-    abstract public Set<IPlaylists> getSubscribed(); //Lazy
-    abstract public Set<IComments> getComments(); //Lazy
-    abstract public Set<IReproduction> getReproductions(); //Lazy
+    Integer getId();
+
+    String getName();
+
+    String getPhoto();
+
+    String getEmail();
+
+    Set<IPlaylists> getCreated();  //Lazy
+
+    Set<IPlaylists> getSubscribed(); //Lazy
+
+    Set<IComments> getComments(); //Lazy
+
+    Set<IReproduction> getReproductions(); //Lazy
 }

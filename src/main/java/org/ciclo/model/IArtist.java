@@ -5,9 +5,13 @@ import java.util.Set;
 
 public interface IArtist extends Comparable<IArtist>, Serializable { //Agustin
 
-    abstract public Integer getId();
-    abstract public String getName();
-    abstract public String getFrom();
-    abstract public String getPhoto();
-    abstract public Set<IDisc> getDiscs(); //Lazy
+    Integer getId();
+
+    String getName();
+
+    String getFrom();
+
+    String getPhoto();
+
+    Set<IDisc> getDiscs(); //Lazy
 }

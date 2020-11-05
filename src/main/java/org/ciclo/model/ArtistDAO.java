@@ -1,4 +1,3 @@
-
 package org.ciclo.model;
 
 import java.sql.Connection;
@@ -10,7 +9,7 @@ import java.util.List;
 
 
 public class ArtistDAO extends Artist {
-    
+
     //Querys
     final static String INSERT = "INSERT INTO artista(nombre, nacionalidad, foto) VALUES(?, ?, ?)";
     final static String UPDATE = "UPDATE artista SET nombre = ?, nacionalidad = ?, foto = ? WHERE id = ?";
@@ -19,18 +18,18 @@ public class ArtistDAO extends Artist {
     final static String SELECT_All = "SELECT * FROM artista";
     final static String SELECT_by_Id = "SELECT id, nombre, nacionalidad, foto FROM artista WHERE id = ?";
     final static String SELECT_by_Name = "SELECT id, nombre, nacionalidad, foto FROM artista WHERE nombre = ?";
-    
-    public ArtistDAO(){
+
+    public ArtistDAO() {
         super();
-    };
-    
-     public ArtistDAO(Artist a){
+    }
+
+    public ArtistDAO(Artist a) {
         this.setId(a.getId());
         this.setName(a.getName());
         this.setNationality(a.getFrom());
-        this.setPhoto(a.getPhoto());      
+        this.setPhoto(a.getPhoto());
     }
-    
+
     public static List<Artist> List_All_Artist() {
         List<Artist> artists = new ArrayList<>();
         try (
@@ -46,89 +45,90 @@ public class ArtistDAO extends Artist {
                 a.setPhoto(rs.getString("foto"));
                 artists.add(a);
             }
-            rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return artists;
     }
-  
-    
-      public static Artist List_Artist_By_Id(Integer id) {
+
+
+    public static Artist List_Artist_By_Id(Integer id) {
         Artist artist = new Artist();
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(SELECT_by_Id);
+                PreparedStatement ps = c.prepareStatement(SELECT_by_Id)
         ) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
                 Artist aux = new Artist();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setNationality(rs.getString("nacionalidad"));
                 aux.setPhoto(rs.getString("foto"));
-                artist = aux;           
-                rs.close();
+                artist = aux;
+            }
+            rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return artist;
     }
-      
-      
-        public static Artist List_Artist_By_Name(String name) {
-         Artist artist = new Artist();
+
+
+    public static Artist List_Artist_By_Name(String name) {
+        Artist artist = new Artist();
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(SELECT_by_Name);
+                PreparedStatement ps = c.prepareStatement(SELECT_by_Name)
         ) {
             ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-                Artist aux = new Artist();
-                aux.setId(rs.getInt("id"));
-                aux.setName(rs.getString("nombre"));
-                aux.setNationality(rs.getString("nacionalidad"));
-                aux.setPhoto(rs.getString("foto"));
-                artist = aux;           
-                rs.close();
+            Artist aux = new Artist();
+            aux.setId(rs.getInt("id"));
+            aux.setName(rs.getString("nombre"));
+            aux.setNationality(rs.getString("nacionalidad"));
+            aux.setPhoto(rs.getString("foto"));
+            artist = aux;
+            rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return artist;
     }
-        
-        public boolean Insert_Artist(){
+
+    public boolean Insert_Artist() {
         boolean result = false;
         try (
-                Connection c = org.ciclo.model.connect.Connection.getConnect();
+                Connection c = org.ciclo.model.connect.Connection.getConnect()
         ) {
             PreparedStatement ps = c.prepareStatement(INSERT);
             ps.setString(1, this.getName());
             ps.setString(2, this.getFrom());
             ps.setString(3, this.getPhoto());
             int i = ps.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 result = true;
             }
-            
+
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
 
         return result;
     }
-        
-      public boolean Update_Artist(){
+
+    public boolean Update_Artist() {
         boolean result = false;
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(UPDATE);
+                PreparedStatement ps = c.prepareStatement(UPDATE)
         ) {
             ps.setString(1, this.getName());
             ps.setString(2, this.getFrom());
             ps.setString(3, this.getPhoto());
             int i = ps.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 result = true;
             }
         } catch (SQLException ex) {
@@ -138,50 +138,16 @@ public class ArtistDAO extends Artist {
 
         return result;
     }
-      
-       public static  boolean Remove_Artist_by_Id(Integer id){
-        boolean result =false;
-        try (
-                Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(DELETE_by_Id);
-        ) {
-            ps.setInt(1, id);
-            int i = ps.executeUpdate();
-            if(i>1){
-                result = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return result;
-    }
-       
-       public static  boolean Remove_Artist_by_Name(String name){
-        boolean result =false;
-        try (
-                Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(DELETE_by_Name);
-        ) {
-            ps.setString(1, name);
-            int i = ps.executeUpdate();
-            if(i>1){
-                result = true;
-            }
-        } catch (SQLException ex) {
-            ex.printStackTrace();
-        }
-        return result;
-    }
-    
-           public  boolean remove_Artist(){
+
+    public static boolean Remove_Artist_by_Id(Integer id) {
         boolean result = false;
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(DELETE_by_Id);
+                PreparedStatement ps = c.prepareStatement(DELETE_by_Id)
         ) {
-            ps.setInt(1, this.getId());
+            ps.setInt(1, id);
             int i = ps.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 result = true;
             }
         } catch (SQLException ex) {
@@ -190,5 +156,39 @@ public class ArtistDAO extends Artist {
         return result;
     }
 
-      
+    public static boolean Remove_Artist_by_Name(String name) {
+        boolean result = false;
+        try (
+                Connection c = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement ps = c.prepareStatement(DELETE_by_Name)
+        ) {
+            ps.setString(1, name);
+            int i = ps.executeUpdate();
+            if (i > 1) {
+                result = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+    public boolean remove_Artist() {
+        boolean result = false;
+        try (
+                Connection c = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement ps = c.prepareStatement(DELETE_by_Id)
+        ) {
+            ps.setInt(1, this.getId());
+            int i = ps.executeUpdate();
+            if (i > 1) {
+                result = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
+
 }

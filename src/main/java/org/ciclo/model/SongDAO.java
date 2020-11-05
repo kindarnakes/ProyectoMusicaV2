@@ -27,7 +27,7 @@ public class SongDAO extends Song {
         this.setReproductions(null);
     }
 
-    public SongDAO(Integer id){
+    public SongDAO(Integer id) {
         this(SongDAO.listById(id));
     }
 
@@ -71,13 +71,15 @@ public class SongDAO extends Song {
         ) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
-            Disc disc = DiscDAO.listById(rs.getInt("id_disco")).get(0);//MUST return one
-            Song aux = new Song();
-            aux.setId(rs.getInt("id"));
-            aux.setName(rs.getString("nombre"));
-            aux.setDuration(rs.getInt("duracion"));
-            aux.setDisc(disc);
-            song = aux;
+            if (rs.next()) {
+                Disc disc = DiscDAO.listById(rs.getInt("id_disco"));
+                Song aux = new Song();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setDuration(rs.getInt("duracion"));
+                aux.setDisc(disc);
+                song = aux;
+            }
 
             rs.close();
         } catch (SQLException ex) {
@@ -96,7 +98,7 @@ public class SongDAO extends Song {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
             while (rs != null && rs.next()) {
-                Disc disc = DiscDAO.listById(rs.getInt("id_disco")).get(0);//MUST return one|Name not UNIQUE but not have many repetitions
+                Disc disc = DiscDAO.listById(rs.getInt("id_disco"));//Name not UNIQUE but not have many repetitions
                 Song aux = new Song();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));

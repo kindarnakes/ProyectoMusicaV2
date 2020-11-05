@@ -6,7 +6,7 @@ import java.time.LocalDate;
 import java.util.List;
 
 public interface IController {
-    //Artist
+    //Artist Agustin
     public List<Artist> listAllArtist();
     public List<Artist> listArtistById(Integer id);
     public List<Artist> listArtistByName(String name);
@@ -15,7 +15,7 @@ public interface IController {
     public boolean removeArtist(Integer id);
     public boolean removeArtist(String name);
 
-    //Disc
+    //Disc Santos
     public List<Disc> listAllDisc();
     public List<Disc> listDiscById(Integer id);
     public List<Disc> listDiscByName(String name);
@@ -23,7 +23,7 @@ public interface IController {
     public boolean updateDisc(String name, String photo, LocalDate releaseDate, Artist creator);
     public boolean removeDisc(Integer id);
 
-    //Song
+    //Song Angel
     public List<Song> listAllSong();
     public List<Song> listSongById(Integer id);
     public List<Song> listSongByName(String name);
@@ -59,11 +59,6 @@ public interface IController {
     public boolean userSubscribePlaylist(User user, Playlist playlist);
     public List<Playlist> listUserSubscribed(User user);
     public List<Playlist> listUserCreated(User user);
-
-
-
-
-
 
 
 

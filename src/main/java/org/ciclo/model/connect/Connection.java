@@ -1,6 +1,9 @@
 package org.ciclo.model.connect;
 
-import javax.xml.bind.*;
+import javax.xml.bind.JAXBContext;
+import javax.xml.bind.JAXBException;
+import javax.xml.bind.Marshaller;
+import javax.xml.bind.Unmarshaller;
 import java.io.*;
 import java.sql.DriverManager;
 import java.sql.SQLException;
@@ -34,15 +37,15 @@ public class Connection {
         return user;
     }
 
-    public static void saveConfig(){
+    public static void saveConfig() {
 
-        try{
-        FileWriter fw = new FileWriter(XML);
+        try {
+            FileWriter fw = new FileWriter(XML);
 
-        JAXBContext context = JAXBContext.newInstance(UserConnection.class);
-        Marshaller m = context.createMarshaller();
-        m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
-        m.marshal(CONNECTION_DATA, fw);
+            JAXBContext context = JAXBContext.newInstance(UserConnection.class);
+            Marshaller m = context.createMarshaller();
+            m.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+            m.marshal(CONNECTION_DATA, fw);
 
             fw.close();
         } catch (IOException | JAXBException e) {

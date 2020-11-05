@@ -5,12 +5,18 @@ import java.util.Set;
 
 public interface ISong extends Comparable<ISong>, Serializable { //Santos
 
-    abstract public Integer getId();
-    abstract public String getName();
-    abstract public Integer getDuration();
-    abstract public IGenre getGenre();
-    abstract public Set<IPlaylists> getLists(); //Lazy
-    abstract public IDisc getDisc();
-    abstract public Set<IReproduction> getReproductions(); //Lazy
+    Integer getId();
+
+    String getName();
+
+    Integer getDuration();
+
+    IGenre getGenre();
+
+    Set<IPlaylists> getLists(); //Lazy
+
+    IDisc getDisc();
+
+    Set<IReproduction> getReproductions(); //Lazy
 
 }
