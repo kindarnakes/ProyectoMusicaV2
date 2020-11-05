@@ -50,7 +50,7 @@ public class Connection {
         }
     }
 
-    static java.sql.Connection getConnect() {
+    public static java.sql.Connection getConnect() {
 
         java.sql.Connection conn = null;
         try {
