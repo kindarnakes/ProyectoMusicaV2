@@ -13,8 +13,20 @@ public class DiscDAO extends Disc {
      * Constructor
      */
     public DiscDAO() {
+    	
         super();
     }
+    
+    public DiscDAO(Disc d) {
+    	this.setArtist(d.getArtist());
+    	this.setId(d.getId());
+    	this.setName(d.getName());
+    	this.setPhoto(d.getPhoto());
+    	this.setReleaseDate(d.getReleaseDate());
+    	this.setSongs(d.getSongs());
+    	
+    }
+    
     public static List<Disc> listAll() {
         List<Disc> disc = new ArrayList<>();
         String sql = "SELECT id, nombre, fecha_publicacion, foto FROM disco";
@@ -47,8 +59,8 @@ public class DiscDAO extends Disc {
         return disc;
     }
     
-    public static List<Disc> listById(Integer id) {
-        List<Disc> disc = new ArrayList<>();
+    public static Disc listById(Integer id) {
+        Disc disc=new Disc();
         String sql = "SELECT id, nombre, fecha_publicacion, foto FROM disco WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
@@ -56,20 +68,21 @@ public class DiscDAO extends Disc {
         ) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
-            while (rs != null && rs.next()) {
+           
                 Disc aux = new Disc();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
                 aux.setPhoto(rs.getNString("foto"));
-                disc.add(aux);
-            }
+                disc=aux;
+            
             rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return disc;
     }
+    
 
     public static List<Disc> listByName(String name) {
         List<Disc> disc = new ArrayList<>();
@@ -81,12 +94,13 @@ public class DiscDAO extends Disc {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
             while (rs != null && rs.next()) {
+            	Artist art =ArtistDAO.List_Artist_By_Id(rs.getInt("id_artista")).get(0);
                 Disc aux = new Disc();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
                 aux.setPhoto(rs.getNString("foto"));
-               // artista que no se
+                aux.setArtist(art);
                
                 disc.add(aux);
             }
@@ -138,6 +152,25 @@ public class DiscDAO extends Disc {
         }
         return removed;
     }
+    
+    public  boolean remove(){
+        boolean removed =false;
+        String sql = "DELETE FROM disco WHERE id = ?";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql);
+        ) {
+            st.setInt(1, this.getId());
+            int i = st.executeUpdate();
+            if(i>1){
+                removed = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return removed;
+    }
+    
     public boolean save(){
         boolean saved = false;
 
