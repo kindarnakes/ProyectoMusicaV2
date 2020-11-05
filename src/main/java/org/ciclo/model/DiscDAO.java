@@ -29,7 +29,7 @@ public class DiscDAO extends Disc {
     
     public static List<Disc> listAll() {
         List<Disc> disc = new ArrayList<>();
-        String sql = "SELECT id, nombre, fecha_publicacion, foto FROM disco";
+        String sql = "SELECT id, nombre, fecha_publicacion, foto, id_artista FROM disco";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql);
@@ -61,19 +61,20 @@ public class DiscDAO extends Disc {
     
     public static Disc listById(Integer id) {
         Disc disc=new Disc();
-        String sql = "SELECT id, nombre, fecha_publicacion, foto FROM disco WHERE id = ?";
+        String sql = "SELECT id, nombre, fecha_publicacion, foto, id_artista FROM disco WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql);
         ) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
-           
+            Artist art =ArtistDAO.List_Artist_By_Id(rs.getInt("id_artista")).get(0);
                 Disc aux = new Disc();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
                 aux.setPhoto(rs.getNString("foto"));
+                aux.setArtist(art);
                 disc=aux;
             
             rs.close();
