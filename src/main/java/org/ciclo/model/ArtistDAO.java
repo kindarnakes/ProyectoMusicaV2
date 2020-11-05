@@ -24,6 +24,13 @@ public class ArtistDAO extends Artist {
         super();
     };
     
+     public ArtistDAO(Artist a){
+        this.setId(a.getId());
+        this.setName(a.getName());
+        this.setNationality(a.getFrom());
+        this.setPhoto(a.getPhoto());      
+    }
+    
     public static List<Artist> List_All_Artist() {
         List<Artist> artists = new ArrayList<>();
         try (
@@ -47,51 +54,47 @@ public class ArtistDAO extends Artist {
     }
   
     
-      public static List<Artist> List_Artist_By_Id(Integer id) {
-        List<Artist> artists = new ArrayList<>();
+      public static Artist List_Artist_By_Id(Integer id) {
+        Artist artist = new Artist();
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement ps = c.prepareStatement(SELECT_by_Id);
         ) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
-            while (rs != null && rs.next()) {
-                Artist a = new Artist();
-                a.setId(rs.getInt("id"));
-                a.setName(rs.getString("nombre"));
-                a.setNationality(rs.getString("nacionalidad"));
-                a.setPhoto(rs.getString("foto"));
-                artists.add(a);
-            }
-            rs.close();
+                Artist aux = new Artist();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setNationality(rs.getString("nacionalidad"));
+                aux.setPhoto(rs.getString("foto"));
+                artist = aux;           
+                rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return artists;
+        return artist;
     }
       
       
-        public static List<Artist> List_Artist_By_Name(String name) {
-        List<Artist> artists = new ArrayList<>();
+        public static Artist List_Artist_By_Name(String name) {
+         Artist artist = new Artist();
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement ps = c.prepareStatement(SELECT_by_Name);
         ) {
-            ps.setInt(1, name);
+            ps.setString(1, name);
             ResultSet rs = ps.executeQuery();
-            while (rs != null && rs.next()) {
-                Artist a = new Artist();
-                a.setId(rs.getInt("id"));
-                a.setName(rs.getString("nombre"));
-                a.setNationality(rs.getString("nacionalidad"));
-                a.setPhoto(rs.getString("foto"));
-                artists.add(a);
-            }
-            rs.close();
+                Artist aux = new Artist();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setNationality(rs.getString("nacionalidad"));
+                aux.setPhoto(rs.getString("foto"));
+                artist = aux;           
+                rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-        return artists;
+        return artist;
     }
         
         public boolean Insert_Artist(){
@@ -170,5 +173,22 @@ public class ArtistDAO extends Artist {
         return result;
     }
     
+           public  boolean remove_Artist(){
+        boolean result = false;
+        try (
+                Connection c = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement ps = c.prepareStatement(DELETE_by_Id);
+        ) {
+            ps.setInt(1, this.getId());
+            int i = ps.executeUpdate();
+            if(i>1){
+                result = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return result;
+    }
+
       
 }
