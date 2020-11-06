@@ -251,7 +251,6 @@ public class DiscDAO extends Disc {
         if(!this.getSongs().isEmpty()){
             loaded = true;
         }
-
         return loaded;
     }
 

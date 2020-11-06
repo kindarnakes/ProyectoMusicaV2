@@ -227,10 +227,6 @@ public class SongDAO extends Song {
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
-
-
-
-
         return songs;
     }
 

@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 
 public class ArtistDAO extends Artist {
@@ -28,6 +29,10 @@ public class ArtistDAO extends Artist {
         this.setName(a.getName());
         this.setNationality(a.getFrom());
         this.setPhoto(a.getPhoto());
+    }
+
+    public ArtistDAO(Integer id){
+        this(ArtistDAO.List_Artist_By_Id(id));
     }
 
     public static List<Artist> List_All_Artist() {
@@ -56,7 +61,7 @@ public class ArtistDAO extends Artist {
         Artist artist = new Artist();
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(SELECT_by_Id)
+                PreparedStatement ps = c.prepareStatement(SELECT_by_Id);
         ) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -188,6 +193,15 @@ public class ArtistDAO extends Artist {
             ex.printStackTrace();
         }
         return result;
+    }
+
+    public boolean loadDiscs(){
+        boolean loaded = false;
+        this.setDiscs(new TreeSet<>(DiscDAO.searchByAuthor(this)));
+        if(!this.getDiscs().isEmpty()){
+            loaded = true;
+        }
+        return loaded;
     }
 
 
