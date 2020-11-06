@@ -53,7 +53,7 @@ public interface IController {
     public boolean addSongToPlaylist(Playlist playlist, Song song);
     public boolean removeSongToPlaylist(Playlist playlist, Song song);
     public List<Playlist> listPlaylistBySong(Song song);
-    public List<Playlist> listSongByPlaylist(Playlist playlist);
+    public List<Song> listSongByPlaylist(Playlist playlist);
 
     //User-Playlist
     public boolean userSubscribePlaylist(User user, Playlist playlist);
