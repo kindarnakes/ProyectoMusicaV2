@@ -152,7 +152,7 @@ public class SongDAO extends Song {
                 saved = true;
             }
 
-            sql = "SElECT nombre, duracion, id_disco FROM canciones WHERE nombre = ? ORDER BY id DESC LIMIT 1";
+            sql = "SElECT id FROM canciones WHERE nombre = ? ORDER BY id DESC LIMIT 1";
             st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
             ResultSet rs = st.executeQuery();
@@ -203,5 +203,36 @@ public class SongDAO extends Song {
         }
         return removed;
     }
+
+    public static List<Song> searchByDisc(Disc disc){
+        List<Song> songs = new ArrayList<>();
+        Integer id_disc = disc.getId();
+
+        String sql = "SELECT id, nombre, duracion FROM cancion WHERE id_disco = ?";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            st.setInt(1, id_disc);
+            ResultSet rs = st.executeQuery();
+            while (rs != null && rs.next()) {
+                Song aux = new Song();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setDuration(rs.getInt("duracion"));
+                aux.setDisc(disc);
+                songs.add(aux);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+
+
+
+        return songs;
+    }
+
 
 }

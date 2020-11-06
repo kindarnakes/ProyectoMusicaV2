@@ -160,7 +160,7 @@ public class ArtistDAO extends Artist {
         boolean result = false;
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(DELETE_by_Name)
+                PreparedStatement ps = c.prepareStatement(DELETE_by_Name);
         ) {
             ps.setString(1, name);
             int i = ps.executeUpdate();

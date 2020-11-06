@@ -3,6 +3,7 @@ package org.ciclo.model;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class DiscDAO extends Disc {
     /**
@@ -21,6 +22,10 @@ public class DiscDAO extends Disc {
         this.setReleaseDate(d.getReleaseDate());
         this.setSongs(d.getSongs());
 
+    }
+
+    public DiscDAO(Integer id){
+        this(DiscDAO.listById(id));
     }
 
     public static List<Disc> listAll() {
@@ -196,7 +201,7 @@ public class DiscDAO extends Disc {
                 saved = true;
             }
 
-            sql = "SElECT nombre, duracion, id_artista, foto FROM disco WHERE nombre = ? ORDER BY id DESC LIMIT 1";
+            sql = "SElECT id FROM disco WHERE nombre = ? ORDER BY id DESC LIMIT 1";
             st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
             ResultSet rs = st.executeQuery();
@@ -210,6 +215,44 @@ public class DiscDAO extends Disc {
         }
 
         return saved;
+    }
+
+    public static List<Disc> searchByAuthor(Artist artist){
+        Integer id_artist = artist.getId();
+        List<Disc> discs = new ArrayList<>();
+
+        String sql = "SELECT id, nombre, fecha_publicacion, foto FROM disco WHERE id_artista = ?";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            st.setInt(1, id_artist);
+            ResultSet rs = st.executeQuery();
+            while (rs != null && rs.next()) {
+
+                Disc aux = new Disc();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
+                aux.setArtist(artist); //Artist Author to artist disc
+                discs.add(aux);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return discs;
+
+    }
+
+    public boolean loadSongs(){
+        boolean loaded = false;
+        this.setSongs(new TreeSet<>(SongDAO.searchByDisc(this)));
+        if(!this.getSongs().isEmpty()){
+            loaded = true;
+        }
+
+        return loaded;
     }
 
 }
