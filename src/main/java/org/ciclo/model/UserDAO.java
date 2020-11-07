@@ -13,7 +13,6 @@ public class UserDAO extends User {
      * Constructor
      */
     public UserDAO() {
-    	
         super();
     }
     public UserDAO(User u) {
@@ -26,6 +25,11 @@ public class UserDAO extends User {
     	this.setReproductions(u.getReproductions());
     	this.setSuscribed(u.getSubscribed());
     }
+    public UserDAO(Integer id){
+        this(UserDAO.listById(id));
+    }
+    
+    
     public static List<User> listAll() {
         List<User> user = new ArrayList<>();
         String sql = "SELECT id, nombre, foto, correo FROM usuario";
