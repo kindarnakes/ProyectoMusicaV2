@@ -248,5 +248,29 @@ public class PlaylistDAO extends Playlist {
 
         return saved;
     }
+
+    public boolean addSong(Song song){
+        boolean added = false;
+
+
+        String sql = "INSERT INTO lista_cancion(id_lista, i_cancion) VALUES (?,?)";
+
+        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
+        PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setInt(1, this.getId());
+            st.setInt(2, song.getId());
+            int i = st.executeUpdate();
+            if(i > 0){
+                added = true;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+
+
+        return added;
+    }
                
 }
