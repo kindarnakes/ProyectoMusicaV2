@@ -57,8 +57,10 @@ public interface IController {
 
     //User-Playlist
     public boolean userSubscribePlaylist(User user, Playlist playlist);
-    public List<Playlist> listUserSubscribed(User user);
+    public boolean userUnSubscribePlaylist(User user, Playlist playlist);
+    public List<Playlist> listPlaylistSubscribed(User user);
     public List<Playlist> listUserCreated(User user);
+    public List<User> listUserSubscribed(Playlist playlist);
 
 
 }
