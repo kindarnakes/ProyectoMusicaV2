@@ -14,7 +14,7 @@ public class Playlist implements IPlaylists {
     /**
      * Description of Playlist
      */
-    private String desciption;
+    private String description;
     /**
      * Creator of Playlist
      */
@@ -45,18 +45,18 @@ public class Playlist implements IPlaylists {
      *
      * @param name
      * @param id
-     * @param desciption
+     * @param description
      * @param creator
      * @param susbcribers
      * @param songs
      * @param comments
      */
-    public Playlist(String name, int id, String desciption, IUser creator, Set<IUser> susbcribers, Set<ISong> songs,
+    public Playlist(String name, int id, String description, IUser creator, Set<IUser> susbcribers, Set<ISong> songs,
                     Set<IComments> comments) {
         super();
         this.name = name;
         this.id = id;
-        this.desciption = desciption;
+        this.description = description;
         this.creator = creator;
         this.susbcribers = susbcribers;
         this.songs = songs;
@@ -90,7 +90,7 @@ public class Playlist implements IPlaylists {
      */
 
     public void setDescription(String desciption) {
-        this.desciption = desciption;
+        this.description = desciption;
     }
 
     /**
@@ -166,7 +166,7 @@ public class Playlist implements IPlaylists {
     @Override
     public String getDescription() {
         // TODO Auto-generated method stub
-        return desciption;
+        return description;
     }
 
     /**

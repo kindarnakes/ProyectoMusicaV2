@@ -279,7 +279,7 @@ public class PlaylistDAO extends Playlist {
         boolean added = false;
 
 
-        String sql = "INSERT INTO lista_cancion(id_lista, i_cancion) VALUES (?,?)";
+        String sql = "INSERT INTO lista_cancion(id_lista, id_cancion) VALUES (?,?)";
 
         try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
         PreparedStatement st = conn.prepareStatement(sql)
@@ -297,6 +297,66 @@ public class PlaylistDAO extends Playlist {
 
 
         return added;
+    }
+    public boolean removeSong(Song song){
+        boolean remove = false;
+        String sql = "DELETE FROM lista_cancion WHERE id_lista = ?, id_cancion = ?";
+
+        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
+            PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setInt(1, this.getId());
+            st.setInt(2, song.getId());
+            int i = st.executeUpdate();
+            if(i > 0){
+                remove = true;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return remove;
+    }
+
+
+    public static List<Playlist> listPlaylistSuscribers(User user){
+        List <Playlist> playlist = new ArrayList<>();
+        Integer id_user = user.getId();
+
+        String sql="SELECT id, nombre, descripcion, id_creador "
+                + "FROM lista_reproduccion  "
+                + "WHERE id IN (SELECT id_lista FROM suscripcion WHERE id_usuario=?)";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            st.setInt(1, id_user);
+            List<User> luser= UserDAO.listAll();
+
+
+            ResultSet rs = st.executeQuery();
+            while (rs != null && rs.next()) {
+                Playlist aux = new Playlist();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setDescription(rs.getString("descripcion"));
+
+                boolean find=false;
+                for(int i=0; i<luser.size() && !find;i++) {
+                    if(rs.getInt("id_creador")==luser.get(i).getId()) {
+                        aux.setCreator(luser.get(i));
+                        find=true;
+
+                    }
+                }
+                playlist.add(aux);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return playlist;
+
     }
                
 }

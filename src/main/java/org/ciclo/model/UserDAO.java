@@ -7,6 +7,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class UserDAO extends User {
 	/**
@@ -48,10 +50,7 @@ public class UserDAO extends User {
                 aux.setName(rs.getString("nombre"));
                 aux.setPhoto(rs.getString("foto"));
                 aux.setEmail(rs.getString("correo"));
-                
-           
-               
-                
+
                 user.add(aux);
             }
             rs.close();
@@ -228,6 +227,106 @@ public class UserDAO extends User {
         return removed;
     }
 
-	
+    public boolean subscribe(Playlist playlist){
+
+        boolean subscribed = false;
+        String sql = "INSERT INTO suscripcion(id_usuario, id_lista) VALUES (?,?)";
+
+        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
+            PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setInt(1, this.getId());
+            st.setInt(2, playlist.getId());
+            int i = st.executeUpdate();
+            if(i > 0){
+                subscribed = true;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return subscribed;
+    }
+
+
+    public boolean unsubscribe(Playlist playlist){
+
+        boolean unsubscribed = false;
+        String sql = "DELETE FROM suscripcion WHERE id_usuario = ?, id_playlist = ?)";
+
+        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
+            PreparedStatement st = conn.prepareStatement(sql)
+        ){
+            st.setInt(1, this.getId());
+            st.setInt(2, playlist.getId());
+            int i = st.executeUpdate();
+            if(i > 0){
+                unsubscribed = true;
+            }
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return unsubscribed;
+    }
+
+	public boolean loadCreated(){
+        boolean load = false;
+
+        Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listUserCreated(this));
+        if(!created.isEmpty()){
+        this.setCreated(created);
+        load = true;
+        }
+
+        return load;
+    }
+
+    public boolean loadSubscribed(){
+        boolean load = false;
+
+
+        Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listPlaylistSuscribers(this));
+        if(!created.isEmpty()){
+            this.setCreated(created);
+            load = true;
+        }
+
+        return load;
+    }
+
+    public static List<User> listUserSubscribed(Playlist playlist){
+        List <User> user = new ArrayList<>();
+        Integer id_playlist = playlist.getId();
+
+        String sql="SELECT id, nombre, correo, foto "
+                + "FROM usuario  "
+                + "WHERE id IN (SELECT id_usuario FROM suscripcion WHERE id_lista=?)";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            st.setInt(1, id_playlist);
+
+
+
+            ResultSet rs = st.executeQuery();
+            while (rs != null && rs.next()) {
+                User aux = new User();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setEmail(rs.getString("correo"));
+                aux.setPhoto(rs.getString("foto"));
+
+
+                user.add(aux);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return user;
+
+    }
 
 }
