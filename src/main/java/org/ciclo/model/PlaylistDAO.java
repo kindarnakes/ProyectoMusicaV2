@@ -9,8 +9,24 @@ import java.util.ArrayList;
 import java.util.List;
 import static org.ciclo.model.ArtistDAO.SELECT_All;
 
-
 public class PlaylistDAO extends Playlist {
+    
+    public PlaylistDAO(){
+      super();
+    }
+    
+    public PlaylistDAO(Playlist p) {
+        this.setCreator(p.getCreator());
+        this.setId(p.getId());
+        this.setName(p.getName());
+        this.setDesciption(p.getDesciption());
+        this.setSongs(p.getSongs());
+        this.setSusbcribers(p.getSusbcribers());
+    }
+    
+    public PlaylistDAO(Integer id){
+        this(PlaylistDAO.List_Playlist_By_Id(id));
+    }
     
       public static List<Playlist> List_All_Playlist() {
         List<Playlist> playlist = new ArrayList<>();
