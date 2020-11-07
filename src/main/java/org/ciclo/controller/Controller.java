@@ -12,9 +12,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public List<Artist> listArtistById(Integer id) {
+    public Artist listArtistById(Integer id) {
         return null;
     }
+
 
     @Override
     public List<Artist> listArtistByName(String name) {
@@ -27,7 +28,7 @@ public class Controller implements IController{
     }
 
     @Override
-    public boolean updateArtist(String name, String from, String photo) {
+    public boolean updateArtist(Artist artist, String name, String from, String photo) {
         return false;
     }
 
@@ -47,9 +48,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public List<Disc> listDiscById(Integer id) {
+    public Disc listDiscById(Integer id) {
         return null;
     }
+
 
     @Override
     public List<Disc> listDiscByName(String name) {
@@ -62,9 +64,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public boolean updateDisc(String name, String photo, LocalDate releaseDate, Artist creator) {
+    public boolean updateDisc(Disc disc, String name, String photo, LocalDate releaseDate, Artist creator) {
         return false;
     }
+
 
     @Override
     public boolean removeDisc(Integer id) {
@@ -77,9 +80,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public List<Song> listSongById(Integer id) {
+    public Song listSongById(Integer id) {
         return null;
     }
+
 
     @Override
     public List<Song> listSongByName(String name) {
@@ -92,9 +96,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public boolean updateSong(String name, Disc disc, Integer duration) {
+    public boolean updateSong(Song song, String name, Disc disc, Integer duration) {
         return false;
     }
+
 
     @Override
     public boolean removeSong(Integer id) {
@@ -107,9 +112,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public List<User> listUserById(Integer id) {
+    public User listUserById(Integer id) {
         return null;
     }
+
 
     @Override
     public List<User> listUserByName(String name) {
@@ -127,9 +133,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public boolean updateUser(String name, String email, String photo) {
+    public boolean updateUser(User user, String name, String email, String photo) {
         return false;
     }
+
 
     @Override
     public boolean removeUser(Integer id) {
@@ -147,9 +154,10 @@ public class Controller implements IController{
     }
 
     @Override
-    public List<Playlist> listPlaylistById(Integer id) {
+    public Playlist listPlaylistById(Integer id) {
         return null;
     }
+
 
     @Override
     public List<Playlist> listPlaylistByName(String name) {
@@ -162,28 +170,31 @@ public class Controller implements IController{
     }
 
     @Override
-    public boolean updatePlaylist(String name, String description, User creator) {
+    public boolean updatePlaylist(Playlist playlist, String name, String description, User creator) {
         return false;
     }
 
+
     @Override
     public boolean removePlaylist(Integer id) {
-        return false;
+        return PlaylistDAO.remove(id);
     }
 
     @Override
     public boolean addSongToPlaylist(Playlist playlist, Song song) {
-        return false;
+        PlaylistDAO playlistDAO = new PlaylistDAO(playlist);
+        return playlistDAO.addSong(song);
     }
 
     @Override
     public boolean removeSongToPlaylist(Playlist playlist, Song song) {
-        return false;
+        PlaylistDAO playlistDAO = new PlaylistDAO(playlist);
+        return playlistDAO.removeSong(song);
     }
 
     @Override
     public List<Playlist> listPlaylistBySong(Song song) {
-        return null;
+        return PlaylistDAO.listBySong(song);
     }
 
     @Override
@@ -193,26 +204,28 @@ public class Controller implements IController{
 
     @Override
     public boolean userSubscribePlaylist(User user, Playlist playlist) {
-        return false;
+        UserDAO userDAO = new UserDAO(user);
+        return userDAO.unsubscribe(playlist);
     }
 
     @Override
     public boolean userUnSubscribePlaylist(User user, Playlist playlist) {
-        return false;
+        UserDAO userDAO = new UserDAO(user);
+        return userDAO.susbcribe(playlist);
     }
 
     @Override
     public List<Playlist> listPlaylistSubscribed(User user) {
-        return null;
+        return PlaylistDAO.listPlaylistSuscribers(user);
     }
 
     @Override
     public List<Playlist> listUserCreated(User user) {
-        return null;
+        return PlaylistDAO.listUserCreated(user);
     }
 
     @Override
     public List<User> listUserSubscribed(Playlist playlist) {
-        return null;
+        return UserDAO.listUserSubscribed(playlist);
     }
 }
