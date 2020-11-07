@@ -9,7 +9,7 @@ public interface IController {
     //Artist Agustin
     public List<Artist> listAllArtist();
     public Artist listArtistById(Integer id);
-    public List<Artist> listArtistByName(String name);
+    public Artist listArtistByName(String name);
     public boolean createArtist(String name, String from, String photo);
     public boolean updateArtist(Artist artist, String name, String from, String photo);
     public boolean removeArtist(Integer id);

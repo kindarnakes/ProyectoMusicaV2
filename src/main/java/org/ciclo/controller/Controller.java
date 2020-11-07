@@ -16,11 +16,11 @@ public class Controller implements IController{
         return null;
     }
 
-
     @Override
-    public List<Artist> listArtistByName(String name) {
+    public Artist listArtistByName(String name) {
         return null;
     }
+
 
     @Override
     public boolean createArtist(String name, String from, String photo) {
@@ -155,23 +155,30 @@ public class Controller implements IController{
 
     @Override
     public Playlist listPlaylistById(Integer id) {
-        return null;
+        return PlaylistDAO.List_Playlist_By_Id(id);
     }
 
 
     @Override
     public List<Playlist> listPlaylistByName(String name) {
-        return null;
+        return PlaylistDAO.listByName(name);
     }
 
     @Override
     public boolean createPlaylist(String name, String description, User creator) {
-        return false;
+        Playlist playlist = new Playlist(name, -1, description, creator, null, null,
+                null);
+        PlaylistDAO playlistDAO = new PlaylistDAO(playlist);
+        return playlistDAO.save();
     }
 
     @Override
     public boolean updatePlaylist(Playlist playlist, String name, String description, User creator) {
-        return false;
+        playlist.setName(name);
+        playlist.setDescription(description);
+        playlist.setCreator(creator);
+        PlaylistDAO playlistDAO = new PlaylistDAO(playlist);
+        return playlistDAO.update();
     }
 
 
@@ -199,7 +206,7 @@ public class Controller implements IController{
 
     @Override
     public List<Song> listSongByPlaylist(Playlist playlist) {
-        return null;
+        return SongDAO.ListSongByPlaylist(playlist);
     }
 
     @Override
