@@ -155,6 +155,33 @@ public class PlaylistDAO extends Playlist {
             return playlists;
         }
         
+        public static List<Playlist> listUserCreated(User user){
+            List<Playlist> playlists = new ArrayList<>();
+            Integer id_user = user.getId();
+            String sql = "SELECT id, nombre, descripcion" +
+           "FROM lista_reproduccion " +
+            "WHERE id_creador = ?";
+            try (
+                    Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                    PreparedStatement st = conn.prepareStatement(sql)
+            ) {
+                st.setInt(1, id_user);
+                ResultSet rs = st.executeQuery();
+                while (rs != null && rs.next()) {
+                    Playlist aux = new Playlist();
+                    aux.setId(rs.getInt("id"));
+                    aux.setName(rs.getString("nombre"));
+                    aux.setDescription(rs.getString("descripcion"));        
+                    aux.setCreator(user);
+                    playlists.add(aux);
+                }
+                rs.close();
+            } catch (SQLException ex) {
+                ex.printStackTrace();
+            }
+            return playlists;        
+        }
+        
          
         public boolean update() {
         boolean update = false;
