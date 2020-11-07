@@ -89,7 +89,7 @@ public class Playlist implements IPlaylists {
      * @param desciption Desciption to assign
      */
 
-    public void setDesciption(String desciption) {
+    public void setDescription(String desciption) {
         this.desciption = desciption;
     }
 
