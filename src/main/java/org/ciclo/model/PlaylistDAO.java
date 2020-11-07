@@ -7,7 +7,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import static org.ciclo.model.ArtistDAO.SELECT_All;
 
 public class PlaylistDAO extends Playlist {
     
@@ -19,7 +18,7 @@ public class PlaylistDAO extends Playlist {
         this.setCreator(p.getCreator());
         this.setId(p.getId());
         this.setName(p.getName());
-        this.setDesciption(p.getDesciption());
+        this.setDescription(p.getDescription());
         this.setSongs(p.getSongs());
         this.setSusbcribers(p.getSusbcribers());
     }
@@ -41,7 +40,7 @@ public class PlaylistDAO extends Playlist {
                 Playlist p = new Playlist();
                 p.setId(rs.getInt("id"));
                 p.setName(rs.getString("nombre"));
-                p.setDesciption(rs.getString("descripcion"));
+                p.setDescription(rs.getString("descripcion"));
                 
                 boolean find = false;
                 int index = 0;
@@ -74,7 +73,7 @@ public class PlaylistDAO extends Playlist {
                 Playlist aux = new Playlist();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));               
-                aux.setDesciption(rs.getNString("descripcion"));
+                aux.setDescription(rs.getNString("descripcion"));
                 aux.setCreator(u);
                 p = aux;
             }
@@ -101,7 +100,7 @@ public class PlaylistDAO extends Playlist {
                 Playlist aux = new Playlist();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
-                aux.setName(rs.getString("descripcion"));
+                aux.setDescription(rs.getString("descripcion"));
                 boolean find = false;
                 int index = 0;
                 for (int i = 0; i < users.size() && !find; i++) {
@@ -165,7 +164,7 @@ public class PlaylistDAO extends Playlist {
                 PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setString(1, this.getName());
-            st.setString(2, this.getDesciption());
+            st.setString(2, this.getDescription());
             st.setInt(3, this.getCreator().getId());          
             st.setInt(5, this.getId());
 
@@ -226,7 +225,7 @@ public class PlaylistDAO extends Playlist {
         ) {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
-            st.setString(1, this.getDesciption());
+            st.setString(1, this.getDescription());
             st.setInt(3, this.getCreator().getId());
             int i = st.executeUpdate();
             if (i > 1) {

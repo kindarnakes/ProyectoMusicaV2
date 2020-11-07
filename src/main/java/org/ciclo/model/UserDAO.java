@@ -15,6 +15,8 @@ public class UserDAO extends User {
     public UserDAO() {
         super();
     }
+
+
     public UserDAO(User u) {
     	this.setComments(u.getComments());
     	this.setCreated(u.getCreated());

@@ -164,7 +164,7 @@ public class Playlist implements IPlaylists {
      */
 
     @Override
-    public String getDesciption() {
+    public String getDescription() {
         // TODO Auto-generated method stub
         return desciption;
     }

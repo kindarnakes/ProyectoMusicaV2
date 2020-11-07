@@ -9,7 +9,7 @@ public interface IPlaylists extends Comparable<IPlaylists>, Serializable { //San
 
     Integer getId();
 
-    String getDesciption();
+    String getDescription();
 
     IUser getCreator();
 
