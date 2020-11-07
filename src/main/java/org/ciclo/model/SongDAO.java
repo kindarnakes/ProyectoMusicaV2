@@ -229,6 +229,41 @@ public class SongDAO extends Song {
         }
         return songs;
     }
+    public static List<Song> ListSongByPlaylist(Playlist playlist){
+        List<Song> songs = new ArrayList<>();
+        Integer id_playlist = playlist.getId();
+
+        String sql = "SELECT id, nombre, duracion, id_disco FROM cancion "
+                + "WHERE id IN (SELECT id_cancion FROM lista_cancion WHERE id_lista=?)";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            st.setInt(1, id_playlist);
+            ResultSet rs = st.executeQuery();
+            List<Disc> discs = DiscDAO.listAll();
+            while (rs != null && rs.next()) {
+                Song aux = new Song();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setDuration(rs.getInt("duracion"));
+                boolean find = false;
+                int index = 0;
+                for (int i = 0; i < discs.size() && !find; i++) {
+                    if (discs.get(i).getId() == rs.getInt("id_disco")) {
+                        find = true;
+                        index = i;
+                    }
+                }
+                aux.setDisc(discs.get(index));
+                songs.add(aux);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return songs;
+    }
 
 
 }
