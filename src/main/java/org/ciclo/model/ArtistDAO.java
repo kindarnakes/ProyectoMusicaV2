@@ -80,7 +80,6 @@ public class ArtistDAO extends Artist {
         return artist;
     }
 
-
     public static Artist List_Artist_By_Name(String name) {
         Artist artist = new Artist();
         try (
@@ -104,6 +103,7 @@ public class ArtistDAO extends Artist {
 
     public boolean Insert_Artist() {
         boolean result = false;
+        String sql;
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect()
         ) {
@@ -115,6 +115,16 @@ public class ArtistDAO extends Artist {
             if (i > 1) {
                 result = true;
             }
+            
+            sql = "SELECT id FROM artista WHERE nombre = ?";
+            ps = c.prepareStatement(sql);
+            ps.setString(1, this.getName());
+            ResultSet rs = ps.executeQuery();
+            if (rs != null && rs.next()) {
+                this.setId(rs.getInt("id"));
+            }
+            rs.close();
+            ps.close();
 
         } catch (SQLException ex) {
             ex.printStackTrace();
