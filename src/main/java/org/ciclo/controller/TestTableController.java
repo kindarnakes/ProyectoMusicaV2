@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -37,6 +38,11 @@ public class TestTableController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateTable();
+        tableExample.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2 ) {
+                    update();
+                }
+            });
     }
 
     public void updateTable() {
