@@ -3,7 +3,6 @@ package org.ciclo.controller;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
-import javafx.stage.Stage;
 import org.ciclo.MainApp;
 import org.ciclo.model.User;
 import org.ciclo.model.UserDAO;
