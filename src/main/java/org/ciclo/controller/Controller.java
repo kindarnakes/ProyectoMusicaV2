@@ -4,6 +4,8 @@ import org.ciclo.model.*;
 
 import java.time.LocalDate;
 import java.util.List;
+import java.util.Set;
+import java.util.TreeSet;
 
 public class Controller implements IController{
    @Override
@@ -99,76 +101,93 @@ public class Controller implements IController{
 
     @Override
     public Song listSongById(Integer id) {
-        return null;
+        return SongDAO.listById(id);
     }
 
 
     @Override
     public List<Song> listSongByName(String name) {
-        return null;
+        return SongDAO.listByName(name);
     }
 
     @Override
     public boolean createSong(String name, Disc disc, Integer duration, List<Playlist> playlist) {
-        return false;
+        Set<IPlaylists> play=new TreeSet<>(playlist);
+        Song song = new Song(name, duration, play, disc);
+        SongDAO songdao = new SongDAO(song);
+        return songdao.save();
+      
     }
 
     @Override
     public boolean updateSong(Song song, String name, Disc disc, Integer duration) {
-        return false;
+        song.setName(name);
+        song.setDisc(disc);
+        song.setDuration(duration);
+        SongDAO songdao = new SongDAO(song);
+        return songdao.update();
+        
     }
 
 
     @Override
     public boolean removeSong(Integer id) {
-        return false;
+        return SongDAO.remove(id);
     }
 
     @Override
     public List<User> listAllUser() {
-        return null;
+        return UserDAO.listAll();
     }
 
     @Override
     public User listUserById(Integer id) {
-        return null;
+        return UserDAO.listById(id);
     }
 
 
     @Override
     public List<User> listUserByName(String name) {
-        return null;
+        return UserDAO.listByName(name);
     }
 
     @Override
     public User listUserByEmail(String email) {
-        return null;
+        return UserDAO.listByEmail(email);
     }
 
     @Override
     public boolean createUser(String name, String email, String photo) {
-        return false;
+          User user = new User(name, photo, email);
+        UserDAO userdao = new UserDAO(user);
+        return userdao.save();
+        
     }
 
     @Override
     public boolean updateUser(User user, String name, String email, String photo) {
-        return false;
+        user.setName(name);
+        user.setEmail(email);
+        user.setPhoto(photo);
+        UserDAO userdao = new UserDAO(user);
+        return userdao.update();
+        
     }
 
 
     @Override
     public boolean removeUser(Integer id) {
-        return false;
+        return UserDAO.remove(id);
     }
 
     @Override
     public boolean removeUser(String email) {
-        return false;
+        return UserDAO.remove(email);
     }
 
     @Override
     public List<Playlist> listAllPlaylist() {
-        return null;
+        return PlaylistDAO.List_All_Playlist();
     }
 
     @Override
