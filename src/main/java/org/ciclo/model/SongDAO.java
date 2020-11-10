@@ -204,7 +204,7 @@ public class SongDAO extends Song {
         return removed;
     }
 
-    public static List<Song> searchByDisc(Disc disc){
+    public static List<Song> searchByDisc(Disc disc) {
         List<Song> songs = new ArrayList<>();
         Integer id_disc = disc.getId();
 
@@ -229,7 +229,8 @@ public class SongDAO extends Song {
         }
         return songs;
     }
-    public static List<Song> ListSongByPlaylist(Playlist playlist){
+
+    public static List<Song> ListSongByPlaylist(Playlist playlist) {
         List<Song> songs = new ArrayList<>();
         Integer id_playlist = playlist.getId();
 

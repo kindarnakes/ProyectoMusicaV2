@@ -31,7 +31,7 @@ public class ArtistDAO extends Artist {
         this.setPhoto(a.getPhoto());
     }
 
-    public ArtistDAO(Integer id){
+    public ArtistDAO(Integer id) {
         this(ArtistDAO.List_Artist_By_Id(id));
     }
 
@@ -61,7 +61,7 @@ public class ArtistDAO extends Artist {
         Artist artist = new Artist();
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(SELECT_by_Id);
+                PreparedStatement ps = c.prepareStatement(SELECT_by_Id)
         ) {
             ps.setInt(1, id);
             ResultSet rs = ps.executeQuery();
@@ -115,7 +115,7 @@ public class ArtistDAO extends Artist {
             if (i > 1) {
                 result = true;
             }
-            
+
             sql = "SELECT id FROM artista WHERE nombre = ?";
             ps = c.prepareStatement(sql);
             ps.setString(1, this.getName());
@@ -175,7 +175,7 @@ public class ArtistDAO extends Artist {
         boolean result = false;
         try (
                 Connection c = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement ps = c.prepareStatement(DELETE_by_Name);
+                PreparedStatement ps = c.prepareStatement(DELETE_by_Name)
         ) {
             ps.setString(1, name);
             int i = ps.executeUpdate();
@@ -205,10 +205,10 @@ public class ArtistDAO extends Artist {
         return result;
     }
 
-    public boolean loadDiscs(){
+    public boolean loadDiscs() {
         boolean loaded = false;
         this.setDiscs(new TreeSet<>(DiscDAO.searchByAuthor(this)));
-        if(!this.getDiscs().isEmpty()){
+        if (!this.getDiscs().isEmpty()) {
             loaded = true;
         }
         return loaded;

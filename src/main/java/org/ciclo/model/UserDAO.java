@@ -1,7 +1,6 @@
 package org.ciclo.model;
 
 import java.sql.Connection;
-import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -11,7 +10,7 @@ import java.util.Set;
 import java.util.TreeSet;
 
 public class UserDAO extends User {
-	/**
+    /**
      * Constructor
      */
     public UserDAO() {
@@ -20,30 +19,31 @@ public class UserDAO extends User {
 
 
     public UserDAO(User u) {
-    	this.setComments(u.getComments());
-    	this.setCreated(u.getCreated());
-    	this.setEmail(u.getEmail());
-    	this.setId(u.getId());
-    	this.setName(u.getName());
-    	this.setPhoto(u.getPhoto());
-    	this.setReproductions(u.getReproductions());
-    	this.setSuscribed(u.getSubscribed());
+        this.setComments(u.getComments());
+        this.setCreated(u.getCreated());
+        this.setEmail(u.getEmail());
+        this.setId(u.getId());
+        this.setName(u.getName());
+        this.setPhoto(u.getPhoto());
+        this.setReproductions(u.getReproductions());
+        this.setSuscribed(u.getSubscribed());
     }
-    public UserDAO(Integer id){
+
+    public UserDAO(Integer id) {
         this(UserDAO.listById(id));
     }
-    
-    
+
+
     public static List<User> listAll() {
         List<User> user = new ArrayList<>();
         String sql = "SELECT id, nombre, foto, correo FROM usuario";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql);
-        		ResultSet rs = st.executeQuery();
+                ResultSet rs = st.executeQuery()
         ) {
-        	
-         
+
+
             while (rs != null && rs.next()) {
                 User aux = new User();
                 aux.setId(rs.getInt("id"));
@@ -59,105 +59,108 @@ public class UserDAO extends User {
         }
         return user;
     }
-    
+
     public static User listById(Integer id) {
-        User user=new User();
+        User user = new User();
         String sql = "SELECT id, nombre, foto, correo FROM usuario WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setInt(1, id);
             ResultSet rs = st.executeQuery();
-            
-                User aux = new User();
+
+            User aux = new User();
+            if (rs != null && rs.next()) {
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setEmail(rs.getString("correo"));
                 aux.setPhoto(rs.getNString("foto"));
-                
-                user=aux;
-            
+
+                user = aux;
+            }
+
             rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return user;
     }
-    
+
     public static List<User> listByName(String name) {
         List<User> user = new ArrayList<>();
         String sql = "SELECT id, nombre, foto, correo FROM usuario WHERE nombre = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
-           
+
             while (rs != null && rs.next()) {
-            	
+
                 User aux = new User();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setEmail(rs.getString("correo"));
                 aux.setPhoto(rs.getNString("foto"));
-                
+
                 user.add(aux);
-                }
+            }
             rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return user;
     }
+
     public static User listByEmail(String email) {
-        User user=new User();
+        User user = new User();
         String sql = "SELECT id, nombre, foto, correo FROM usuario WHERE email = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
-            
-                User aux = new User();
-                aux.setId(rs.getInt("id"));
-                aux.setName(rs.getString("nombre"));
-                aux.setEmail(rs.getString("correo"));
-                aux.setPhoto(rs.getNString("foto"));
-                
-                user=aux;
-            
+
+            User aux = new User();
+            aux.setId(rs.getInt("id"));
+            aux.setName(rs.getString("nombre"));
+            aux.setEmail(rs.getString("correo"));
+            aux.setPhoto(rs.getNString("foto"));
+
+            user = aux;
+
             rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
         return user;
     }
-    
-    public boolean save(){
+
+    public boolean save() {
         boolean saved = false;
 
-        String sql = "INSERT INTO user(nombre, foto, correo) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO usuario(nombre, foto, correo) VALUES (?, ?, ?)";
         try (
-                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                Connection conn = org.ciclo.model.connect.Connection.getConnect()
         ) {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
             st.setString(2, this.getPhoto());
             st.setString(3, this.getEmail());
-           
+
             int i = st.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 saved = true;
             }
 
-            sql = "SElECT id FROM usuario WHERE email=?";
+            sql = "SElECT id FROM usuario WHERE correo=?";
             st = conn.prepareStatement(sql);
             st.setString(1, this.getEmail());
             ResultSet rs = st.executeQuery();
-            if(rs !=null && rs.next()){
+            if (rs != null && rs.next()) {
                 this.setId(rs.getInt("id"));
             }
             rs.close();
@@ -168,21 +171,22 @@ public class UserDAO extends User {
 
         return saved;
     }
-    
-    
-    public boolean update(){
-        boolean update =false;
-        String sql = "UPDATE usuario SET nombre = ?, foto = ?, correo = ?, FROM usuario WHERE id = ?";
+
+
+    public boolean update() {
+        boolean update = false;
+        String sql = "UPDATE usuario SET nombre = ?, foto = ?, correo = ?  WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setString(1, this.getName());
             st.setString(2, this.getPhoto());
             st.setString(3, this.getEmail());
-           
+            st.setInt(4, this.getId());
+
             int i = st.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 update = true;
             }
         } catch (SQLException ex) {
@@ -192,16 +196,17 @@ public class UserDAO extends User {
 
         return update;
     }
-    public static  boolean remove(Integer id){
-        boolean removed =false;
+
+    public static boolean remove(Integer id) {
+        boolean removed = false;
         String sql = "DELETE FROM usuario WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setInt(1, id);
             int i = st.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -211,16 +216,16 @@ public class UserDAO extends User {
     }
 
 
-    public  boolean remove(){
-        boolean removed =false;
+    public boolean remove() {
+        boolean removed = false;
         String sql = "DELETE FROM usuario WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setInt(1, this.getId());
             int i = st.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -229,16 +234,16 @@ public class UserDAO extends User {
         return removed;
     }
 
-    public static  boolean remove(String email){
-        boolean removed =false;
+    public static boolean remove(String email) {
+        boolean removed = false;
         String sql = "DELETE FROM usuario WHERE email = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql);
+                PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setString(1, email);
             int i = st.executeUpdate();
-            if(i>1){
+            if (i > 1) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -247,18 +252,18 @@ public class UserDAO extends User {
         return removed;
     }
 
-    public boolean subscribe(Playlist playlist){
+    public boolean subscribe(Playlist playlist) {
 
         boolean subscribed = false;
         String sql = "INSERT INTO suscripcion(id_usuario, id_lista) VALUES (?,?)";
 
-        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
-            PreparedStatement st = conn.prepareStatement(sql)
-        ){
+        try (Connection conn = org.ciclo.model.connect.Connection.getConnect();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ) {
             st.setInt(1, this.getId());
             st.setInt(2, playlist.getId());
             int i = st.executeUpdate();
-            if(i > 0){
+            if (i > 0) {
                 subscribed = true;
             }
 
@@ -269,18 +274,18 @@ public class UserDAO extends User {
     }
 
 
-    public boolean unsubscribe(Playlist playlist){
+    public boolean unsubscribe(Playlist playlist) {
 
         boolean unsubscribed = false;
         String sql = "DELETE FROM suscripcion WHERE id_usuario = ?, id_playlist = ?)";
 
-        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
-            PreparedStatement st = conn.prepareStatement(sql)
-        ){
+        try (Connection conn = org.ciclo.model.connect.Connection.getConnect();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ) {
             st.setInt(1, this.getId());
             st.setInt(2, playlist.getId());
             int i = st.executeUpdate();
-            if(i > 0){
+            if (i > 0) {
                 unsubscribed = true;
             }
 
@@ -290,24 +295,11 @@ public class UserDAO extends User {
         return unsubscribed;
     }
 
-	public boolean loadCreated(){
+    public boolean loadCreated() {
         boolean load = false;
 
         Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listUserCreated(this));
-        if(!created.isEmpty()){
-        this.setCreated(created);
-        load = true;
-        }
-
-        return load;
-    }
-
-    public boolean loadSubscribed(){
-        boolean load = false;
-
-
-        Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listPlaylistSuscribers(this));
-        if(!created.isEmpty()){
+        if (!created.isEmpty()) {
             this.setCreated(created);
             load = true;
         }
@@ -315,11 +307,24 @@ public class UserDAO extends User {
         return load;
     }
 
-    public static List<User> listUserSubscribed(Playlist playlist){
-        List <User> user = new ArrayList<>();
+    public boolean loadSubscribed() {
+        boolean load = false;
+
+
+        Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listPlaylistSuscribers(this));
+        if (!created.isEmpty()) {
+            this.setCreated(created);
+            load = true;
+        }
+
+        return load;
+    }
+
+    public static List<User> listUserSubscribed(Playlist playlist) {
+        List<User> user = new ArrayList<>();
         Integer id_playlist = playlist.getId();
 
-        String sql="SELECT id, nombre, correo, foto "
+        String sql = "SELECT id, nombre, correo, foto "
                 + "FROM usuario  "
                 + "WHERE id IN (SELECT id_usuario FROM suscripcion WHERE id_lista=?)";
         try (
@@ -327,7 +332,6 @@ public class UserDAO extends User {
                 PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setInt(1, id_playlist);
-
 
 
             ResultSet rs = st.executeQuery();

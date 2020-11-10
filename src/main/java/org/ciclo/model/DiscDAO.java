@@ -24,7 +24,7 @@ public class DiscDAO extends Disc {
 
     }
 
-    public DiscDAO(Integer id){
+    public DiscDAO(Integer id) {
         this(DiscDAO.listById(id));
     }
 
@@ -217,7 +217,7 @@ public class DiscDAO extends Disc {
         return saved;
     }
 
-    public static List<Disc> searchByAuthor(Artist artist){
+    public static List<Disc> searchByAuthor(Artist artist) {
         Integer id_artist = artist.getId();
         List<Disc> discs = new ArrayList<>();
 
@@ -245,10 +245,10 @@ public class DiscDAO extends Disc {
 
     }
 
-    public boolean loadSongs(){
+    public boolean loadSongs() {
         boolean loaded = false;
         this.setSongs(new TreeSet<>(SongDAO.searchByDisc(this)));
-        if(!this.getSongs().isEmpty()){
+        if (!this.getSongs().isEmpty()) {
             loaded = true;
         }
         return loaded;

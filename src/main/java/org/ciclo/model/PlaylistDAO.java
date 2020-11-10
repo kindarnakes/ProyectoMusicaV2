@@ -1,4 +1,3 @@
-
 package org.ciclo.model;
 
 import java.sql.Connection;
@@ -9,11 +8,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlaylistDAO extends Playlist {
-    
-    public PlaylistDAO(){
-      super();
+
+    public PlaylistDAO() {
+        super();
     }
-    
+
     public PlaylistDAO(Playlist p) {
         this.setCreator(p.getCreator());
         this.setId(p.getId());
@@ -22,12 +21,12 @@ public class PlaylistDAO extends Playlist {
         this.setSongs(p.getSongs());
         this.setSusbcribers(p.getSusbcribers());
     }
-    
-    public PlaylistDAO(Integer id){
+
+    public PlaylistDAO(Integer id) {
         this(PlaylistDAO.List_Playlist_By_Id(id));
     }
-    
-      public static List<Playlist> List_All_Playlist() {
+
+    public static List<Playlist> List_All_Playlist() {
         List<Playlist> playlist = new ArrayList<>();
         String sql = "SELECT * FROM lista_reproduccion";
         try (
@@ -41,7 +40,7 @@ public class PlaylistDAO extends Playlist {
                 p.setId(rs.getInt("id"));
                 p.setName(rs.getString("nombre"));
                 p.setDescription(rs.getString("descripcion"));
-                
+
                 boolean find = false;
                 int index = 0;
                 for (int i = 0; i < users.size() && !find; i++) {
@@ -58,8 +57,8 @@ public class PlaylistDAO extends Playlist {
         }
         return playlist;
     }
-      
-        public static Playlist List_Playlist_By_Id(Integer id) {
+
+    public static Playlist List_Playlist_By_Id(Integer id) {
         Playlist p = new Playlist();
         String sql = "SELECT id, nombre, descripcion, id_creador FROM lista_reproduccion WHERE id = ?";
         try (
@@ -72,7 +71,7 @@ public class PlaylistDAO extends Playlist {
                 User u = UserDAO.listById(rs.getInt("id_creador"));
                 Playlist aux = new Playlist();
                 aux.setId(rs.getInt("id"));
-                aux.setName(rs.getString("nombre"));               
+                aux.setName(rs.getString("nombre"));
                 aux.setDescription(rs.getNString("descripcion"));
                 aux.setCreator(u);
                 p = aux;
@@ -84,8 +83,8 @@ public class PlaylistDAO extends Playlist {
         }
         return p;
     }
-         
-        public static List<Playlist> listByName(String name) {
+
+    public static List<Playlist> listByName(String name) {
         List<Playlist> playlists = new ArrayList<>();
         String sql = "SELECT id, nombre, descripcion, id_creador FROM lista_reproduccion WHERE nombre = ?";
         try (
@@ -118,72 +117,72 @@ public class PlaylistDAO extends Playlist {
         }
         return playlists;
     }
-        
-        public static List<Playlist> listBySong(Song song){
-            List<Playlist> playlists = new ArrayList<>();
-            String sql = "SELECT id, nombre, descripcion, id_creador" +
-           "FROM lista_reproduccion " +
-            "WHERE id IN (SELECT id_lista FROM lista_cancion WHERE id_cancion = ?)";
-            try (
+
+    public static List<Playlist> listBySong(Song song) {
+        List<Playlist> playlists = new ArrayList<>();
+        String sql = "SELECT id, nombre, descripcion, id_creador" +
+                "FROM lista_reproduccion " +
+                "WHERE id IN (SELECT id_lista FROM lista_cancion WHERE id_cancion = ?)";
+        try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                PreparedStatement st = conn.prepareStatement(sql) 
-            ){
-               List<User> users = UserDAO.listAll();
-               st.setInt(1, song.getId());
-               ResultSet rs = st.executeQuery();
-               while(rs != null && rs.next()){
-                   Playlist p = new Playlist();
-                   p.setId(rs.getInt("id"));
-                   p.setName(rs.getString("nombre"));
-                   p.setDescription(rs.getString("descripcion"));
-                   
-                   boolean find = false;
-                   
-                   for(int i=0; i<users.size() && !find; i++){
-                       if(users.get(i).getId() == rs.getInt("id_creador")){
-                           p.setCreator(users.get(i));
-                           find = true;
-                       }
-                   }                 
-                   playlists.add(p);                  
-               }
-                rs.close();
-                
-            } catch (SQLException ex) {
-            ex.printStackTrace();
-            }
-            return playlists;
-        }
-        
-        public static List<Playlist> listUserCreated(User user){
-            List<Playlist> playlists = new ArrayList<>();
-            Integer id_user = user.getId();
-            String sql = "SELECT id, nombre, descripcion" +
-           "FROM lista_reproduccion " +
-            "WHERE id_creador = ?";
-            try (
-                    Connection conn = org.ciclo.model.connect.Connection.getConnect();
-                    PreparedStatement st = conn.prepareStatement(sql)
-            ) {
-                st.setInt(1, id_user);
-                ResultSet rs = st.executeQuery();
-                while (rs != null && rs.next()) {
-                    Playlist aux = new Playlist();
-                    aux.setId(rs.getInt("id"));
-                    aux.setName(rs.getString("nombre"));
-                    aux.setDescription(rs.getString("descripcion"));        
-                    aux.setCreator(user);
-                    playlists.add(aux);
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            List<User> users = UserDAO.listAll();
+            st.setInt(1, song.getId());
+            ResultSet rs = st.executeQuery();
+            while (rs != null && rs.next()) {
+                Playlist p = new Playlist();
+                p.setId(rs.getInt("id"));
+                p.setName(rs.getString("nombre"));
+                p.setDescription(rs.getString("descripcion"));
+
+                boolean find = false;
+
+                for (int i = 0; i < users.size() && !find; i++) {
+                    if (users.get(i).getId() == rs.getInt("id_creador")) {
+                        p.setCreator(users.get(i));
+                        find = true;
+                    }
                 }
-                rs.close();
-            } catch (SQLException ex) {
-                ex.printStackTrace();
+                playlists.add(p);
             }
-            return playlists;        
+            rs.close();
+
+        } catch (SQLException ex) {
+            ex.printStackTrace();
         }
-        
-         
-        public boolean update() {
+        return playlists;
+    }
+
+    public static List<Playlist> listUserCreated(User user) {
+        List<Playlist> playlists = new ArrayList<>();
+        Integer id_user = user.getId();
+        String sql = "SELECT id, nombre, descripcion" +
+                "FROM lista_reproduccion " +
+                "WHERE id_creador = ?";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql)
+        ) {
+            st.setInt(1, id_user);
+            ResultSet rs = st.executeQuery();
+            while (rs != null && rs.next()) {
+                Playlist aux = new Playlist();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setDescription(rs.getString("descripcion"));
+                aux.setCreator(user);
+                playlists.add(aux);
+            }
+            rs.close();
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return playlists;
+    }
+
+
+    public boolean update() {
         boolean update = false;
         String sql = "UPDATE lista_reproduccion SET nombre = ?, descripccion = ?, id_creador = ? WHERE id = ?";
         try (
@@ -192,7 +191,7 @@ public class PlaylistDAO extends Playlist {
         ) {
             st.setString(1, this.getName());
             st.setString(2, this.getDescription());
-            st.setInt(3, this.getCreator().getId());          
+            st.setInt(3, this.getCreator().getId());
             st.setInt(5, this.getId());
 
             int i = st.executeUpdate();
@@ -206,8 +205,8 @@ public class PlaylistDAO extends Playlist {
 
         return update;
     }
-         
-      public static boolean remove(Integer id) {
+
+    public static boolean remove(Integer id) {
         boolean removed = false;
         String sql = "DELETE FROM lista_reproduccion WHERE id = ?";
         try (
@@ -223,9 +222,9 @@ public class PlaylistDAO extends Playlist {
             ex.printStackTrace();
         }
         return removed;
-    }   
-         
-       public boolean remove() {
+    }
+
+    public boolean remove() {
         boolean removed = false;
         String sql = "DELETE FROM lista_reproduccion WHERE id = ?";
         try (
@@ -241,9 +240,9 @@ public class PlaylistDAO extends Playlist {
             ex.printStackTrace();
         }
         return removed;
-    }  
-       
-        public boolean save() {
+    }
+
+    public boolean save() {
         boolean saved = false;
 
         String sql = "INSERT INTO lista_reproduccion(nombre, descripcion, id_creador) VALUES (?, ?, ?)";
@@ -275,19 +274,19 @@ public class PlaylistDAO extends Playlist {
         return saved;
     }
 
-    public boolean addSong(Song song){
+    public boolean addSong(Song song) {
         boolean added = false;
 
 
         String sql = "INSERT INTO lista_cancion(id_lista, id_cancion) VALUES (?,?)";
 
-        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
-        PreparedStatement st = conn.prepareStatement(sql)
-        ){
+        try (Connection conn = org.ciclo.model.connect.Connection.getConnect();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ) {
             st.setInt(1, this.getId());
             st.setInt(2, song.getId());
             int i = st.executeUpdate();
-            if(i > 0){
+            if (i > 0) {
                 added = true;
             }
 
@@ -298,17 +297,18 @@ public class PlaylistDAO extends Playlist {
 
         return added;
     }
-    public boolean removeSong(Song song){
+
+    public boolean removeSong(Song song) {
         boolean remove = false;
         String sql = "DELETE FROM lista_cancion WHERE id_lista = ?, id_cancion = ?";
 
-        try(Connection conn =org.ciclo.model.connect.Connection.getConnect();
-            PreparedStatement st = conn.prepareStatement(sql)
-        ){
+        try (Connection conn = org.ciclo.model.connect.Connection.getConnect();
+             PreparedStatement st = conn.prepareStatement(sql)
+        ) {
             st.setInt(1, this.getId());
             st.setInt(2, song.getId());
             int i = st.executeUpdate();
-            if(i > 0){
+            if (i > 0) {
                 remove = true;
             }
 
@@ -319,11 +319,11 @@ public class PlaylistDAO extends Playlist {
     }
 
 
-    public static List<Playlist> listPlaylistSuscribers(User user){
-        List <Playlist> playlist = new ArrayList<>();
+    public static List<Playlist> listPlaylistSuscribers(User user) {
+        List<Playlist> playlist = new ArrayList<>();
         Integer id_user = user.getId();
 
-        String sql="SELECT id, nombre, descripcion, id_creador "
+        String sql = "SELECT id, nombre, descripcion, id_creador "
                 + "FROM lista_reproduccion  "
                 + "WHERE id IN (SELECT id_lista FROM suscripcion WHERE id_usuario=?)";
         try (
@@ -331,7 +331,7 @@ public class PlaylistDAO extends Playlist {
                 PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setInt(1, id_user);
-            List<User> luser= UserDAO.listAll();
+            List<User> luser = UserDAO.listAll();
 
 
             ResultSet rs = st.executeQuery();
@@ -341,11 +341,11 @@ public class PlaylistDAO extends Playlist {
                 aux.setName(rs.getString("nombre"));
                 aux.setDescription(rs.getString("descripcion"));
 
-                boolean find=false;
-                for(int i=0; i<luser.size() && !find;i++) {
-                    if(rs.getInt("id_creador")==luser.get(i).getId()) {
+                boolean find = false;
+                for (int i = 0; i < luser.size() && !find; i++) {
+                    if (rs.getInt("id_creador") == luser.get(i).getId()) {
                         aux.setCreator(luser.get(i));
-                        find=true;
+                        find = true;
 
                     }
                 }
@@ -358,5 +358,5 @@ public class PlaylistDAO extends Playlist {
         return playlist;
 
     }
-               
+
 }

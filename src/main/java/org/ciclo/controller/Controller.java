@@ -5,8 +5,8 @@ import org.ciclo.model.*;
 import java.time.LocalDate;
 import java.util.List;
 
-public class Controller implements IController{
-   @Override
+public class Controller implements IController {
+    @Override
     public List<Artist> listAllArtist() {
         List<Artist> artists = ArtistDAO.List_All_Artist();
         return artists;
@@ -26,7 +26,7 @@ public class Controller implements IController{
 
     @Override
     public boolean createArtist(String name, String photo, String from) {
-        Artist artist = new Artist(name, photo, from);             
+        Artist artist = new Artist(name, photo, from);
         ArtistDAO artistDAO = new ArtistDAO(artist);
         return artistDAO.Insert_Artist();
     }
@@ -58,7 +58,7 @@ public class Controller implements IController{
 
     @Override
     public Disc listDiscById(Integer id) {
-       Disc disc = DiscDAO.listById(id);
+        Disc disc = DiscDAO.listById(id);
         return disc;
     }
 
@@ -70,7 +70,7 @@ public class Controller implements IController{
 
     @Override
     public boolean createDisc(String name, String photo, LocalDate releaseDate, Artist creator, List<Song> songs) {
-        Disc disc = new Disc(name, releaseDate, photo, creator, null);             
+        Disc disc = new Disc(name, releaseDate, photo, creator, null);
         DiscDAO discDAO = new DiscDAO(disc);
         return discDAO.save();
     }

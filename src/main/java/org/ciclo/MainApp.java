@@ -6,31 +6,37 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.io.IOException;
+
 
 public class MainApp extends Application {
 
+
+    private static Scene scene;
+
     @Override
-    public void start(Stage stage) throws Exception {
-        Parent root = FXMLLoader.load(getClass().getResource("/fxml/Main.fxml"));
-        
-        Scene scene = new Scene(root);
-        scene.getStylesheets().add("/styles/Styles.css");
-        
-        stage.setTitle("JavaFX and Maven");
+    public void start(Stage stage) throws IOException {
+        Parent root = loadFXML("TestTable");
+        scene = new Scene(root, root.prefWidth(0), root.prefHeight(0));
         stage.setScene(scene);
+        stage.setTitle("ProyectoMusica");
         stage.show();
     }
 
-    /**
-     * The main() method is ignored in correctly deployed JavaFX application.
-     * main() serves only as fallback in case the application can not be
-     * launched through deployment artifacts, e.g., in IDEs with limited FX
-     * support. NetBeans ignores main().
-     *
-     * @param args the command line arguments
-     */
+    public static void setRoot(String fxml) throws IOException {
+        Parent root = loadFXML(fxml);
+        scene.getWindow().setHeight(root.prefHeight(0) + 20);
+        scene.getWindow().setWidth(root.prefWidth(0) + 20);
+        scene.setRoot(root);
+    }
+
+    private static Parent loadFXML(String fxml) throws IOException {
+        FXMLLoader fxmlLoader = new FXMLLoader(MainApp.class.getResource("/View/fxml/" + fxml + ".fxml"));
+        return fxmlLoader.load();
+    }
+
     public static void main(String[] args) {
-        launch(args);
+        launch();
     }
 
 }
