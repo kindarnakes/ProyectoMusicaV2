@@ -141,7 +141,7 @@ public class Controller implements IController{
     }
 
     @Override
-    public List<User> listUserByEmail(String email) {
+    public User listUserByEmail(String email) {
         return null;
     }
 

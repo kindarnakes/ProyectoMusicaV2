@@ -35,7 +35,7 @@ public interface IController {
     public List<User> listAllUser();
     public User listUserById(Integer id);
     public List<User> listUserByName(String name);
-    public List<User> listUserByEmail(String email);
+    public User listUserByEmail(String email);
     public boolean createUser(String name, String email, String photo);
     public boolean updateUser(User user, String name, String email, String photo);
     public boolean removeUser(Integer id);
