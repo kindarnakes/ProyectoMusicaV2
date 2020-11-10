@@ -6,77 +6,95 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class Controller implements IController{
-    @Override
+   @Override
     public List<Artist> listAllArtist() {
-        return null;
+        List<Artist> artists = ArtistDAO.List_All_Artist();
+        return artists;
     }
 
     @Override
     public Artist listArtistById(Integer id) {
-        return null;
+        Artist artist = ArtistDAO.List_Artist_By_Id(id);
+        return artist;
     }
 
     @Override
     public Artist listArtistByName(String name) {
-        return null;
+        Artist artist = ArtistDAO.List_Artist_By_Name(name);
+        return artist;
     }
 
-
     @Override
-    public boolean createArtist(String name, String from, String photo) {
-        return false;
+    public boolean createArtist(String name, String photo, String from) {
+        Artist artist = new Artist(name, photo, from);             
+        ArtistDAO artistDAO = new ArtistDAO(artist);
+        return artistDAO.Insert_Artist();
     }
 
     @Override
     public boolean updateArtist(Artist artist, String name, String from, String photo) {
-        return false;
+        artist.setName(name);
+        artist.setNationality(from);
+        artist.setPhoto(photo);
+        ArtistDAO artistDAO = new ArtistDAO(artist);
+        return artistDAO.Update_Artist();
     }
 
     @Override
     public boolean removeArtist(Integer id) {
-        return false;
+        return ArtistDAO.Remove_Artist_by_Id(id);
     }
 
     @Override
     public boolean removeArtist(String name) {
-        return false;
+        return ArtistDAO.Remove_Artist_by_Name(name);
     }
 
     @Override
     public List<Disc> listAllDisc() {
-        return null;
+        List<Disc> discs = DiscDAO.listAll();
+        return discs;
     }
 
     @Override
     public Disc listDiscById(Integer id) {
-        return null;
+       Disc disc = DiscDAO.listById(id);
+        return disc;
     }
-
 
     @Override
     public List<Disc> listDiscByName(String name) {
-        return null;
+        List<Disc> discs = DiscDAO.listByName(name);
+        return discs;
     }
 
     @Override
     public boolean createDisc(String name, String photo, LocalDate releaseDate, Artist creator, List<Song> songs) {
-        return false;
+        Disc disc = new Disc(name, releaseDate, photo, creator, null);             
+        DiscDAO discDAO = new DiscDAO(disc);
+        return discDAO.save();
     }
 
     @Override
     public boolean updateDisc(Disc disc, String name, String photo, LocalDate releaseDate, Artist creator) {
-        return false;
+        disc.setName(name);
+        disc.setPhoto(photo);
+        disc.setReleaseDate(releaseDate);
+        disc.setArtist(creator);
+        DiscDAO discDAO = new DiscDAO(disc);
+        return discDAO.update();
     }
 
 
     @Override
     public boolean removeDisc(Integer id) {
-        return false;
+        return DiscDAO.remove(id);
     }
 
     @Override
     public List<Song> listAllSong() {
-        return null;
+        List<Song> songs = SongDAO.listAll();
+        return songs;
     }
 
     @Override
