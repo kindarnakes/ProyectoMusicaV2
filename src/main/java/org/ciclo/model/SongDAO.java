@@ -33,7 +33,7 @@ public class SongDAO extends Song {
 
     public static List<Song> listAll() {
         List<Song> songs = new ArrayList<>();
-        String sql = "SELECT id, nombre, duracion FROM cancion";
+        String sql = "SELECT id, nombre, duracion, id_disco FROM cancion";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql);
@@ -64,7 +64,7 @@ public class SongDAO extends Song {
 
     public static Song listById(Integer id) {
         Song song = new Song();
-        String sql = "SELECT id, nombre, duracion FROM cancion WHERE id = ?";
+        String sql = "SELECT id, nombre, duracion, id_disco FROM cancion WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -115,7 +115,7 @@ public class SongDAO extends Song {
 
     public boolean update() {
         boolean update = false;
-        String sql = "UPDATE cancion SET nombre = ?, duration = ?, id_disco = ? FROM cancion WHERE id = ?";
+        String sql = "UPDATE cancion SET nombre = ?, duracion = ?, id_disco = ? WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -139,7 +139,7 @@ public class SongDAO extends Song {
     public boolean save() {
         boolean saved = false;
 
-        String sql = "INSERT INTO cancion(nombre, duration, id_disco) VALUES (?, ?, ?)";
+        String sql = "INSERT INTO cancion(nombre, duracion, id_disco) VALUES (?, ?, ?)";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect()
         ) {
@@ -152,7 +152,7 @@ public class SongDAO extends Song {
                 saved = true;
             }
 
-            sql = "SElECT id FROM canciones WHERE nombre = ? ORDER BY id DESC LIMIT 1";
+            sql = "SElECT id FROM cancion WHERE nombre = ? ORDER BY id DESC LIMIT 1";
             st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
             ResultSet rs = st.executeQuery();
@@ -170,7 +170,7 @@ public class SongDAO extends Song {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
-        String sql = "DELETE FROM canciones WHERE id = ?";
+        String sql = "DELETE FROM cancion WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -188,7 +188,7 @@ public class SongDAO extends Song {
 
     public boolean remove() {
         boolean removed = false;
-        String sql = "DELETE FROM canciones WHERE id = ?";
+        String sql = "DELETE FROM cancion WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)

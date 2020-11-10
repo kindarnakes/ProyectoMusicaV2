@@ -112,7 +112,7 @@ public class Controller implements IController {
 
     @Override
     public boolean createSong(String name, Disc disc, Integer duration, List<Playlist> playlist) {
-        Set<IPlaylists> play=new TreeSet<>(playlist);
+        Set<IPlaylists> play= playlist!= null?new TreeSet<>(playlist):new TreeSet<>();
         Song song = new Song(name, duration, play, disc);
         SongDAO songdao = new SongDAO(song);
         return songdao.save();
