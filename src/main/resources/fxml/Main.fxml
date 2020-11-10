@@ -5,13 +5,13 @@
 
 <AnchorPane id="AnchorPane" prefHeight="616.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.FXMLController">
    <children>
-      <TreeTableView fx:id="tableExample" layoutX="182.0" layoutY="90.0" prefHeight="329.0" prefWidth="453.0">
+      <Button fx:id="delete" layoutX="399.0" layoutY="474.0" mnemonicParsing="false" onAction="#delete" text="DELETE" />
+      <TableView fx:id="tableExample" layoutX="192.0" layoutY="127.0" prefHeight="329.0" prefWidth="415.0">
         <columns>
-          <TreeTableColumn fx:id="c1" prefWidth="112.0" text="C1" />
-          <TreeTableColumn fx:id="c2" prefWidth="120.0" text="C2" />
-            <TreeTableColumn fx:id="c3" minWidth="0.0" prefWidth="120.0" text="C3" />
-            <TreeTableColumn fx:id="c4" prefWidth="100.0" text="C4" />
+          <TableColumn fx:id="c1" prefWidth="150.0" text="C1" />
+          <TableColumn fx:id="c2" prefWidth="125.0" text="C2" />
+            <TableColumn fx:id="c3" prefWidth="139.0" text="Column X" />
         </columns>
-      </TreeTableView>
+      </TableView>
    </children>
 </AnchorPane>

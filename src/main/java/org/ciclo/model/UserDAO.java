@@ -209,6 +209,26 @@ public class UserDAO extends User {
         }
         return removed;
     }
+
+
+    public  boolean remove(){
+        boolean removed =false;
+        String sql = "DELETE FROM usuario WHERE id = ?";
+        try (
+                Connection conn = org.ciclo.model.connect.Connection.getConnect();
+                PreparedStatement st = conn.prepareStatement(sql);
+        ) {
+            st.setInt(1, this.getId());
+            int i = st.executeUpdate();
+            if(i>1){
+                removed = true;
+            }
+        } catch (SQLException ex) {
+            ex.printStackTrace();
+        }
+        return removed;
+    }
+
     public static  boolean remove(String email){
         boolean removed =false;
         String sql = "DELETE FROM usuario WHERE email = ?";
