@@ -192,7 +192,7 @@ public class PlaylistDAO extends Playlist {
             st.setString(1, this.getName());
             st.setString(2, this.getDescription());
             st.setInt(3, this.getCreator().getId());
-            st.setInt(5, this.getId());
+            st.setInt(4, this.getId());
 
             int i = st.executeUpdate();
             if (i > 1) {

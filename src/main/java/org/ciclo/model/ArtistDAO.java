@@ -142,6 +142,7 @@ public class ArtistDAO extends Artist {
             ps.setString(1, this.getName());
             ps.setString(2, this.getFrom());
             ps.setString(3, this.getPhoto());
+            ps.setInt(4, this.getId());
             int i = ps.executeUpdate();
             if (i > 1) {
                 result = true;
