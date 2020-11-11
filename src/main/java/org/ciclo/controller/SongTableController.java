@@ -1,5 +1,6 @@
 package org.ciclo.controller;
 
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,30 +10,28 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.ciclo.MainApp;
-import org.ciclo.model.User;
-import org.ciclo.model.UserDAO;
+import org.ciclo.model.*;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class TestTableController implements Initializable {
+public class SongTableController implements Initializable {
 
     @FXML
-    TableView<User> tableExample;
+    TableView<Song> tableExample;
     @FXML
-    TableColumn<User, String> c1;
+    TableColumn<Song, String> c1;
     @FXML
-    TableColumn<User, String> c2;
+    TableColumn<Song, Integer> c2;
     @FXML
-    TableColumn<User, String> c3;
+    TableColumn<Song, String> c3;
+    @FXML
+    TableColumn<Song, String> c4;
 
-    private ObservableList<User> _list;
+    private ObservableList<Song> _list;
 
 
     @Override
@@ -46,16 +45,17 @@ public class TestTableController implements Initializable {
     }
 
     public void updateTable() {
-        _list = FXCollections.observableList(UserDAO.listAll());
+        _list = FXCollections.observableList(SongDAO.listAll());
         tableExample.setItems(_list);
         c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        c2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getEmail()));
-        c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPhoto()));
+        c2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDuration()).asObject());
+        c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getName()));
+        c4.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getArtist().getName()));
     }
 
     public void delete() {
-        UserDAO userDAO = new UserDAO(tableExample.getSelectionModel().getSelectedItem());
-        userDAO.remove();
+        SongDAO songDAO = new SongDAO(tableExample.getSelectionModel().getSelectedItem());
+        songDAO.remove();
         updateTable();
     }
 
@@ -66,9 +66,9 @@ public class TestTableController implements Initializable {
     public void update() {
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/FormTest.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/SongForm.fxml"));
             root = loader.load();
-            TestFormController test = loader.getController();
+            SongFormController test = loader.getController();
             test.setId(tableExample.getSelectionModel().getSelectedItem() !=null? tableExample.getSelectionModel().getSelectedItem().getId():0);
             test.showData();
             Scene scene = this.tableExample.getScene();

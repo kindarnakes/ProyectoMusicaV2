@@ -64,7 +64,7 @@ public class SongDAO extends Song {
 
     public static Song listById(Integer id) {
         Song song = new Song();
-        String sql = "SELECT id, nombre, duracion, id_disco FROM cancion WHERE id = ?";
+        String sql = "SELECT id, nombre, duracion, id_disco FROM cancion WHERE id = ?"; //cambiar
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -90,7 +90,9 @@ public class SongDAO extends Song {
 
     public static List<Song> listByName(String name) {
         List<Song> songs = new ArrayList<>();
-        String sql = "SELECT id, nombre, duracion, id_disco FROM cancion WHERE nombre = ?";
+        String sql = "SELECT c.id, c.nombre, c.duracion, d.id, d.nombre, d.foto, d.fecha_publicacion, a.id, a.nombre, a.foto, a.nacionalidad " +
+                "FROM cancion AS c LEFT JOIN disco AS d ON c.id_disco = d.id LEFT JOIN artista AS a ON a.id=d.id_artista " +
+                "WHERE c.nombre = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -98,11 +100,20 @@ public class SongDAO extends Song {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
             while (rs != null && rs.next()) {
-                Disc disc = DiscDAO.listById(rs.getInt("id_disco"));//Name not UNIQUE but not have many repetitions
+                Disc disc = new Disc();
+                Artist artist = new Artist();
                 Song aux = new Song();
-                aux.setId(rs.getInt("id"));
-                aux.setName(rs.getString("nombre"));
-                aux.setDuration(rs.getInt("duracion"));
+                aux.setId(rs.getInt("c.id"));
+                aux.setName(rs.getString("c.nombre"));
+                aux.setDuration(rs.getInt("c.duracion"));
+                disc.setId(rs.getInt("d.id"));
+                disc.setName(rs.getString("d.nombre"));
+                disc.setPhoto(rs.getString("d.foto"));
+                disc.setReleaseDate(rs.getDate("d.fecha_publicacion").toLocalDate());
+                artist.setId(rs.getInt("a.id"));
+                artist.setName(rs.getString("a.nombre"));
+                artist.setNationality(rs.getString("a.nacionalidad"));
+                disc.setArtist(artist);
                 aux.setDisc(disc);
                 songs.add(aux);
             }

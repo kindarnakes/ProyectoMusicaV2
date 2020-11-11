@@ -91,29 +91,25 @@ public class DiscDAO extends Disc {
 
     public static List<Disc> listByName(String name) {
         List<Disc> disc = new ArrayList<>();
-        String sql = "SELECT id, nombre, fecha_publicacion, id_artista, foto FROM disco WHERE nombre = ?";
+        String sql = "SELECT d.id, d.nombre, d.foto, d.fecha_publicacion, a.id, a.nombre, a.foto, a.nacionalidad " +
+                "FROM disco AS d LEFT JOIN artista AS a ON a.id=d.id_artista " +
+                "WHERE d.nombre = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
         ) {
             st.setString(1, name);
             ResultSet rs = st.executeQuery();
-            List<Artist> artists = ArtistDAO.List_All_Artist();
             while (rs != null && rs.next()) {
-
+                Artist artist = new Artist();
                 Disc aux = new Disc();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
                 aux.setReleaseDate(rs.getDate("fecha_publicacion").toLocalDate());
-                boolean find = false;
-                int index = 0;
-                for (int i = 0; i < artists.size() && !find; i++) {
-                    if (artists.get(i).getId() == rs.getInt("id_artista")) {
-                        find = true;
-                        index = i;
-                    }
-                }
-                aux.setArtist(artists.get(index));
+                artist.setId(rs.getInt("a.id"));
+                artist.setName(rs.getString("a.nombre"));
+                artist.setNationality(rs.getString("a.nacionalidad"));
+                aux.setArtist(artist);
                 disc.add(aux);
             }
             rs.close();

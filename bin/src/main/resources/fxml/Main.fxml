@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="616.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.TestTableController">
+<AnchorPane id="AnchorPane" prefHeight="616.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.SongTableController">
    <children>
       <TreeTableView fx:id="tableExample" layoutX="182.0" layoutY="90.0" prefHeight="329.0" prefWidth="453.0">
         <columns>
