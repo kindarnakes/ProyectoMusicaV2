@@ -112,11 +112,11 @@ public class Controller implements IController {
 
     @Override
     public boolean createSong(String name, Disc disc, Integer duration, List<Playlist> playlist) {
-        Set<IPlaylists> play= playlist!= null?new TreeSet<>(playlist):new TreeSet<>();
+        Set<IPlaylists> play = playlist != null ? new TreeSet<>(playlist) : new TreeSet<>();
         Song song = new Song(name, duration, play, disc);
         SongDAO songdao = new SongDAO(song);
         return songdao.save();
-      
+
     }
 
     @Override
@@ -126,7 +126,7 @@ public class Controller implements IController {
         song.setDuration(duration);
         SongDAO songdao = new SongDAO(song);
         return songdao.update();
-        
+
     }
 
 
@@ -158,10 +158,10 @@ public class Controller implements IController {
 
     @Override
     public boolean createUser(String name, String email, String photo) {
-          User user = new User(name, photo, email);
+        User user = new User(name, photo, email);
         UserDAO userdao = new UserDAO(user);
         return userdao.save();
-        
+
     }
 
     @Override
@@ -171,7 +171,7 @@ public class Controller implements IController {
         user.setPhoto(photo);
         UserDAO userdao = new UserDAO(user);
         return userdao.update();
-        
+
     }
 
 

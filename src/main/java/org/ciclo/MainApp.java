@@ -16,7 +16,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = loadFXML("TestTable");
+        Parent root = loadFXML("PlaylistTable");
         scene = new Scene(root, root.prefWidth(0), root.prefHeight(0));
         stage.setScene(scene);
         stage.setTitle("ProyectoMusica");

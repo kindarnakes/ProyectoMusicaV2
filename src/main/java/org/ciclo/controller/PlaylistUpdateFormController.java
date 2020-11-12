@@ -13,6 +13,7 @@ import org.ciclo.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class PlaylistUpdateFormController implements Initializable {
@@ -21,6 +22,10 @@ public class PlaylistUpdateFormController implements Initializable {
     TextField name;
     @FXML
     TextArea description;
+    @FXML
+    ChoiceBox<String> creator;
+    @FXML
+    Label error;
 
     @FXML
     TableView<Song> tableExample;
@@ -52,29 +57,19 @@ public class PlaylistUpdateFormController implements Initializable {
 
     int id = 0;
 
-    public void save() {
-
-        if (name.getText() != null && !name.getText().equals("")) {
-            if (tableExample.getSelectionModel().getSelectedItem() != null) {
-                if (id == 0) {
+    public void save() throws IOException {
 
 
-
-                } else {
-
-
-                }
-
-                try {
-                    back();
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
-            } else {
-                Utils.popUp("Debe seleccionar disco", "Debe seleccionar a que disco pertenece la canción en la tabla");
+        String userEmail = creator.getSelectionModel().getSelectedItem();
+        User u = c.listUserByEmail(userEmail!=null?userEmail:"");
+        if (name.getText() != null && !name.getText().equals("") && u != null) {
+            if(c.updatePlaylist(playlistDAO, name.getText(), description.getText(), u)){
+                back();
+            }else{
+                Utils.popUp("Error de guardado", "No se ha podido guardar");
             }
         } else {
-            //error.setText("Debe escribir un nombre válido");
+            error.setText("Debe escribir un nombre válido");
         }
     }
 
@@ -97,20 +92,28 @@ public class PlaylistUpdateFormController implements Initializable {
                 if( song != null && c.addSongToPlaylist(playlistDAO, song)){
                     _list.remove(song);
                     _listIncluded.add(song);
+                    System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
             }
         });
 
         tableExample1.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                Song song = tableExample.getSelectionModel().getSelectedItem();
+                Song song = (Song) tableExample1.getSelectionModel().getSelectedItem();
                 if( song != null && c.removeSongToPlaylist(playlistDAO, song)){
+                    if(_list == null || _list.size() == 0){
+                        updateTable();
+                    }
                     _list.add(song);
                     _listIncluded.remove(song);
+                    System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
 
             }
         });
+        for(User u:c.listAllUser()){
+            creator.getItems().add(u.getEmail());
+        }
 
     }
 
@@ -127,6 +130,7 @@ public class PlaylistUpdateFormController implements Initializable {
             c21.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getName()));
             c31.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getArtist().getName()));
             c41.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getReleaseDate().toString()));
+            creator.getSelectionModel().select(playlistDAO.getCreator().getEmail());
         }
     }
 
