@@ -16,6 +16,10 @@ public class UserDAO extends User {
     public UserDAO() {
         super();
     }
+    /**
+     * Parametrized constructor
+     * @param u user to update
+     */
 
 
     public UserDAO(User u) {
@@ -28,10 +32,18 @@ public class UserDAO extends User {
         this.setReproductions(u.getReproductions());
         this.setSuscribed(u.getSubscribed());
     }
+    /**
+     * Constructor
+     * @param id of the user
+     */
 
     public UserDAO(Integer id) {
         this(UserDAO.listById(id));
     }
+    /**
+     * List all the users
+     * @return All the users
+     */
 
 
     public static List<User> listAll() {
@@ -58,6 +70,11 @@ public class UserDAO extends User {
         }
         return user;
     }
+    /**
+     * List of the user with that ide
+     * @param id unique for all the users
+     * @return The user with that id
+     */
 
     public static User listById(Integer id) {
         User user = new User();
@@ -85,6 +102,12 @@ public class UserDAO extends User {
         }
         return user;
     }
+    
+    /**
+     * List the user with that name
+     * @param name the name of the user
+     * @return The user with that name
+     */
 
     public static List<User> listByName(String name) {
         List<User> user = new ArrayList<>();
@@ -112,6 +135,11 @@ public class UserDAO extends User {
         }
         return user;
     }
+    /**
+     * List the user with that email
+     * @param email unique for all the user
+     * @return The user with that email
+     */
 
     public static User listByEmail(String email) {
         User user = null;
@@ -139,6 +167,10 @@ public class UserDAO extends User {
         }
         return user;
     }
+    /**
+     * Save and insert a user
+     * @return true if the user has been inserted and saved, false if not
+     */
 
     public boolean save() {
         boolean saved = false;
@@ -172,6 +204,10 @@ public class UserDAO extends User {
 
         return saved;
     }
+    /**
+     * Update a user
+     * @return true if the user has been updated, false if not
+     */
 
 
     public boolean update() {
@@ -197,6 +233,11 @@ public class UserDAO extends User {
 
         return update;
     }
+    /**
+     * Remove a user with that id
+     * @param id unique for all the users
+     * @return true if the user has been removed, false if not
+     */
 
     public static boolean remove(Integer id) {
         boolean removed = false;
@@ -215,6 +256,10 @@ public class UserDAO extends User {
         }
         return removed;
     }
+    /**
+     * Remove a user
+     * @return true if the user has been removed, false if not
+     */
 
 
     public boolean remove() {
@@ -234,6 +279,11 @@ public class UserDAO extends User {
         }
         return removed;
     }
+    /**
+     * Remove a user with that email
+     * @param email uniqe for all the user
+     * @return true if the user has been removed, false if not
+     */
 
     public static boolean remove(String email) {
         boolean removed = false;
@@ -252,6 +302,11 @@ public class UserDAO extends User {
         }
         return removed;
     }
+    /**
+     * Subscribe a user in a playlist
+     * @param playlist the playlist in which I want to insert
+     * @return  true if the user has been inserted in the playlist, false if not
+     */
 
     public boolean subscribe(Playlist playlist) {
 
@@ -273,6 +328,12 @@ public class UserDAO extends User {
         }
         return subscribed;
     }
+    
+    /**
+     * Unsubscribe a user of a playlist
+     * @param playlist the playlist in which I want to unsusvribed
+     * @return  true if the user has been unsubcribe in the playlist, false if not
+     */
 
 
     public boolean unsubscribe(Playlist playlist) {
@@ -295,6 +356,10 @@ public class UserDAO extends User {
         }
         return unsubscribed;
     }
+    /**
+     * Load all user creator
+     * @return true if the user has been loaded, false if not
+     */
 
     public boolean loadCreated() {
         boolean load = false;
@@ -307,6 +372,10 @@ public class UserDAO extends User {
 
         return load;
     }
+    /**
+     * Load all user subcribed
+     * @return true if the user has been loaded, false if not
+     */
 
     public boolean loadSubscribed() {
         boolean load = false;
@@ -320,6 +389,11 @@ public class UserDAO extends User {
 
         return load;
     }
+    /**
+     * Load all user susbcriber in a playlist
+     * @param playlist the playlist wich list its user suscribers
+     * @return The list of the user susbcribers in a playlist
+     */
 
     public static List<User> listUserSubscribed(Playlist playlist) {
         List<User> user = new ArrayList<>();
