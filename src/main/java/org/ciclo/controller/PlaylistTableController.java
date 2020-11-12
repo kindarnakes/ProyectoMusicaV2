@@ -44,9 +44,9 @@ public class PlaylistTableController implements Initializable {
         updateTable();
         tableExample.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                if(tableExample.getSelectionModel().getSelectedItem() != null) {
+                if (tableExample.getSelectionModel().getSelectedItem() != null) {
                     update();
-                }else{
+                } else {
                     try {
                         form();
                     } catch (IOException e) {
@@ -65,7 +65,9 @@ public class PlaylistTableController implements Initializable {
     private void filter() {
 
         Predicate<Playlist> playPredicate = i -> i.getName().startsWith(filter.getText());
-        if( _listFilteredList != null){_listFilteredList.setPredicate(playPredicate);}
+        if (_listFilteredList != null) {
+            _listFilteredList.setPredicate(playPredicate);
+        }
     }
 
     public void updateTable() {
@@ -78,10 +80,10 @@ public class PlaylistTableController implements Initializable {
     }
 
     public void delete() {
-        if (tableExample.getSelectionModel().getSelectedItem() != null){
-            PlaylistDAO playlistDAO= new PlaylistDAO(tableExample.getSelectionModel().getSelectedItem());
+        if (tableExample.getSelectionModel().getSelectedItem() != null) {
+            PlaylistDAO playlistDAO = new PlaylistDAO(tableExample.getSelectionModel().getSelectedItem());
             PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + playlistDAO.getName(), true);
-            if(pop.getAcept()) {
+            if (pop.getAcept()) {
                 playlistDAO.remove();
                 updateTable();
             }
@@ -94,7 +96,7 @@ public class PlaylistTableController implements Initializable {
 
     public void update() {
         Parent root;
-        if(tableExample.getSelectionModel().getSelectedItem() != null) {
+        if (tableExample.getSelectionModel().getSelectedItem() != null) {
             try {
                 FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/PlaylistUpdateForm.fxml"));
                 root = loader.load();

@@ -19,14 +19,17 @@ public class ArtistDAO extends Artist {
     final static String SELECT_All = "SELECT * FROM artista";
     final static String SELECT_by_Id = "SELECT id, nombre, nacionalidad, foto FROM artista WHERE id = ?";
     final static String SELECT_by_Name = "SELECT id, nombre, nacionalidad, foto FROM artista WHERE nombre = ?";
+
     /**
      * Constructor
      */
     public ArtistDAO() {
         super();
     }
+
     /**
      * Parametrized constructor
+     *
      * @param a Artis to update
      */
 
@@ -36,18 +39,22 @@ public class ArtistDAO extends Artist {
         this.setNationality(a.getFrom());
         this.setPhoto(a.getPhoto());
     }
+
     /**
      * Constructor
+     *
      * @param id id of the artist
      */
 
     public ArtistDAO(Integer id) {
         this(ArtistDAO.List_Artist_By_Id(id));
     }
-/**
- * List all the artist
- * @return All the artist
- */
+
+    /**
+     * List all the artist
+     *
+     * @return All the artist
+     */
     public static List<Artist> List_All_Artist() {
         List<Artist> artists = new ArrayList<>();
         try (
@@ -69,11 +76,12 @@ public class ArtistDAO extends Artist {
         return artists;
     }
 
-/**
- * List artists by id
- * @param id unique for all the artist
- * @return the artist with that id
- */
+    /**
+     * List artists by id
+     *
+     * @param id unique for all the artist
+     * @return the artist with that id
+     */
     public static Artist List_Artist_By_Id(Integer id) {
         Artist artist = new Artist();
         try (
@@ -96,8 +104,10 @@ public class ArtistDAO extends Artist {
         }
         return artist;
     }
+
     /**
      * List artists by name
+     *
      * @param name unique for all the artist
      * @return the artist with that name
      */
@@ -122,8 +132,10 @@ public class ArtistDAO extends Artist {
         }
         return artist;
     }
+
     /**
      * Save and insert a new artist
+     *
      * @return true if the artist has been inserted, false if not
      */
     public boolean Insert_Artist() {
@@ -157,9 +169,10 @@ public class ArtistDAO extends Artist {
 
         return result;
     }
-    
+
     /**
      * Update a artist
+     *
      * @return true if the artist has been updated, false if not
      */
 
@@ -184,11 +197,13 @@ public class ArtistDAO extends Artist {
 
         return result;
     }
-/**
- * Remove a artist
- * @param id unique for all the artist
- * @return true if the artist has been removed, false if not
- */
+
+    /**
+     * Remove a artist
+     *
+     * @param id unique for all the artist
+     * @return true if the artist has been removed, false if not
+     */
     public static boolean Remove_Artist_by_Id(Integer id) {
         boolean result = false;
         try (
@@ -205,8 +220,10 @@ public class ArtistDAO extends Artist {
         }
         return result;
     }
+
     /**
      * Remove a artist by name
+     *
      * @param name unique for all the artist
      * @return true if the artist has been removed, false if not
      */
@@ -227,10 +244,12 @@ public class ArtistDAO extends Artist {
         }
         return result;
     }
-/**
- * Remove a artist
- * @return true if the artist has been removed, false if not
- */
+
+    /**
+     * Remove a artist
+     *
+     * @return true if the artist has been removed, false if not
+     */
     public boolean remove_Artist() {
         boolean result = false;
         try (
@@ -247,9 +266,11 @@ public class ArtistDAO extends Artist {
         }
         return result;
     }
+
     /**
      * Load all the disc from the artist
-     * @return 
+     *
+     * @return
      */
 
     public boolean loadDiscs() {

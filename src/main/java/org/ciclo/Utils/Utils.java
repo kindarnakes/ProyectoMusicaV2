@@ -34,6 +34,7 @@ public class Utils {
             e.printStackTrace();
         }
     }
+
     public static PopUpControler popUpWithController(String title, String message, boolean acceptWindow) {
         Parent root;
         PopUpControler pop = null;
@@ -46,7 +47,7 @@ public class Utils {
             PopUpControler popUpControler = loader.getController();
             popUpControler.setMensaje(message);
             stage.setScene(new Scene(root));
-            if(acceptWindow){
+            if (acceptWindow) {
                 popUpControler.setAceptionWindow();
             }
             stage.showAndWait();

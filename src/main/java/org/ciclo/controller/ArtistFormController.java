@@ -1,15 +1,24 @@
 package org.ciclo.controller;
 
+import javafx.beans.property.SimpleObjectProperty;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
+import org.ciclo.model.Artist;
+import org.ciclo.model.ArtistDAO;
+import org.ciclo.model.Disc;
+import org.ciclo.model.IDisc;
 
 import java.io.IOException;
 import java.net.URL;
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
-import org.ciclo.model.Artist;
-import org.ciclo.model.ArtistDAO;
 
 public class ArtistFormController implements Initializable {
 
@@ -19,9 +28,15 @@ public class ArtistFormController implements Initializable {
     TextField from;
     @FXML
     TextField photo;
+    @FXML
+    TableView<IDisc> table;
+    @FXML
+    TableColumn<Disc, String> c1;
+    @FXML
+    TableColumn<Disc, LocalDate> c2;
 
     int id = 0;
-    Artist artist;
+    ArtistDAO artist;
 
     public void save() {
 
@@ -49,7 +64,7 @@ public class ArtistFormController implements Initializable {
     }
 
     public void back() throws IOException {
-            MainApp.setRoot("ArtistTable");
+        MainApp.setRoot("ArtistTable");
 
     }
 
@@ -60,12 +75,17 @@ public class ArtistFormController implements Initializable {
 
     }
 
-    public void showData(){
+    public void showData() {
         if (id != 0) {
             artist = new ArtistDAO(id);
             name.setText(artist.getName());
             from.setText(artist.getFrom());
             photo.setText(artist.getPhoto());
+            artist.loadDiscs();
+
+            table.setItems(FXCollections.observableList(new ArrayList<>(artist.getDiscs())));
+            c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+            c2.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getReleaseDate()));
         }
     }
 

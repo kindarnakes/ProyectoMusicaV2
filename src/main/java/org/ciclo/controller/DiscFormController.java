@@ -10,7 +10,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.*;
+import org.ciclo.model.Artist;
+import org.ciclo.model.ArtistDAO;
+import org.ciclo.model.DiscDAO;
+import org.ciclo.model.ISong;
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,9 +69,9 @@ public class DiscFormController implements Initializable {
             if (artistList.getSelectionModel().getSelectedItem() != null) {
                 if (name.getText() != null && !name.getText().equals("")) {
                     if (id == 0) {
-                        if(c.createDisc(name.getText(), photo.getText(), release.getValue(), artistList.getSelectionModel().getSelectedItem(), null)){
+                        if (c.createDisc(name.getText(), photo.getText(), release.getValue(), artistList.getSelectionModel().getSelectedItem(), null)) {
                             back();
-                        }else{
+                        } else {
                             Utils.popUp("Error de guardado", "No se ha podido guardar");
                         }
                     } else {
@@ -78,7 +81,7 @@ public class DiscFormController implements Initializable {
                             Utils.popUp("Error de guardado", "No se ha podido guardar");
                         }
                     }
-                }else{
+                } else {
                     error.setText("Debe escribir un nombre válido");
                 }
             } else {
@@ -99,7 +102,7 @@ public class DiscFormController implements Initializable {
 
     }
 
-    public void showData(){
+    public void showData() {
         discDAO = new DiscDAO(id);
         name.setText(discDAO.getName());
         photo.setText(discDAO.getPhoto());

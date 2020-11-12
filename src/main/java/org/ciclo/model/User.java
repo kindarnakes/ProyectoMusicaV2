@@ -225,7 +225,7 @@ public class User implements IUser {
      * @param rp playlist to subscribe
      * @return True if subscribe, false if not
      */
-    public boolean susbcribe(IPlaylists rp) {
+    public boolean subscribe(IPlaylists rp) {
         return this._subscribed.add(rp);
     }
 

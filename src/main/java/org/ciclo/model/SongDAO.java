@@ -16,8 +16,10 @@ public class SongDAO extends Song {
     public SongDAO() {
         super();
     }
+
     /**
      * Parametrized constructor
+     *
      * @param s song to update
      */
 
@@ -30,16 +32,20 @@ public class SongDAO extends Song {
         this.setList(s.getLists()); //Pointer to same object
         this.setReproductions(null);
     }
+
     /**
      * Constructor
+     *
      * @param id of the Song
      */
 
     public SongDAO(Integer id) {
         this(SongDAO.listById(id));
     }
+
     /**
      * List all the songs
+     *
      * @return All the songs
      */
 
@@ -73,8 +79,10 @@ public class SongDAO extends Song {
         }
         return songs;
     }
+
     /**
      * List the song with that id
+     *
      * @param id unique for all the song
      * @return The song with that id
      */
@@ -103,9 +111,11 @@ public class SongDAO extends Song {
             ex.printStackTrace();
         }
         return song;
-    } 
+    }
+
     /**
      * List all the song with that name
+     *
      * @param name the name of the song
      * @return The songs with that name
      */
@@ -145,9 +155,11 @@ public class SongDAO extends Song {
         }
         return songs;
     }
+
     /**
      * Update a song
-     * @return  true if the song has been updated, false if not
+     *
+     * @return true if the song has been updated, false if not
      */
 
     public boolean update() {
@@ -172,8 +184,10 @@ public class SongDAO extends Song {
 
         return update;
     }
+
     /**
      * Save and insert a somg
+     *
      * @return true if the song has been inserted, false if not
      */
 
@@ -208,8 +222,10 @@ public class SongDAO extends Song {
 
         return saved;
     }
+
     /**
      * Remove a song with that id
+     *
      * @param id unique for all the song
      * @return true if the song has been removed, false if not
      */
@@ -231,8 +247,10 @@ public class SongDAO extends Song {
         }
         return removed;
     }
+
     /**
      * Remove the song
+     *
      * @return true if the song has been removed, false if not
      */
 
@@ -253,8 +271,10 @@ public class SongDAO extends Song {
         }
         return removed;
     }
+
     /**
      * List all the song in that disc
+     *
      * @param disc the disc to insert the song
      * @return true if the song has been inserted in the disc, false if not
      */
@@ -284,8 +304,10 @@ public class SongDAO extends Song {
         }
         return songs;
     }
+
     /**
      * List all song in a playlist
+     *
      * @param playlist the playlist that contains the discs
      * @return The list of the song in a playlist
      */

@@ -10,23 +10,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableRow;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import org.ciclo.MainApp;
+import org.ciclo.Utils.Utils;
+import org.ciclo.model.Artist;
+import org.ciclo.model.ArtistDAO;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
-
-import org.ciclo.Utils.Utils;
-import org.ciclo.model.Artist;
-import org.ciclo.model.ArtistDAO;
-import org.ciclo.model.Disc;
-import org.ciclo.model.PlaylistDAO;
 
 public class ArtistTableController implements Initializable {
 
@@ -45,15 +39,14 @@ public class ArtistTableController implements Initializable {
     private FilteredList<Artist> _listArtistFiltered;
 
 
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         updateTable();
         tableExample.setOnMouseClicked(event -> {
-                if (event.getClickCount() == 2 ) {
-                    update();
-                }
-            });
+            if (event.getClickCount() == 2) {
+                update();
+            }
+        });
 
         filter.textProperty().addListener((observable, oldValue, newValue) -> {
             filter();
@@ -64,7 +57,9 @@ public class ArtistTableController implements Initializable {
     private void filter() {
 
         Predicate<Artist> songPredicate = i -> i.getName().startsWith(filter.getText());
-        if( _listArtistFiltered != null){_listArtistFiltered.setPredicate(songPredicate);}
+        if (_listArtistFiltered != null) {
+            _listArtistFiltered.setPredicate(songPredicate);
+        }
     }
 
     public void updateTable() {
@@ -78,15 +73,15 @@ public class ArtistTableController implements Initializable {
 
     public void delete() {
 
-        if (tableExample.getSelectionModel().getSelectedItem() != null){
+        if (tableExample.getSelectionModel().getSelectedItem() != null) {
             ArtistDAO artistDAO = new ArtistDAO(tableExample.getSelectionModel().getSelectedItem());
             PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + artistDAO.getName(), true);
-            if(pop.getAcept()) {
+            if (pop.getAcept()) {
                 artistDAO.loadDiscs();
-                if(artistDAO.getDiscs().isEmpty()){
+                if (artistDAO.getDiscs().isEmpty()) {
                     artistDAO.remove_Artist();
                     updateTable();
-                }else{
+                } else {
                     Utils.popUp("Error", "Primero debe borrar los discos");
                 }
             }
@@ -103,9 +98,11 @@ public class ArtistTableController implements Initializable {
             FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/ArtistForm.fxml"));
             root = loader.load();
             ArtistFormController test = loader.getController();
-            test.setId(tableExample.getSelectionModel().getSelectedItem() !=null? tableExample.getSelectionModel().getSelectedItem().getId():0);
+            test.setId(tableExample.getSelectionModel().getSelectedItem() != null ? tableExample.getSelectionModel().getSelectedItem().getId() : 0);
             test.showData();
             Scene scene = this.tableExample.getScene();
+            scene.getWindow().setHeight(root.prefHeight(0) + 20);
+            scene.getWindow().setWidth(root.prefWidth(0) + 20);
             scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();

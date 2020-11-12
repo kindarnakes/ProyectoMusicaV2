@@ -13,8 +13,10 @@ public class DiscDAO extends Disc {
 
         super();
     }
+
     /**
      * Parametrized constructor
+     *
      * @param d Disc to update
      */
 
@@ -27,17 +29,21 @@ public class DiscDAO extends Disc {
         this.setSongs(d.getSongs());
 
     }
+
     /**
      * Constructor
+     *
      * @param id of the Disc
      */
 
     public DiscDAO(Integer id) {
         this(DiscDAO.listById(id));
     }
+
     /**
      * List all disc
-     * @return  All discs
+     *
+     * @return All discs
      */
 
     public static List<Disc> listAll() {
@@ -72,8 +78,10 @@ public class DiscDAO extends Disc {
         }
         return disc;
     }
+
     /**
      * List all disc by id
+     *
      * @param id unique for all the discs
      * @return the disc with that id
      */
@@ -104,8 +112,10 @@ public class DiscDAO extends Disc {
         }
         return disc;
     }
+
     /**
      * List all disc with that name
+     *
      * @param name of the discs
      * @return the discs with that name
      */
@@ -140,8 +150,10 @@ public class DiscDAO extends Disc {
         }
         return disc;
     }
+
     /**
      * Update disc
+     *
      * @return true if the disc has been updated, false if not
      */
 
@@ -169,8 +181,10 @@ public class DiscDAO extends Disc {
 
         return update;
     }
+
     /**
      * Remove the disc with that id
+     *
      * @param id unique for all the discs
      * @return true if the artist has been removed, false if not
      */
@@ -192,8 +206,10 @@ public class DiscDAO extends Disc {
         }
         return removed;
     }
+
     /**
      * Remove the disc
+     *
      * @return true if the disc has been removed, false if not
      */
 
@@ -214,8 +230,10 @@ public class DiscDAO extends Disc {
         }
         return removed;
     }
+
     /**
      * Save and insert a disc
+     *
      * @return true if the disc has been inserted, false if not
      */
 
@@ -251,8 +269,10 @@ public class DiscDAO extends Disc {
 
         return saved;
     }
+
     /**
      * List  the disc with that artist
+     *
      * @param artist of that disc
      * @return Discs with that artist
      */
@@ -284,8 +304,10 @@ public class DiscDAO extends Disc {
         return discs;
 
     }
+
     /**
      * Load all the song by disc
+     *
      * @return true if the song has been loaded, false if not
      */
 

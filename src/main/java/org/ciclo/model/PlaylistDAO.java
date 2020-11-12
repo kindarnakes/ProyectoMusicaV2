@@ -16,8 +16,10 @@ public class PlaylistDAO extends Playlist {
     public PlaylistDAO() {
         super();
     }
+
     /**
      * Parametrized constructor
+     *
      * @param p playlist to update
      */
 
@@ -29,16 +31,20 @@ public class PlaylistDAO extends Playlist {
         this.setSongs(p.getSongs());
         this.setSusbcribers(p.getSusbcribers());
     }
+
     /**
      * Constructor
+     *
      * @param id id of the playlist
      */
 
     public PlaylistDAO(Integer id) {
         this(PlaylistDAO.List_Playlist_By_Id(id));
     }
+
     /**
      * List all playlist
+     *
      * @return All playlist
      */
 
@@ -65,9 +71,9 @@ public class PlaylistDAO extends Playlist {
                         index = i;
                     }
                 }
-                if(find) {
+                if (find) {
                     p.setCreator(users.get(index));
-                }else{
+                } else {
                     User user = new User("anonimo", "anonimo", "anonimo");
                     p.setCreator(user);
                 }
@@ -78,8 +84,10 @@ public class PlaylistDAO extends Playlist {
         }
         return playlist;
     }
+
     /**
      * List all the playlist with that id
+     *
      * @param id unique for all the playlist
      * @return The playlist with that ide
      */
@@ -109,8 +117,10 @@ public class PlaylistDAO extends Playlist {
         }
         return p;
     }
+
     /**
      * List all the playlist with that name
+     *
      * @param name of the playlists
      * @return The playlsts whit that name
      */
@@ -148,16 +158,18 @@ public class PlaylistDAO extends Playlist {
         }
         return playlists;
     }
+
     /**
      * List all the playlist with that song
+     *
      * @param song of the playlist
      * @return The playlist with that songs
      */
-    
+
 
     public static List<Playlist> listBySong(Song song) {
         List<Playlist> playlists = new ArrayList<>();
-        String sql = "SELECT id, nombre, descripcion, id_creador" +
+        String sql = "SELECT id, nombre, descripcion, id_creador " +
                 "FROM lista_reproduccion " +
                 "WHERE id IN (SELECT id_lista FROM lista_cancion WHERE id_cancion = ?)";
         try (
@@ -190,8 +202,10 @@ public class PlaylistDAO extends Playlist {
         }
         return playlists;
     }
+
     /**
      * List all playlist with that Creator
+     *
      * @param user the creator of the playlist
      * @return The playlist with that creator
      */
@@ -199,7 +213,7 @@ public class PlaylistDAO extends Playlist {
     public static List<Playlist> listUserCreated(User user) {
         List<Playlist> playlists = new ArrayList<>();
         Integer id_user = user.getId();
-        String sql = "SELECT id, nombre, descripcion" +
+        String sql = "SELECT id, nombre, descripcion " +
                 "FROM lista_reproduccion " +
                 "WHERE id_creador = ?";
         try (
@@ -222,8 +236,10 @@ public class PlaylistDAO extends Playlist {
         }
         return playlists;
     }
+
     /**
      * Update a playlist
+     *
      * @return true if the playlist has been updated, false if not
      */
 
@@ -251,8 +267,10 @@ public class PlaylistDAO extends Playlist {
 
         return update;
     }
+
     /**
      * Remove a playlist
+     *
      * @param id unique of all the playlist
      * @return true if the playlist has been removed, false if not
      */
@@ -274,11 +292,13 @@ public class PlaylistDAO extends Playlist {
         }
         return removed;
     }
+
     /**
      * Remove a playlist
+     *
      * @return true if the playlist has been removed, false if not
      */
-    
+
 
     public boolean remove() {
         boolean removed = false;
@@ -297,8 +317,10 @@ public class PlaylistDAO extends Playlist {
         }
         return removed;
     }
+
     /**
      * Save and insert a playlist
+     *
      * @return true if the playlist has been inserted, false if not
      */
 
@@ -330,8 +352,10 @@ public class PlaylistDAO extends Playlist {
 
         return saved;
     }
+
     /**
      * Add song to a playlist
+     *
      * @param song the song to add
      * @return true if the playlist has been added, false if not
      */
@@ -359,8 +383,10 @@ public class PlaylistDAO extends Playlist {
 
         return added;
     }
+
     /**
      * Remove a song in that playlist
+     *
      * @param song the song to remove
      * @return true if the song has been removed, false if not
      */
@@ -384,8 +410,10 @@ public class PlaylistDAO extends Playlist {
         }
         return remove;
     }
+
     /**
      * List all the playlist with that suscribers
+     *
      * @param user the user of the playlist
      * @return The playlist with that suscribers
      */
@@ -421,7 +449,7 @@ public class PlaylistDAO extends Playlist {
 
                     }
                 }
-                if(find == false){
+                if (find == false) {
                     aux.setCreator(new User());
                 }
                 playlist.add(aux);
@@ -433,17 +461,19 @@ public class PlaylistDAO extends Playlist {
         return playlist;
 
     }
+
     /**
      * Load the song of the playlist
-     * @return  true if the song has been loaded, false if not
+     *
+     * @return true if the song has been loaded, false if not
      */
 
-    public boolean loadSongs(){
+    public boolean loadSongs() {
         boolean loaded = false;
 
         setSongs(new TreeSet<>(SongDAO.ListSongByPlaylist(this)));
 
-        if(this.getSongs() != null){
+        if (this.getSongs() != null) {
             loaded = true;
         }
 

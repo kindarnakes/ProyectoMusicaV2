@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="606.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.ArtistFormController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="370.0" prefWidth="820.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.ArtistFormController">
    <children>
       <TextField fx:id="name" layoutX="301.0" layoutY="105.0" />
       <TextField fx:id="from" layoutX="301.0" layoutY="150.0" />
@@ -36,5 +36,11 @@
       </Button>
       <Label layoutX="304.0" layoutY="83.0" prefHeight="18.0" prefWidth="149.0" textFill="RED" />
       <Label layoutX="300.0" layoutY="132.0" prefHeight="18.0" prefWidth="149.0" textFill="RED" />
+      <TableView fx:id="table" layoutX="507.0" layoutY="63.0" prefHeight="273.0" prefWidth="279.0">
+        <columns>
+          <TableColumn fx:id="c1" prefWidth="153.0" text="Disco" />
+          <TableColumn fx:id="c2" prefWidth="125.0" text="Fecha de publicación" />
+        </columns>
+      </TableView>
    </children>
 </AnchorPane>

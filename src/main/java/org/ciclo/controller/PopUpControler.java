@@ -22,11 +22,12 @@ public class PopUpControler {
         acept = false;
     }
 
-    public void setAceptionWindow(){
+    public void setAceptionWindow() {
         aceptar.setDisable(false);
         aceptar.setVisible(true);
         cancel.setText("Cancelar");
     }
+
     public void setMensaje(String s) {
 
         String error = "";
@@ -44,12 +45,12 @@ public class PopUpControler {
         stage.close();
     }
 
-    public void acept(){
+    public void acept() {
         acept = true;
         back();
     }
 
-    public boolean getAcept(){
+    public boolean getAcept() {
         return acept;
     }
 

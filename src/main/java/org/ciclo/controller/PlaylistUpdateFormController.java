@@ -14,7 +14,6 @@ import org.ciclo.model.*;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -48,7 +47,7 @@ public class PlaylistUpdateFormController implements Initializable {
     @FXML
     TableColumn<Song, String> c4;
 
-    private Controller c = new Controller();
+    private final Controller c = new Controller();
 
     @FXML
     TableView<ISong> tableExample1;
@@ -72,8 +71,8 @@ public class PlaylistUpdateFormController implements Initializable {
     public void save() throws IOException {
 
         String userEmail = creator.getSelectionModel().getSelectedItem();
-        User u = c.listUserByEmail(userEmail!=null?userEmail:"");
-        if (u != null){
+        User u = c.listUserByEmail(userEmail != null ? userEmail : "");
+        if (u != null) {
             if (name.getText() != null && !name.getText().equals("")) {
                 if (c.updatePlaylist(playlistDAO, name.getText(), description.getText(), u)) {
                     back();
@@ -83,7 +82,7 @@ public class PlaylistUpdateFormController implements Initializable {
             } else {
                 error.setText("Debe escribir un nombre válido");
             }
-        }else{
+        } else {
             Utils.popUp("Error", "Debe elegir el usuario");
         }
     }
@@ -104,7 +103,7 @@ public class PlaylistUpdateFormController implements Initializable {
         tableExample.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Song song = tableExample.getSelectionModel().getSelectedItem();
-                if( song != null && c.addSongToPlaylist(playlistDAO, song)){
+                if (song != null && c.addSongToPlaylist(playlistDAO, song)) {
                     _list.remove(song);
                     _listIncluded.add(song);
                 }
@@ -114,8 +113,8 @@ public class PlaylistUpdateFormController implements Initializable {
         tableExample1.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
                 Song song = (Song) tableExample1.getSelectionModel().getSelectedItem();
-                if( song != null && c.removeSongToPlaylist(playlistDAO, song)){
-                    if(_list == null || _list.size() == 0){
+                if (song != null && c.removeSongToPlaylist(playlistDAO, song)) {
+                    if (_list == null || _list.size() == 0) {
                         updateTable();
                     }
                     _list.add(song);
@@ -124,7 +123,7 @@ public class PlaylistUpdateFormController implements Initializable {
 
             }
         });
-        for(User u:c.listAllUser()){
+        for (User u : c.listAllUser()) {
             creator.getItems().add(u.getEmail());
         }
         filter.textProperty().addListener((observable, oldValue, newValue) -> {
@@ -153,7 +152,7 @@ public class PlaylistUpdateFormController implements Initializable {
 
     public void updateTable() {
         _list = FXCollections.observableList(SongDAO.listAll());
-        for(ISong p: _listIncluded){
+        for (ISong p : _listIncluded) {
             _list.remove(p);
         }
         _listFiltered = new FilteredList<>(_list);
@@ -164,38 +163,46 @@ public class PlaylistUpdateFormController implements Initializable {
         c4.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getReleaseDate().toString()));
     }
 
-    public void filter(){
-        if(titleFilter.isSelected()){
+    public void filter() {
+        if (titleFilter.isSelected()) {
             Predicate<Song> songPredicate = i -> i.getName().startsWith(filter.getText());
             Predicate<ISong> isongPredicate = i -> i.getName().startsWith(filter.getText());
-            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+            if (_listFiltered != null) {
+                _listFiltered.setPredicate(songPredicate);
+            }
             _listIncludedFiltered.setPredicate(isongPredicate);
-        }else if(artistFilter.isSelected()){
+        } else if (artistFilter.isSelected()) {
 
             Predicate<Song> songPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
             Predicate<ISong> isongPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
-            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+            if (_listFiltered != null) {
+                _listFiltered.setPredicate(songPredicate);
+            }
             _listIncludedFiltered.setPredicate(isongPredicate);
-        }else if(discFilter.isSelected()){
+        } else if (discFilter.isSelected()) {
             Predicate<Song> songPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
             Predicate<ISong> isongPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
-            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+            if (_listFiltered != null) {
+                _listFiltered.setPredicate(songPredicate);
+            }
             _listIncludedFiltered.setPredicate(isongPredicate);
 
         }
     }
 
-    public void title(){
+    public void title() {
         artistFilter.setSelected(false);
         discFilter.setSelected(false);
         titleFilter.setSelected(true);
     }
-    public void artist(){
+
+    public void artist() {
         artistFilter.setSelected(true);
         discFilter.setSelected(false);
         titleFilter.setSelected(false);
     }
-    public void discFilter(){
+
+    public void discFilter() {
         artistFilter.setSelected(false);
         discFilter.setSelected(true);
         titleFilter.setSelected(false);

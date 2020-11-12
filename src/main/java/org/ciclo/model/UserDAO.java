@@ -16,8 +16,10 @@ public class UserDAO extends User {
     public UserDAO() {
         super();
     }
+
     /**
      * Parametrized constructor
+     *
      * @param u user to update
      */
 
@@ -32,16 +34,20 @@ public class UserDAO extends User {
         this.setReproductions(u.getReproductions());
         this.setSuscribed(u.getSubscribed());
     }
+
     /**
      * Constructor
+     *
      * @param id of the user
      */
 
     public UserDAO(Integer id) {
         this(UserDAO.listById(id));
     }
+
     /**
      * List all the users
+     *
      * @return All the users
      */
 
@@ -70,8 +76,10 @@ public class UserDAO extends User {
         }
         return user;
     }
+
     /**
      * List of the user with that ide
+     *
      * @param id unique for all the users
      * @return The user with that id
      */
@@ -102,9 +110,10 @@ public class UserDAO extends User {
         }
         return user;
     }
-    
+
     /**
      * List the user with that name
+     *
      * @param name the name of the user
      * @return The user with that name
      */
@@ -135,8 +144,10 @@ public class UserDAO extends User {
         }
         return user;
     }
+
     /**
      * List the user with that email
+     *
      * @param email unique for all the user
      * @return The user with that email
      */
@@ -151,7 +162,7 @@ public class UserDAO extends User {
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
 
-            if(rs.next()){
+            if (rs.next()) {
                 User aux = new User();
                 aux.setId(rs.getInt("id"));
                 aux.setName(rs.getString("nombre"));
@@ -167,8 +178,10 @@ public class UserDAO extends User {
         }
         return user;
     }
+
     /**
      * Save and insert a user
+     *
      * @return true if the user has been inserted and saved, false if not
      */
 
@@ -185,7 +198,7 @@ public class UserDAO extends User {
             st.setString(3, this.getEmail());
 
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 saved = true;
             }
 
@@ -204,8 +217,10 @@ public class UserDAO extends User {
 
         return saved;
     }
+
     /**
      * Update a user
+     *
      * @return true if the user has been updated, false if not
      */
 
@@ -233,8 +248,10 @@ public class UserDAO extends User {
 
         return update;
     }
+
     /**
      * Remove a user with that id
+     *
      * @param id unique for all the users
      * @return true if the user has been removed, false if not
      */
@@ -256,8 +273,10 @@ public class UserDAO extends User {
         }
         return removed;
     }
+
     /**
      * Remove a user
+     *
      * @return true if the user has been removed, false if not
      */
 
@@ -279,8 +298,10 @@ public class UserDAO extends User {
         }
         return removed;
     }
+
     /**
      * Remove a user with that email
+     *
      * @param email uniqe for all the user
      * @return true if the user has been removed, false if not
      */
@@ -302,10 +323,12 @@ public class UserDAO extends User {
         }
         return removed;
     }
+
     /**
      * Subscribe a user in a playlist
+     *
      * @param playlist the playlist in which I want to insert
-     * @return  true if the user has been inserted in the playlist, false if not
+     * @return true if the user has been inserted in the playlist, false if not
      */
 
     public boolean subscribe(Playlist playlist) {
@@ -328,18 +351,19 @@ public class UserDAO extends User {
         }
         return subscribed;
     }
-    
+
     /**
      * Unsubscribe a user of a playlist
+     *
      * @param playlist the playlist in which I want to unsusvribed
-     * @return  true if the user has been unsubcribe in the playlist, false if not
+     * @return true if the user has been unsubcribe in the playlist, false if not
      */
 
 
     public boolean unsubscribe(Playlist playlist) {
 
         boolean unsubscribed = false;
-        String sql = "DELETE FROM suscripcion WHERE id_usuario = ?, id_playlist = ?)";
+        String sql = "DELETE FROM suscripcion WHERE id_usuario = ? AND id_lista = ?";
 
         try (Connection conn = org.ciclo.model.connect.Connection.getConnect();
              PreparedStatement st = conn.prepareStatement(sql)
@@ -356,8 +380,10 @@ public class UserDAO extends User {
         }
         return unsubscribed;
     }
+
     /**
      * Load all user creator
+     *
      * @return true if the user has been loaded, false if not
      */
 
@@ -365,15 +391,17 @@ public class UserDAO extends User {
         boolean load = false;
 
         Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listUserCreated(this));
-        if (!created.isEmpty()) {
+        if (created!= null) {
             this.setCreated(created);
             load = true;
         }
 
         return load;
     }
+
     /**
      * Load all user subcribed
+     *
      * @return true if the user has been loaded, false if not
      */
 
@@ -382,15 +410,18 @@ public class UserDAO extends User {
 
 
         Set<IPlaylists> created = new TreeSet<>(PlaylistDAO.listPlaylistSuscribers(this));
-        if (!created.isEmpty()) {
-            this.setCreated(created);
+        if (created != null){
+            this.setSuscribed(created);
             load = true;
         }
 
+
         return load;
     }
+
     /**
      * Load all user susbcriber in a playlist
+     *
      * @param playlist the playlist wich list its user suscribers
      * @return The list of the user susbcribers in a playlist
      */

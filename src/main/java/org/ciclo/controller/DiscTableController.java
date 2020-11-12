@@ -59,7 +59,9 @@ public class DiscTableController implements Initializable {
     private void filter() {
 
         Predicate<Disc> songPredicate = i -> i.getName().startsWith(filter.getText());
-        if( _listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+        if (_listFiltered != null) {
+            _listFiltered.setPredicate(songPredicate);
+        }
     }
 
     public void update() {
@@ -94,16 +96,17 @@ public class DiscTableController implements Initializable {
     }
 
     public void delete() {
-        if (tableExample.getSelectionModel().getSelectedItem() != null){
+        if (tableExample.getSelectionModel().getSelectedItem() != null) {
             DiscDAO discDAO = new DiscDAO(tableExample.getSelectionModel().getSelectedItem());
             PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + discDAO.getName(), true);
-            if(pop.getAcept()) {
+            if (pop.getAcept()) {
                 discDAO.loadSongs();
-                if(!discDAO.getSongs().isEmpty()){
+                if (!discDAO.getSongs().isEmpty()) {
                     Utils.popUp("Error", "Primero debe borrar las canciones");
-                }else{
-                discDAO.remove();
-                updateTable();}
+                } else {
+                    discDAO.remove();
+                    updateTable();
+                }
             }
         }
     }

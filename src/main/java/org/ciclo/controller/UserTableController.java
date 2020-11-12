@@ -1,9 +1,5 @@
 package org.ciclo.controller;
 
-import java.io.IOException;
-import java.net.URL;
-import java.util.ResourceBundle;
-import java.util.function.Predicate;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -18,10 +14,13 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.Artist;
-import org.ciclo.model.ArtistDAO;
 import org.ciclo.model.User;
 import org.ciclo.model.UserDAO;
+
+import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class UserTableController implements Initializable {
 
@@ -77,36 +76,33 @@ public class UserTableController implements Initializable {
             UserDAO userDAO = new UserDAO(tableExample.getSelectionModel().getSelectedItem());
             PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + userDAO.getName(), true);
             if (pop.getAcept()) {
+                userDAO.remove();
                 updateTable();
             }
         }
     }
 
 
-public void form() throws IOException {
+    public void form() throws IOException {
         MainApp.setRoot("UserCreateForm");
     }
 
     public void update() {
         Parent root;
-
-try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class  
-
-    .getResource("/View/fxml/UserCreateForm.fxml"));
-            root  = loader.load();
-    UserFormController test = loader.getController();
-
-    test.setId (tableExample.getSelectionModel
-
-    ().getSelectedItem() !=null? tableExample.getSelectionModel().getSelectedItem().getId():0);
-    test.showData ();
-    Scene scene = this.tableExample.getScene();
-
-    scene.setRoot (root);
-}
-catch (IOException e) {
-            e.printStackTrace();
+        if (tableExample.getSelectionModel().getSelectedItem() != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/UserUpdateForm.fxml"));
+                root = loader.load();
+                UserFormController test = loader.getController();
+                test.setId(tableExample.getSelectionModel().getSelectedItem() != null ? tableExample.getSelectionModel().getSelectedItem().getId() : 0);
+                test.showData();
+                Scene scene = this.tableExample.getScene();
+                scene.getWindow().setHeight(root.prefHeight(0) + 20);
+                scene.getWindow().setWidth(root.prefWidth(0) + 20);
+                scene.setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

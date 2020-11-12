@@ -255,7 +255,7 @@ public class Controller implements IController {
     @Override
     public boolean userUnSubscribePlaylist(User user, Playlist playlist) {
         UserDAO userDAO = new UserDAO(user);
-        return userDAO.susbcribe(playlist);
+        return userDAO.subscribe(playlist);
     }
 
     @Override

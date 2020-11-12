@@ -16,7 +16,6 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.ISong;
 import org.ciclo.model.Song;
 import org.ciclo.model.SongDAO;
 
@@ -74,10 +73,10 @@ public class SongTableController implements Initializable {
     }
 
     public void delete() {
-        if (tableExample.getSelectionModel().getSelectedItem() != null){
+        if (tableExample.getSelectionModel().getSelectedItem() != null) {
             SongDAO songDAO = new SongDAO(tableExample.getSelectionModel().getSelectedItem());
             PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + songDAO.getName(), true);
-            if(pop.getAcept()) {
+            if (pop.getAcept()) {
                 songDAO.remove();
                 updateTable();
             }
@@ -103,32 +102,40 @@ public class SongTableController implements Initializable {
         }
     }
 
-    public void filter(){
-        if(titleFilter.isSelected()){
+    public void filter() {
+        if (titleFilter.isSelected()) {
             Predicate<Song> songPredicate = i -> i.getName().startsWith(filter.getText());
-            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
-        }else if(artistFilter.isSelected()){
+            if (_listFiltered != null) {
+                _listFiltered.setPredicate(songPredicate);
+            }
+        } else if (artistFilter.isSelected()) {
 
             Predicate<Song> songPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
-            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
-        }else if(discFilter.isSelected()){
+            if (_listFiltered != null) {
+                _listFiltered.setPredicate(songPredicate);
+            }
+        } else if (discFilter.isSelected()) {
             Predicate<Song> songPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
-            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+            if (_listFiltered != null) {
+                _listFiltered.setPredicate(songPredicate);
+            }
 
         }
     }
 
-    public void title(){
+    public void title() {
         artistFilter.setSelected(false);
         discFilter.setSelected(false);
         titleFilter.setSelected(true);
     }
-    public void artist(){
+
+    public void artist() {
         artistFilter.setSelected(true);
         discFilter.setSelected(false);
         titleFilter.setSelected(false);
     }
-    public void discFilter(){
+
+    public void discFilter() {
         artistFilter.setSelected(false);
         discFilter.setSelected(true);
         titleFilter.setSelected(false);
