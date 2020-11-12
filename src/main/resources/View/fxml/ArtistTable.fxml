@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
@@ -28,7 +29,7 @@
       </Button>
       <Button layoutX="643.0" layoutY="491.0" mnemonicParsing="false" onAction="#delete" text="Borrar">
          <font>
-            <Font size="17.0" />
+            <Font size="18.0" />
          </font>
       </Button>
       <Button layoutX="550.0" layoutY="491.0" mnemonicParsing="false" onAction="#update" text="Editar">
@@ -36,5 +37,11 @@
             <Font size="18.0" />
          </font>
       </Button>
+      <Button layoutX="78.0" layoutY="490.0" mnemonicParsing="false" onAction="#back" text="Volver">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <TextField fx:id="filter" layoutX="296.0" layoutY="497.0" />
    </children>
 </AnchorPane>
