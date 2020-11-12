@@ -1,6 +1,5 @@
 package org.ciclo.controller;
 
-import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -13,27 +12,25 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.Song;
-import org.ciclo.model.SongDAO;
+import org.ciclo.model.Playlist;
+import org.ciclo.model.PlaylistDAO;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 
-public class SongTableController implements Initializable {
+public class PlaylistTableController implements Initializable {
 
     @FXML
-    TableView<Song> tableExample;
+    TableView<Playlist> tableExample;
     @FXML
-    TableColumn<Song, String> c1;
+    TableColumn<Playlist, String> c1;
     @FXML
-    TableColumn<Song, Integer> c2;
+    TableColumn<Playlist, String> c2;
     @FXML
-    TableColumn<Song, String> c3;
-    @FXML
-    TableColumn<Song, String> c4;
+    TableColumn<Playlist, String> c3;
 
-    private ObservableList<Song> _list;
+    private ObservableList<Playlist> _list;
 
 
     @Override
@@ -47,35 +44,34 @@ public class SongTableController implements Initializable {
     }
 
     public void updateTable() {
-        _list = FXCollections.observableList(SongDAO.listAll());
+        _list = FXCollections.observableList(PlaylistDAO.List_All_Playlist());
         tableExample.setItems(_list);
         c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-        c2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDuration()).asObject());
-        c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getName()));
-        c4.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getArtist().getName()));
+        c2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
+        c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreator().getName()));
     }
 
     public void delete() {
         if (tableExample.getSelectionModel().getSelectedItem() != null){
-            SongDAO songDAO = new SongDAO(tableExample.getSelectionModel().getSelectedItem());
-            PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + songDAO.getName(), true);
+            PlaylistDAO playlistDAO= new PlaylistDAO(tableExample.getSelectionModel().getSelectedItem());
+            PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + playlistDAO.getName(), true);
             if(pop.getAcept()) {
-                songDAO.remove();
+                playlistDAO.remove();
                 updateTable();
             }
         }
     }
 
     public void form() throws IOException {
-        MainApp.setRoot("SongForm");
+        MainApp.setRoot("PlaylistForm");
     }
 
     public void update() {
         Parent root;
         try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/SongForm.fxml"));
+            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/PlaylistUpdateForm.fxml"));
             root = loader.load();
-            SongFormController test = loader.getController();
+            PlaylistUpdateFormController test = loader.getController();
             test.setId(tableExample.getSelectionModel().getSelectedItem() != null ? tableExample.getSelectionModel().getSelectedItem().getId() : 0);
             test.showData();
             Scene scene = this.tableExample.getScene();

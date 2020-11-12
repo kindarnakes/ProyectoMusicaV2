@@ -2,21 +2,38 @@
 
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<AnchorPane prefHeight="446.0" prefWidth="771.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.SongFormController">
+<AnchorPane prefHeight="446.0" prefWidth="845.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.SongFormController">
    <children>
-      <Button layoutX="118.0" layoutY="305.0" mnemonicParsing="false" onAction="#save" text="Guardar" />
-      <Label layoutX="118.0" layoutY="81.0" text="Nombre:" />
-      <Label layoutX="118.0" layoutY="108.0" text="Duracion" />
+      <Button layoutX="167.0" layoutY="231.0" mnemonicParsing="false" onAction="#save" text="Guardar">
+         <font>
+            <Font size="20.0" />
+         </font></Button>
+      <Label layoutX="118.0" layoutY="81.0" text="Nombre:">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <Label layoutX="116.0" layoutY="117.0" text="Duracion:">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
       <TextField fx:id="name" layoutX="277.0" layoutY="77.0" />
-      <TextField fx:id="email" layoutX="277.0" layoutY="104.0" />
-      <Button layoutX="326.0" layoutY="305.0" mnemonicParsing="false" onAction="#back" text="Atras" />
-      <TableView fx:id="tableExample" layoutX="452.0" layoutY="65.0" prefHeight="200.0" prefWidth="300.0">
+      <Button layoutX="315.0" layoutY="352.0" mnemonicParsing="false" onAction="#back" text="Atras">
+         <font>
+            <Font size="20.0" />
+         </font></Button>
+      <TableView fx:id="tableExample" layoutX="452.0" layoutY="65.0" prefHeight="331.0" prefWidth="384.0">
         <columns>
-          <TableColumn fx:id="c1" prefWidth="99.0" text="C1" />
-          <TableColumn fx:id="c2" prefWidth="94.0" text="C2" />
-            <TableColumn fx:id="c3" prefWidth="103.0" text="Column X" />
+          <TableColumn fx:id="c1" prefWidth="130.0" text="Disco" />
+          <TableColumn fx:id="c2" prefWidth="136.0" text="Fecha de publicación" />
+            <TableColumn fx:id="c3" prefWidth="115.0" text="Artista" />
         </columns>
       </TableView>
+      <Spinner fx:id="duration" layoutX="277.0" layoutY="113.0" />
+      <Label fx:id="error" layoutX="277.0" layoutY="57.0" prefHeight="17.0" prefWidth="149.0" textFill="#eb0707">
+         <font>
+            <Font size="10.0" />
+         </font></Label>
    </children>
 </AnchorPane>

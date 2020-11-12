@@ -6,6 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.TreeSet;
 
 public class PlaylistDAO extends Playlist {
 
@@ -300,7 +301,7 @@ public class PlaylistDAO extends Playlist {
 
     public boolean removeSong(Song song) {
         boolean remove = false;
-        String sql = "DELETE FROM lista_cancion WHERE id_lista = ?, id_cancion = ?";
+        String sql = "DELETE FROM lista_cancion WHERE id_lista = ? AND id_cancion = ?";
 
         try (Connection conn = org.ciclo.model.connect.Connection.getConnect();
              PreparedStatement st = conn.prepareStatement(sql)
@@ -357,6 +358,18 @@ public class PlaylistDAO extends Playlist {
         }
         return playlist;
 
+    }
+
+    public boolean loadSongs(){
+        boolean loaded = false;
+
+        setSongs(new TreeSet<>(SongDAO.ListSongByPlaylist(this)));
+
+        if(this.getSongs() != null){
+            loaded = true;
+        }
+
+        return loaded;
     }
 
 }

@@ -5,11 +5,12 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.ciclo.MainApp;
-import org.ciclo.model.*;
+import org.ciclo.Utils.Utils;
+import org.ciclo.model.Disc;
+import org.ciclo.model.DiscDAO;
+import org.ciclo.model.SongDAO;
 
 import java.io.IOException;
 import java.net.URL;
@@ -20,7 +21,9 @@ public class SongFormController implements Initializable {
     @FXML
     TextField name;
     @FXML
-    TextField email;
+    Spinner<Integer> duration;
+    @FXML
+    Label error;
 
     @FXML
     TableView<Disc> tableExample;
@@ -38,19 +41,28 @@ public class SongFormController implements Initializable {
 
     public void save() {
         Controller c = new Controller();
-        if (id == 0) {
 
-            c.createSong(name.getText(), tableExample.getSelectionModel().getSelectedItem(), Integer.parseInt(email.getText()), null);
+        if (name.getText() != null && !name.getText().equals("")) {
+            if (tableExample.getSelectionModel().getSelectedItem() != null) {
+                if (id == 0) {
 
+                    c.createSong(name.getText(), tableExample.getSelectionModel().getSelectedItem(), duration.getValue(), null);
+
+                } else {
+
+                    c.updateSong(songDAO, name.getText(), tableExample.getSelectionModel().getSelectedItem(), duration.getValue());
+                }
+
+                try {
+                    back();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            } else {
+                Utils.popUp("Debe seleccionar disco", "Debe seleccionar a que disco pertenece la canción en la tabla");
+            }
         } else {
-
-            c.updateSong(songDAO, name.getText(), tableExample.getSelectionModel().getSelectedItem(), Integer.parseInt(email.getText()));
-        }
-
-        try {
-            back();
-        } catch (IOException e) {
-            e.printStackTrace();
+            error.setText("Debe escribir un nombre válido");
         }
     }
 
@@ -59,7 +71,7 @@ public class SongFormController implements Initializable {
     }
 
     public void back() throws IOException {
-            MainApp.setRoot("TestTable");
+        MainApp.setRoot("SongTable");
 
     }
 
@@ -67,15 +79,16 @@ public class SongFormController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         updateTable();
+        duration.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 3600, 120));
 
     }
 
-    public void showData(){
+    public void showData() {
         if (id != 0) {
             songDAO = new SongDAO(id);
             name.setText(songDAO.getName());
-            email.setText(songDAO.getDuration().toString());
-            tableExample.getSelectionModel().select((Disc)songDAO.getDisc());
+            duration.getValueFactory().setValue(songDAO.getDuration());
+            tableExample.getSelectionModel().select((Disc) songDAO.getDisc());
         }
     }
 

@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 05-11-2020 a las 10:46:48
+-- Tiempo de generación: 12-11-2020 a las 01:53:29
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.2.34
 
@@ -409,7 +409,7 @@ ALTER TABLE `disco`
 --
 ALTER TABLE `lista_cancion`
   ADD CONSTRAINT `id_cancion` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `lista_reproduccion`

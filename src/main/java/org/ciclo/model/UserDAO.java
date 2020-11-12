@@ -53,7 +53,6 @@ public class UserDAO extends User {
 
                 user.add(aux);
             }
-            rs.close();
         } catch (SQLException ex) {
             ex.printStackTrace();
         }
