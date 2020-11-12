@@ -180,7 +180,7 @@ public class UserDAO extends User {
                 Connection conn = org.ciclo.model.connect.Connection.getConnect()
         ) {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(0, this.getName());
+            st.setString(1, this.getName());
             st.setString(2, this.getPhoto());
             st.setString(3, this.getEmail());
 

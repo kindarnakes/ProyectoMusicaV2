@@ -73,7 +73,7 @@ public class PlaylistUpdateFormController implements Initializable {
 
         String userEmail = creator.getSelectionModel().getSelectedItem();
         User u = c.listUserByEmail(userEmail!=null?userEmail:"");
-        if (name.getText() != null && !name.getText().equals("") && u != null) {
+        if (name.getText() != null && !name.getText().equals("")) {
             if(c.updatePlaylist(playlistDAO, name.getText(), description.getText(), u)){
                 back();
             }else{

@@ -71,6 +71,8 @@ public class DiscTableController implements Initializable {
             test.setId(tableExample.getSelectionModel().getSelectedItem() != null ? tableExample.getSelectionModel().getSelectedItem().getId() : 0);
             test.showData();
             Scene scene = this.tableExample.getScene();
+            scene.getWindow().setHeight(root.prefHeight(0) + 20);
+            scene.getWindow().setWidth(root.prefWidth(0) + 20);
             scene.setRoot(root);
         } catch (IOException e) {
             e.printStackTrace();
