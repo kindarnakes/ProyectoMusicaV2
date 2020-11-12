@@ -26,6 +26,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 /**
  * @author Agustín
@@ -62,6 +63,8 @@ public class UserFormController implements Initializable {
     Label error;
     @FXML
     Label error1;
+    @FXML
+    TextField filter;
 
     ObservableList<Playlist> _list;
     ObservableList<IPlaylists> _listSubscribed;
@@ -174,5 +177,18 @@ public class UserFormController implements Initializable {
 
             }
         });
+
+        filter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filter();
+        });
+    }
+
+    private void filter() {
+
+        Predicate<IPlaylists> playPredicate = i -> i.getName().startsWith(filter.getText());
+        if (_listFiltered != null) {
+            _listFiltered.setPredicate(playPredicate);
+        }
+        _listSubscribedFiltered.setPredicate(playPredicate);
     }
 }
