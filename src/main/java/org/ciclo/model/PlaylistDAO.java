@@ -65,7 +65,12 @@ public class PlaylistDAO extends Playlist {
                         index = i;
                     }
                 }
-                p.setCreator(users.get(index));
+                if(find) {
+                    p.setCreator(users.get(index));
+                }else{
+                    User user = new User("anonimo", "anonimo", "anonimo");
+                    p.setCreator(user);
+                }
                 playlist.add(p);
             }
         } catch (SQLException ex) {

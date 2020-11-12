@@ -1,23 +1,20 @@
 package org.ciclo.controller;
 
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.DatePicker;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.Artist;
-import org.ciclo.model.ArtistDAO;
-import org.ciclo.model.Disc;
-import org.ciclo.model.DiscDAO;
+import org.ciclo.model.*;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
@@ -34,6 +31,12 @@ public class DiscFormController implements Initializable {
     TextField filter;
     @FXML
     Label error;
+    @FXML
+    TableView<ISong> table;
+    @FXML
+    TableColumn<ISong, String> c1;
+    @FXML
+    TableColumn<ISong, Integer> c2;
 
     int id = 0;
     private final Controller c = new Controller();
@@ -41,6 +44,7 @@ public class DiscFormController implements Initializable {
 
     ObservableList<Artist> artistObservableList;
     FilteredList<Artist> artistFilteredList;
+    ObservableList<ISong> songs;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -101,6 +105,12 @@ public class DiscFormController implements Initializable {
         photo.setText(discDAO.getPhoto());
         release.setValue(discDAO.getReleaseDate());
         artistList.getSelectionModel().select((Artist) discDAO.getArtist());
+        discDAO.loadSongs();
+        songs = FXCollections.observableList(new ArrayList<>(discDAO.getSongs()));
+        table.setItems(songs);
+        c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        c2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDuration()).asObject());
+
     }
 
 

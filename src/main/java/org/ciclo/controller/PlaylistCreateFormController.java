@@ -37,16 +37,20 @@ public class PlaylistCreateFormController implements Initializable {
     public void save() throws IOException {
         String userEmail = creator.getSelectionModel().getSelectedItem();
         User u = c.listUserByEmail(userEmail!=null?userEmail:"");
-        if (name.getText() != null && !name.getText().equals("") && u != null) {
-            if(c.createPlaylist(name.getText(), description.getText(), u)){
-                List<Playlist> playlists = c.listPlaylistByName(name.getText());
-                playlistDAO = new PlaylistDAO(playlists.get(playlists.size()-1));
-                update();
-            }else{
-                Utils.popUp("Error de guardado", "No se ha podido guardar");
+        if(u != null) {
+            if (name.getText() != null && !name.getText().equals("")) {
+                if (c.createPlaylist(name.getText(), description.getText(), u)) {
+                    List<Playlist> playlists = c.listPlaylistByName(name.getText());
+                    playlistDAO = new PlaylistDAO(playlists.get(playlists.size() - 1));
+                    update();
+                } else {
+                    Utils.popUp("Error de guardado", "No se ha podido guardar");
+                }
+            } else {
+                error.setText("Debe escribir un nombre válido");
             }
-        } else {
-            error.setText("Debe escribir un nombre válido");
+        }else{
+            Utils.popUp("Error", "Debe elegir el usuario");
         }
     }
 

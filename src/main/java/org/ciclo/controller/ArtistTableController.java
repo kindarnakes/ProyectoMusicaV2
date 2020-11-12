@@ -22,9 +22,11 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import java.util.function.Predicate;
 
+import org.ciclo.Utils.Utils;
 import org.ciclo.model.Artist;
 import org.ciclo.model.ArtistDAO;
 import org.ciclo.model.Disc;
+import org.ciclo.model.PlaylistDAO;
 
 public class ArtistTableController implements Initializable {
 
@@ -75,9 +77,20 @@ public class ArtistTableController implements Initializable {
     }
 
     public void delete() {
-        ArtistDAO artistDAO = new ArtistDAO(tableExample.getSelectionModel().getSelectedItem());
-        artistDAO.remove_Artist();
-        updateTable();
+
+        if (tableExample.getSelectionModel().getSelectedItem() != null){
+            ArtistDAO artistDAO = new ArtistDAO(tableExample.getSelectionModel().getSelectedItem());
+            PopUpControler pop = Utils.popUpWithController("Borrado", "¿Seguro que desea borrar: " + artistDAO.getName(), true);
+            if(pop.getAcept()) {
+                artistDAO.loadDiscs();
+                if(artistDAO.getDiscs().isEmpty()){
+                    artistDAO.remove_Artist();
+                    updateTable();
+                }else{
+                    Utils.popUp("Error", "Primero debe borrar los discos");
+                }
+            }
+        }
     }
 
     public void form() throws IOException {

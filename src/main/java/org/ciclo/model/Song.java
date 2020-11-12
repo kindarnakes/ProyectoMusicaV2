@@ -245,5 +245,8 @@ public class Song implements ISong {
 
     }
 
-
+    @Override
+    public String toString() {
+        return name + " : " + getDisc().getArtist().getName();
+    }
 }

@@ -73,14 +73,18 @@ public class PlaylistUpdateFormController implements Initializable {
 
         String userEmail = creator.getSelectionModel().getSelectedItem();
         User u = c.listUserByEmail(userEmail!=null?userEmail:"");
-        if (name.getText() != null && !name.getText().equals("") && u != null) {
-            if(c.updatePlaylist(playlistDAO, name.getText(), description.getText(), u)){
-                back();
-            }else{
-                Utils.popUp("Error de guardado", "No se ha podido guardar");
+        if (u != null){
+            if (name.getText() != null && !name.getText().equals("")) {
+                if (c.updatePlaylist(playlistDAO, name.getText(), description.getText(), u)) {
+                    back();
+                } else {
+                    Utils.popUp("Error de guardado", "No se ha podido guardar");
+                }
+            } else {
+                error.setText("Debe escribir un nombre válido");
             }
-        } else {
-            error.setText("Debe escribir un nombre válido");
+        }else{
+            Utils.popUp("Error", "Debe elegir el usuario");
         }
     }
 
@@ -103,7 +107,6 @@ public class PlaylistUpdateFormController implements Initializable {
                 if( song != null && c.addSongToPlaylist(playlistDAO, song)){
                     _list.remove(song);
                     _listIncluded.add(song);
-                    System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
             }
         });
