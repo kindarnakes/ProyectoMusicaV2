@@ -101,8 +101,8 @@ public class PlaylistUpdateFormController implements Initializable {
             if (event.getClickCount() == 2) {
                 Song song = tableExample.getSelectionModel().getSelectedItem();
                 if( song != null && c.addSongToPlaylist(playlistDAO, song)){
-                    _listFiltered.remove(song);
-                    _listIncludedFiltered.add(song);
+                    _list.remove(song);
+                    _listIncluded.add(song);
                     System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
             }
@@ -115,8 +115,8 @@ public class PlaylistUpdateFormController implements Initializable {
                     if(_list == null || _list.size() == 0){
                         updateTable();
                     }
-                    _listFiltered.add(song);
-                    _listIncludedFiltered.remove(song);
+                    _list.add(song);
+                    _listIncluded.remove(song);
                     System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
 

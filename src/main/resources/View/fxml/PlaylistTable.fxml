@@ -4,9 +4,12 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<AnchorPane id="AnchorPane" prefHeight="616.0" prefWidth="763.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.PlaylistTableController">
+<AnchorPane id="AnchorPane" prefHeight="616.0" prefWidth="764.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="org.ciclo.controller.PlaylistTableController">
    <children>
-      <Button fx:id="delete" layoutX="648.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" text="Borrar" />
+      <Button fx:id="delete" layoutX="648.0" layoutY="510.0" mnemonicParsing="false" onAction="#delete" text="Borrar">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <TableView fx:id="tableExample" layoutX="81.0" layoutY="127.0" prefHeight="314.0" prefWidth="616.0">
         <columns>
           <TableColumn fx:id="c1" prefWidth="150.0" text="Nombre" />
@@ -18,11 +21,20 @@
          <font>
             <Font size="18.0" />
          </font></Button>
-      <Button layoutX="561.0" layoutY="510.0" mnemonicParsing="false" onAction="#update" text="Editar" />
+      <Button layoutX="561.0" layoutY="510.0" mnemonicParsing="false" onAction="#update" text="Editar">
+         <font>
+            <Font size="18.0" />
+         </font></Button>
       <Label layoutX="203.0" layoutY="43.0" text="Listas de reproducción">
          <font>
             <Font size="36.0" />
          </font>
       </Label>
+      <Button layoutX="81.0" layoutY="498.0" mnemonicParsing="false" onAction="#back" text="Atrás">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <TextField fx:id="filter" layoutX="315.0" layoutY="525.0" />
    </children>
 </AnchorPane>

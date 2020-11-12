@@ -134,4 +134,8 @@ public class SongTableController implements Initializable {
         titleFilter.setSelected(false);
     }
 
+    public void back() throws IOException {
+        MainApp.setRoot("Main");
+    }
+
 }

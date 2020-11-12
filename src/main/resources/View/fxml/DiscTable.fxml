@@ -34,5 +34,11 @@
             <Font size="16.0" />
          </font>
       </Button>
+      <Button layoutX="74.0" layoutY="543.0" mnemonicParsing="false" onAction="#back" text="Atrás">
+         <font>
+            <Font size="18.0" />
+         </font>
+      </Button>
+      <TextField fx:id="filter" layoutX="313.0" layoutY="550.0" />
    </children>
 </AnchorPane>

@@ -3,6 +3,7 @@ package org.ciclo.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,15 +11,16 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
 import org.ciclo.model.Disc;
 import org.ciclo.model.DiscDAO;
-import org.ciclo.model.SongDAO;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class DiscTableController implements Initializable {
 
@@ -32,8 +34,11 @@ public class DiscTableController implements Initializable {
     TableColumn<Disc, String> c3;
     @FXML
     TableColumn<Disc, String> c4;
+    @FXML
+    TextField filter;
 
     private ObservableList<Disc> _list;
+    private FilteredList<Disc> _listFiltered;
 
 
     @Override
@@ -44,6 +49,17 @@ public class DiscTableController implements Initializable {
                 update();
             }
         });
+
+
+        filter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filter();
+        });
+    }
+
+    private void filter() {
+
+        Predicate<Disc> songPredicate = i -> i.getName().startsWith(filter.getText());
+        if( _listFiltered != null){_listFiltered.setPredicate(songPredicate);}
     }
 
     public void update() {
@@ -63,7 +79,8 @@ public class DiscTableController implements Initializable {
 
     public void updateTable() {
         _list = FXCollections.observableList(DiscDAO.listAll());
-        tableExample.setItems(_list);
+        _listFiltered = new FilteredList<>(_list);
+        tableExample.setItems(_listFiltered);
         c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         c2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getReleaseDate().toString()));
         c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getPhoto()));
@@ -87,5 +104,9 @@ public class DiscTableController implements Initializable {
                 updateTable();}
             }
         }
+    }
+
+    public void back() throws IOException {
+        MainApp.setRoot("Main");
     }
 }

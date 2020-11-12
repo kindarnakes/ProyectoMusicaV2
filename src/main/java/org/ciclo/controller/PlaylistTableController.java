@@ -3,6 +3,7 @@ package org.ciclo.controller;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -10,6 +11,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
 import org.ciclo.model.Playlist;
@@ -18,6 +20,7 @@ import org.ciclo.model.PlaylistDAO;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class PlaylistTableController implements Initializable {
 
@@ -29,8 +32,11 @@ public class PlaylistTableController implements Initializable {
     TableColumn<Playlist, String> c2;
     @FXML
     TableColumn<Playlist, String> c3;
+    @FXML
+    TextField filter;
 
     private ObservableList<Playlist> _list;
+    private FilteredList<Playlist> _listFilteredList;
 
 
     @Override
@@ -41,11 +47,23 @@ public class PlaylistTableController implements Initializable {
                 update();
             }
         });
+
+
+        filter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filter();
+        });
+    }
+
+    private void filter() {
+
+        Predicate<Playlist> playPredicate = i -> i.getName().startsWith(filter.getText());
+        if( _listFilteredList != null){_listFilteredList.setPredicate(playPredicate);}
     }
 
     public void updateTable() {
         _list = FXCollections.observableList(PlaylistDAO.List_All_Playlist());
-        tableExample.setItems(_list);
+        _listFilteredList = new FilteredList<>(_list);
+        tableExample.setItems(_listFilteredList);
         c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         c2.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDescription()));
         c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreator().getName()));
@@ -84,8 +102,8 @@ public class PlaylistTableController implements Initializable {
     }
 
 
-    public void newElement() throws IOException {
-        MainApp.setRoot("PlaylistCreateForm");
+    public void back() throws IOException {
+        MainApp.setRoot("Main");
     }
 
 }
