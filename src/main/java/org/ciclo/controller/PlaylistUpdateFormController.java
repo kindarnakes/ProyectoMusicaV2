@@ -107,7 +107,6 @@ public class PlaylistUpdateFormController implements Initializable {
                 if( song != null && c.addSongToPlaylist(playlistDAO, song)){
                     _list.remove(song);
                     _listIncluded.add(song);
-                    System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
             }
         });
