@@ -4,21 +4,26 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.collections.transformation.FilteredList;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
+import org.ciclo.model.ISong;
 import org.ciclo.model.Song;
 import org.ciclo.model.SongDAO;
 
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import java.util.function.Predicate;
 
 public class SongTableController implements Initializable {
 
@@ -32,8 +37,17 @@ public class SongTableController implements Initializable {
     TableColumn<Song, String> c3;
     @FXML
     TableColumn<Song, String> c4;
+    @FXML
+    RadioButton titleFilter;
+    @FXML
+    RadioButton artistFilter;
+    @FXML
+    RadioButton discFilter;
+    @FXML
+    TextField filter;
 
     private ObservableList<Song> _list;
+    private FilteredList<Song> _listFiltered;
 
 
     @Override
@@ -44,11 +58,15 @@ public class SongTableController implements Initializable {
                 update();
             }
         });
+        filter.textProperty().addListener((observable, oldValue, newValue) -> {
+            filter();
+        });
     }
 
     public void updateTable() {
         _list = FXCollections.observableList(SongDAO.listAll());
-        tableExample.setItems(_list);
+        _listFiltered = new FilteredList<>(_list);
+        tableExample.setItems(_listFiltered);
         c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         c2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDuration()).asObject());
         c3.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getDisc().getName()));
@@ -83,6 +101,37 @@ public class SongTableController implements Initializable {
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    public void filter(){
+        if(titleFilter.isSelected()){
+            Predicate<Song> songPredicate = i -> i.getName().startsWith(filter.getText());
+            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+        }else if(artistFilter.isSelected()){
+
+            Predicate<Song> songPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
+            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+        }else if(discFilter.isSelected()){
+            Predicate<Song> songPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
+            if(_listFiltered != null){_listFiltered.setPredicate(songPredicate);}
+
+        }
+    }
+
+    public void title(){
+        artistFilter.setSelected(false);
+        discFilter.setSelected(false);
+        titleFilter.setSelected(true);
+    }
+    public void artist(){
+        artistFilter.setSelected(true);
+        discFilter.setSelected(false);
+        titleFilter.setSelected(false);
+    }
+    public void discFilter(){
+        artistFilter.setSelected(false);
+        discFilter.setSelected(true);
+        titleFilter.setSelected(false);
     }
 
 }

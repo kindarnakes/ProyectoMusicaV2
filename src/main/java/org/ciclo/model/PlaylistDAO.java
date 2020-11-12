@@ -347,6 +347,9 @@ public class PlaylistDAO extends Playlist {
 
                     }
                 }
+                if(find == false){
+                    aux.setCreator(new User());
+                }
                 playlist.add(aux);
             }
             rs.close();
