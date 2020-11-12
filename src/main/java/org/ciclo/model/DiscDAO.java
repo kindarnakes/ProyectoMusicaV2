@@ -147,7 +147,7 @@ public class DiscDAO extends Disc {
 
     public boolean update() {
         boolean update = false;
-        String sql = "UPDATE disco SET nombre = ?, fecha_publicacion = ?, id_artista = ?, foto = ? FROM disco WHERE id = ?";
+        String sql = "UPDATE disco SET nombre = ?, fecha_publicacion = ?, id_artista = ?, foto = ? WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -159,7 +159,7 @@ public class DiscDAO extends Disc {
             st.setInt(5, this.getId());
 
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 update = true;
             }
         } catch (SQLException ex) {
@@ -232,7 +232,7 @@ public class DiscDAO extends Disc {
             st.setInt(3, this.getArtist().getId());
             st.setString(4, this.getPhoto());
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 saved = true;
             }
 

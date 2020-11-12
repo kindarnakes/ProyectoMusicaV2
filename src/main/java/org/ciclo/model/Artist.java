@@ -185,7 +185,7 @@ public class Artist implements IArtist {
 
     @Override
     public String toString() {
-        return "Artist{" + "_id=" + _id + ", _name=" + _name + ", _photo=" + _photo + ", _nationality=" + _nationality + ", _Discs=" + _Discs + '}';
+        return _name;
     }
 
 
