@@ -114,8 +114,8 @@ public class UserDAO extends User {
     }
 
     public static User listByEmail(String email) {
-        User user = new User();
-        String sql = "SELECT id, nombre, foto, correo FROM usuario WHERE email = ?";
+        User user = null;
+        String sql = "SELECT id, nombre, foto, correo FROM usuario WHERE correo = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -123,13 +123,15 @@ public class UserDAO extends User {
             st.setString(1, email);
             ResultSet rs = st.executeQuery();
 
-            User aux = new User();
-            aux.setId(rs.getInt("id"));
-            aux.setName(rs.getString("nombre"));
-            aux.setEmail(rs.getString("correo"));
-            aux.setPhoto(rs.getNString("foto"));
+            if(rs.next()){
+                User aux = new User();
+                aux.setId(rs.getInt("id"));
+                aux.setName(rs.getString("nombre"));
+                aux.setEmail(rs.getString("correo"));
+                aux.setPhoto(rs.getNString("foto"));
 
-            user = aux;
+                user = aux;
+            }
 
             rs.close();
         } catch (SQLException ex) {
@@ -146,7 +148,7 @@ public class UserDAO extends User {
                 Connection conn = org.ciclo.model.connect.Connection.getConnect()
         ) {
             PreparedStatement st = conn.prepareStatement(sql);
-            st.setString(1, this.getName());
+            st.setString(0, this.getName());
             st.setString(2, this.getPhoto());
             st.setString(3, this.getEmail());
 
@@ -185,7 +187,7 @@ public class UserDAO extends User {
             st.setInt(4, this.getId());
 
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 update = true;
             }
         } catch (SQLException ex) {
@@ -205,7 +207,7 @@ public class UserDAO extends User {
         ) {
             st.setInt(1, id);
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -224,7 +226,7 @@ public class UserDAO extends User {
         ) {
             st.setInt(1, this.getId());
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -242,7 +244,7 @@ public class UserDAO extends User {
         ) {
             st.setString(1, email);
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 removed = true;
             }
         } catch (SQLException ex) {

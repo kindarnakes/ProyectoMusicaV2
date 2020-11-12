@@ -1,12 +1,5 @@
 package org.ciclo;
 
-import org.ciclo.model.Disc;
-import org.ciclo.model.DiscDAO;
-import org.ciclo.model.Song;
-import org.ciclo.model.SongDAO;
-
-import java.util.List;
-
 public class Run {
     public static void main(String[] args) {
         MainApp.main(args);

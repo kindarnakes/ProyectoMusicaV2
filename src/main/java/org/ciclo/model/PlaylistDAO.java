@@ -104,7 +104,7 @@ public class PlaylistDAO extends Playlist {
                 boolean find = false;
                 int index = 0;
                 for (int i = 0; i < users.size() && !find; i++) {
-                    if (users.get(i).getId() == rs.getInt("id_artista")) {
+                    if (users.get(i).getId() == rs.getInt("id_creador")) {
                         find = true;
                         index = i;
                     }
@@ -185,7 +185,7 @@ public class PlaylistDAO extends Playlist {
 
     public boolean update() {
         boolean update = false;
-        String sql = "UPDATE lista_reproduccion SET nombre = ?, descripccion = ?, id_creador = ? WHERE id = ?";
+        String sql = "UPDATE lista_reproduccion SET nombre = ?, descripcion = ?, id_creador = ? WHERE id = ?";
         try (
                 Connection conn = org.ciclo.model.connect.Connection.getConnect();
                 PreparedStatement st = conn.prepareStatement(sql)
@@ -196,7 +196,7 @@ public class PlaylistDAO extends Playlist {
             st.setInt(4, this.getId());
 
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 update = true;
             }
         } catch (SQLException ex) {
@@ -216,7 +216,7 @@ public class PlaylistDAO extends Playlist {
         ) {
             st.setInt(1, id);
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -234,7 +234,7 @@ public class PlaylistDAO extends Playlist {
         ) {
             st.setInt(1, this.getId());
             int i = st.executeUpdate();
-            if (i > 1) {
+            if (i > 0) {
                 removed = true;
             }
         } catch (SQLException ex) {
@@ -252,13 +252,10 @@ public class PlaylistDAO extends Playlist {
         ) {
             PreparedStatement st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
-            st.setString(1, this.getDescription());
+            st.setString(2, this.getDescription());
             st.setInt(3, this.getCreator().getId());
-            int i = st.executeUpdate();
-            if (i > 1) {
-                saved = true;
-            }
-
+            st.executeUpdate();
+            saved = true;
             sql = "SELECT id FROM lista_reproduccion WHERE nombre = ? ORDER BY id DESC LIMIT 1";
             st = conn.prepareStatement(sql);
             st.setString(1, this.getName());
