@@ -16,7 +16,7 @@ public class MainApp extends Application {
 
     @Override
     public void start(Stage stage) throws IOException {
-        Parent root = loadFXML("PlaylistTable");
+        Parent root = loadFXML("Main");
         scene = new Scene(root, root.prefWidth(0), root.prefHeight(0));
         stage.setScene(scene);
         stage.setTitle("ProyectoMusica");
@@ -25,8 +25,8 @@ public class MainApp extends Application {
 
     public static void setRoot(String fxml) throws IOException {
         Parent root = loadFXML(fxml);
-        scene.getWindow().setHeight(root.prefHeight(0) + 20);
-        scene.getWindow().setWidth(root.prefWidth(0) + 20);
+        scene.getWindow().setHeight(root.prefHeight(800) + 20);
+        scene.getWindow().setWidth(root.prefWidth(800) + 20);
         scene.setRoot(root);
     }
 

@@ -20,7 +20,8 @@ public class MainWindowController {
     public void users(){
         Utils.newWindow("/View/fxml/SongTable.fxml", "Canciones", Modality.APPLICATION_MODAL);
     }
-    public void artists(){
-        Utils.newWindow("/View/fxml/SongTable.fxml", "Canciones", Modality.APPLICATION_MODAL);
+
+    public void artists() throws IOException {
+        MainApp.setRoot("ArtistTable");
     }
 }

@@ -78,4 +78,8 @@ public class ArtistTableController implements Initializable {
         }
     }
 
+    public void back() throws IOException {
+        MainApp.setRoot("Main");
+    }
+
 }
