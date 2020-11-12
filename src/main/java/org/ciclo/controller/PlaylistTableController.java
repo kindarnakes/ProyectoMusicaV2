@@ -44,7 +44,15 @@ public class PlaylistTableController implements Initializable {
         updateTable();
         tableExample.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                update();
+                if(tableExample.getSelectionModel().getSelectedItem() != null) {
+                    update();
+                }else{
+                    try {
+                        form();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
             }
         });
 
@@ -86,18 +94,20 @@ public class PlaylistTableController implements Initializable {
 
     public void update() {
         Parent root;
-        try {
-            FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/PlaylistUpdateForm.fxml"));
-            root = loader.load();
-            PlaylistUpdateFormController test = loader.getController();
-            test.setId(tableExample.getSelectionModel().getSelectedItem() != null ? tableExample.getSelectionModel().getSelectedItem().getId() : 0);
-            test.showData();
-            Scene scene = this.tableExample.getScene();
-            scene.getWindow().setHeight(root.prefHeight(0) + 20);
-            scene.getWindow().setWidth(root.prefWidth(0) + 20);
-            scene.setRoot(root);
-        } catch (IOException e) {
-            e.printStackTrace();
+        if(tableExample.getSelectionModel().getSelectedItem() != null) {
+            try {
+                FXMLLoader loader = new FXMLLoader(MainApp.class.getResource("/View/fxml/PlaylistUpdateForm.fxml"));
+                root = loader.load();
+                PlaylistUpdateFormController test = loader.getController();
+                test.setId(tableExample.getSelectionModel().getSelectedItem().getId());
+                test.showData();
+                Scene scene = this.tableExample.getScene();
+                scene.getWindow().setHeight(root.prefHeight(0) + 20);
+                scene.getWindow().setWidth(root.prefWidth(0) + 20);
+                scene.setRoot(root);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
         }
     }
 

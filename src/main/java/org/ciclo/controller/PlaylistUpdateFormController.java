@@ -120,7 +120,6 @@ public class PlaylistUpdateFormController implements Initializable {
                     }
                     _list.add(song);
                     _listIncluded.remove(song);
-                    System.out.println(playlistDAO.getId() + " " + song.getId());
                 }
 
             }
