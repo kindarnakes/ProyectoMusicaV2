@@ -20,8 +20,8 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `bd_musica`
 --
-CREATE DATABASE IF NOT EXISTS db_musica;
-USE db_musica;
+CREATE DATABASE IF NOT EXISTS bd_musica;
+USE bd_musica;
 -- --------------------------------------------------------
 
 --
