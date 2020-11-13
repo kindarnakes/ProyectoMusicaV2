@@ -154,33 +154,35 @@ public class UserFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        table1.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                Playlist playlist = table1.getSelectionModel().getSelectedItem();
-                if (playlist!= null && c.userUnSubscribePlaylist(this.userDAO, playlist)) {
-                    _list.remove(playlist);
-                    _listSubscribed.add(playlist);
-                }
-            }
-        });
-
-        table.setOnMouseClicked(event -> {
-            if (event.getClickCount() == 2) {
-                Playlist playlist = (Playlist) table.getSelectionModel().getSelectedItem();
-                if (playlist != null && c.userSubscribePlaylist(this.userDAO, playlist)) {
-                    if (_list == null || _list.size() == 0) {
-                        updateTable();
+        if(table != null && table1 != null && filter != null){
+            table1.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    Playlist playlist = table1.getSelectionModel().getSelectedItem();
+                    if (playlist != null && c.userUnSubscribePlaylist(this.userDAO, playlist)) {
+                        _list.remove(playlist);
+                        _listSubscribed.add(playlist);
                     }
-                    _list.add(playlist);
-                    _listSubscribed.remove(playlist);
                 }
+            });
 
-            }
-        });
+            table.setOnMouseClicked(event -> {
+                if (event.getClickCount() == 2) {
+                    Playlist playlist = (Playlist) table.getSelectionModel().getSelectedItem();
+                    if (playlist != null && c.userSubscribePlaylist(this.userDAO, playlist)) {
+                        if (_list == null || _list.size() == 0) {
+                            updateTable();
+                        }
+                        _list.add(playlist);
+                        _listSubscribed.remove(playlist);
+                    }
 
-        filter.textProperty().addListener((observable, oldValue, newValue) -> {
-            filter();
-        });
+                }
+            });
+
+            filter.textProperty().addListener((observable, oldValue, newValue) -> {
+                filter();
+            });
+        }
     }
 
     private void filter() {
