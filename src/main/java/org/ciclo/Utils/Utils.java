@@ -8,6 +8,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.ciclo.MainApp;
 import org.ciclo.controller.PopUpControler;
+import org.ciclo.model.connect.Connection;
 
 import java.io.IOException;
 
@@ -87,5 +88,15 @@ public class Utils {
             e.printStackTrace();
         }
         return controller;
+    }
+
+    public static boolean checkConnection(){
+        boolean conected = false;
+
+        if(Connection.getConnect() != null){
+            conected = true;
+        }
+
+        return conected;
     }
 }
