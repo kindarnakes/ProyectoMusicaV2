@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 12-11-2020 a las 01:53:29
+-- Tiempo de generación: 13-11-2020 a las 12:43:37
 -- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.2.34
+-- Versión de PHP: 7.4.11
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -39,8 +39,10 @@ CREATE TABLE `artista` (
 --
 
 INSERT INTO `artista` (`id`, `nombre`, `nacionalidad`, `foto`) VALUES
-(1, 'Sabina', 'español', 'http://adsadasdasdasd.com'),
-(2, 'Heroes del silencio', 'español', 'http://sadasdasdsafsdgsdhfhdfh.com');
+(1, 'Sabina', 'Español', 'http://adsadasdasdasd.com'),
+(2, 'Heroes del silencio', 'Español', 'http://sadasdasdsafsdgsdhfhdfh.com'),
+(3, 'Leiva', 'Español', 'ecdcdcdcd'),
+(4, 'Dani Martin', 'Español', 'frrfrfer');
 
 -- --------------------------------------------------------
 
@@ -63,10 +65,13 @@ CREATE TABLE `cancion` (
 INSERT INTO `cancion` (`id`, `nombre`, `duracion`, `id_genero`, `id_disco`) VALUES
 (1, '19 dias y 500 noches', 240, 2, 1),
 (2, 'Maldito duende', 300, 1, 3),
-(3, 'afafasf', 685, 2, 2),
-(4, 'sdgsdgsdgsdg', 785, 1, 4),
-(5, 'fgsghegshfhfdh', 85, 3, 2),
-(6, '19 dias y 500 noches', 858, 1, 4);
+(6, '19 dias y 500 noches', 858, 1, 4),
+(7, 'Portales', 251, NULL, 6),
+(8, 'La Mentira', 255, NULL, 6),
+(9, 'Godzilla', 164, NULL, 5),
+(10, 'Lobos', 142, NULL, 5),
+(11, 'Los Cantantes', 137, NULL, 8),
+(12, 'Emocional', 133, NULL, 7);
 
 -- --------------------------------------------------------
 
@@ -116,7 +121,11 @@ INSERT INTO `disco` (`id`, `nombre`, `fecha_publicacion`, `foto`, `id_artista`) 
 (1, '19 dias y 500 noches', '2020-05-21', 'http://', 1),
 (2, 'Esta boca es mia', '2019-07-12', 'http://', 1),
 (3, 'Maldito Duende', '2019-07-09', 'http://', 2),
-(4, 'Tierra', '2019-08-12', 'http://', 2);
+(4, 'Tierra', '2019-08-12', 'http://', 2),
+(5, 'Nuclear', '2019-09-12', 'efefefefefe', 3),
+(6, 'La montaña rusa', '2016-11-10', 'rvfrvreververve', 4),
+(7, 'Mi Teatro', '2014-11-06', 'defefefefe', 4),
+(8, 'Pólvora', '2014-11-20', 'ddedngegkj', 3);
 
 -- --------------------------------------------------------
 
@@ -155,12 +164,13 @@ CREATE TABLE `lista_cancion` (
 
 INSERT INTO `lista_cancion` (`id_lista`, `id_cancion`) VALUES
 (1, 1),
-(1, 3),
 (2, 2),
-(2, 4),
 (3, 1),
-(3, 5),
-(3, 6);
+(3, 6),
+(4, 2),
+(4, 6),
+(4, 9),
+(4, 10);
 
 -- --------------------------------------------------------
 
@@ -182,7 +192,9 @@ CREATE TABLE `lista_reproduccion` (
 INSERT INTO `lista_reproduccion` (`id`, `nombre`, `descripcion`, `id_creador`) VALUES
 (1, 'sabina', 'ggasfasfagsgsdgsdgsdg', 2),
 (2, 'Heroes', 'sdggfjyu,fdnhsdg', 1),
-(3, 'Mezcla', 'rehfhfhfgj', 1);
+(3, 'Mezcla', 'rehfhfhfgj', 1),
+(4, 'Los Intocables', 'Somos los intocable nen', 9),
+(5, 'aleatiro', 'fnerveruigfper,gpèr', 11);
 
 -- --------------------------------------------------------
 
@@ -205,7 +217,6 @@ INSERT INTO `reproduce` (`id`, `id_cancion`, `id_usuario`, `instante`) VALUES
 (1, 1, 1, '2020-10-29 09:59:21'),
 (2, 1, 2, '2020-10-29 09:59:52'),
 (3, 6, 1, '2020-10-19 08:59:54'),
-(4, 4, 2, '2020-10-01 09:00:02'),
 (5, 6, 2, '2020-10-15 09:00:09'),
 (6, 2, 1, '2020-10-13 09:00:16'),
 (7, 2, 2, '2020-10-29 10:00:41'),
@@ -250,7 +261,9 @@ CREATE TABLE `usuario` (
 
 INSERT INTO `usuario` (`id`, `correo`, `nombre`, `foto`) VALUES
 (1, 'agustin@ejemplo.com', 'agustin', 'http//:notengo.com'),
-(2, 'angel@ejemplo.com', 'angel', 'http//:notengo.com');
+(2, 'angel@ejemplo.com', 'angel', 'http//:notengo.com'),
+(9, 'santos@ejemplo.com', 'santos', 'notieneeee'),
+(11, 'anonimo', 'anonimo', 'anonimo');
 
 --
 -- Índices para tablas volcadas
@@ -336,13 +349,13 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `artista`
 --
 ALTER TABLE `artista`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `cancion`
 --
 ALTER TABLE `cancion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `comenta`
@@ -354,7 +367,7 @@ ALTER TABLE `comenta`
 -- AUTO_INCREMENT de la tabla `disco`
 --
 ALTER TABLE `disco`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `genero`
@@ -366,7 +379,7 @@ ALTER TABLE `genero`
 -- AUTO_INCREMENT de la tabla `lista_reproduccion`
 --
 ALTER TABLE `lista_reproduccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `reproduce`
@@ -378,7 +391,7 @@ ALTER TABLE `reproduce`
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restricciones para tablas volcadas
