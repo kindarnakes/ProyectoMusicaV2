@@ -113,18 +113,20 @@ public class UserFormController implements Initializable {
         c31.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getCreator().getName()));
     }
 
-    public void save() {
+    public void save() throws IOException {
         if (name.getText() != null && !name.getText().equals("")) {
             if (email.getText() != null && !email.getText().equals("") && email.getText().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")) {
                 if(id == 0){
                     if (c.createUser(name.getText(), email.getText(), photo.getText())) {
                         update();
+                        back();
                     } else {
                         Utils.popUp("Error de guardado", "No se ha podido guardar");
                     }
                 }else{
                     if (c.updateUser(this.userDAO, name.getText(), email.getText(), photo.getText())) {
                         update();
+                        back();
                     } else {
                         Utils.popUp("Error de guardado", "No se ha podido guardar");
                     }
