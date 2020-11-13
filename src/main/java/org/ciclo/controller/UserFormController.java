@@ -116,10 +116,18 @@ public class UserFormController implements Initializable {
     public void save() {
         if (name.getText() != null && !name.getText().equals("")) {
             if (email.getText() != null && !email.getText().equals("") && email.getText().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")) {
-                if (c.createUser(name.getText(), email.getText(), photo.getText())) {
-                    update();
-                } else {
-                    Utils.popUp("Error de guardado", "No se ha podido guardar");
+                if(id == 0){
+                    if (c.createUser(name.getText(), email.getText(), photo.getText())) {
+                        update();
+                    } else {
+                        Utils.popUp("Error de guardado", "No se ha podido guardar");
+                    }
+                }else{
+                    if (c.updateUser(this.userDAO, name.getText(), email.getText(), photo.getText())) {
+                        update();
+                    } else {
+                        Utils.popUp("Error de guardado", "No se ha podido guardar");
+                    }
                 }
             }else{
                 error1.setText("Debe escribir un correo válido");
