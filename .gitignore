@@ -2,3 +2,5 @@
 /target/*
 /UserConf.xml
 /target/
+.idea
+.settings
