@@ -4,6 +4,7 @@ module org.ciclo {
     requires java.sql;
     requires javafx.graphics;
     requires java.xml.bind;
+    requires java.persistence;
 
     opens org.ciclo.model to mysql.connector.java;
     opens org.ciclo to javafx.fxml;
