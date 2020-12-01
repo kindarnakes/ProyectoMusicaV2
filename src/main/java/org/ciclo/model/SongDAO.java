@@ -27,7 +27,6 @@ public class SongDAO extends Song {
         this.setId(s.getId());
         this.setDuration(s.getDuration());
         this.setName(s.getName());
-        this.setGenre(null);
         this.setDisc(s.getDisc()); //Pointer to same object
         this.setList(s.getLists()); //Pointer to same object
     }
