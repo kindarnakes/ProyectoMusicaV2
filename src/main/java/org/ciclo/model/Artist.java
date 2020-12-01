@@ -1,28 +1,38 @@
 package org.ciclo.model;
 
 import java.util.Set;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  * Artist class
  */
-
+@Entity
+@Table (name="artista")
 public class Artist implements IArtist {
 
     /**
      * Database Id
      */
+    @Id
+    @Column(name = "id")
     private Integer _id;
     /**
      * Artist name
      */
+    @Column(name = "nombre", unique = true)
     private String _name;
     /**
      * Url to artist photo
      */
+    @Column(name = "foto")
     private String _photo;
     /**
      * Artist's nationality
      */
+    @Column(name = "nacionalidad")
     private String _nationality;
     /**
      * Artist's discs collection
