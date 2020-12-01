@@ -17,6 +17,7 @@ public class Song implements Serializable {
      * Database Id
      */
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name="id")
     private int Id;
     /**

@@ -1,6 +1,7 @@
 package org.ciclo.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -9,11 +10,12 @@ import java.util.Set;
  */
 @Entity
 @Table(name="disco")
-public class Disc{
+public class Disc implements Serializable {
     /**
      * Database Id
      */
 	@Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name = "id")
     private Integer _id;
     /**

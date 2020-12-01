@@ -1,6 +1,7 @@
 package org.ciclo.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 /**
@@ -8,12 +9,13 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "usuario")
-public class User{
+public class User implements Serializable {
 
     /**
      * Database Id
      */
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer _id;
     /**
@@ -24,12 +26,12 @@ public class User{
     /**
      * Url to user photo
      */
-    @Column(name = "correo")
+    @Column(name = "foto", columnDefinition="TEXT")
     private String _photo;
     /**
      * User's email
      */
-    @Column(name = "foto")
+    @Column(name = "correo")
     private String _email;
     /**
      * Playlists created by user

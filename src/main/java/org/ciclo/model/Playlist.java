@@ -1,11 +1,12 @@
 package org.ciclo.model;
 
 import javax.persistence.*;
+import java.io.Serializable;
 import java.util.Set;
 
 @Entity
 @Table(name="lista_reproduccion")
-public class Playlist{
+public class Playlist implements Serializable {
     /**
      * Name of Playlist
      */
@@ -15,6 +16,7 @@ public class Playlist{
      * Database Id
      */
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     /**

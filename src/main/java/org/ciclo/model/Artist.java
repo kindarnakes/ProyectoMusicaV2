@@ -1,25 +1,21 @@
 package org.ciclo.model;
 
+import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.FetchType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 
 /**
  * Artist class
  */
 @Entity
 @Table (name="artista")
-public class Artist {
+public class Artist implements Serializable {
 
     /**
      * Database Id
      */
     @Id
+    @GeneratedValue(strategy=GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer _id;
     /**
@@ -30,7 +26,7 @@ public class Artist {
     /**
      * Url to artist photo
      */
-    @Column(name = "foto")
+    @Column(name = "foto", columnDefinition = "TEXT")
     private String _photo;
     /**
      * Artist's nationality
