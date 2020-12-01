@@ -33,10 +33,13 @@ public class Song implements Serializable {
     /**
      * Song playlist
      */
+    @ManyToMany
     private Set<Playlist> list;
     /**
      * Song of disc
      */
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.LAZY)
+    @JoinColumn(name="id_disco")
     private Disc disc;
     /**
      * Constructor

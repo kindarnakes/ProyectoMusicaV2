@@ -63,7 +63,6 @@ public class Playlist{
         this.creator = creator;
         //this.susbcribers = susbcribers;
         //this.songs = songs;
-        //this.comments = comments;
     }
 
 

@@ -131,26 +131,6 @@ INSERT INTO `disco` (`id`, `nombre`, `fecha_publicacion`, `foto`, `id_artista`) 
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `genero`
---
-
-CREATE TABLE `genero` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(60) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `genero`
---
-
-INSERT INTO `genero` (`id`, `nombre`) VALUES
-(1, 'Rock'),
-(2, 'Autor'),
-(3, 'Pop');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `lista_cancion`
 --
 
@@ -195,33 +175,6 @@ INSERT INTO `lista_reproduccion` (`id`, `nombre`, `descripcion`, `id_creador`) V
 (2, 'Heroes', 'sdggfjyu,fdnhsdg', 1),
 (3, 'Mezcla', 'rehfhfhfgj', 1),
 (4, 'Los Intocables', 'Somos los intocable nen', 9);
-
--- --------------------------------------------------------
-
---
--- Estructura de tabla para la tabla `reproduce`
---
-
-CREATE TABLE `reproduce` (
-  `id` int(11) NOT NULL,
-  `id_cancion` int(11) NOT NULL,
-  `id_usuario` int(11) DEFAULT NULL,
-  `instante` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `reproduce`
---
-
-INSERT INTO `reproduce` (`id`, `id_cancion`, `id_usuario`, `instante`) VALUES
-(1, 1, 1, '2020-10-29 09:59:21'),
-(2, 1, 2, '2020-10-29 09:59:52'),
-(3, 6, 1, '2020-10-19 08:59:54'),
-(5, 6, 2, '2020-10-15 09:00:09'),
-(6, 2, 1, '2020-10-13 09:00:16'),
-(7, 2, 2, '2020-10-29 10:00:41'),
-(8, 2, 1, '2020-08-04 09:00:42'),
-(9, 2, 1, '2020-10-29 10:00:58');
 
 -- --------------------------------------------------------
 
@@ -299,12 +252,6 @@ ALTER TABLE `disco`
   ADD KEY `id_artista` (`id_artista`);
 
 --
--- Indices de la tabla `genero`
---
-ALTER TABLE `genero`
-  ADD PRIMARY KEY (`id`);
-
---
 -- Indices de la tabla `lista_cancion`
 --
 ALTER TABLE `lista_cancion`
@@ -317,14 +264,6 @@ ALTER TABLE `lista_cancion`
 ALTER TABLE `lista_reproduccion`
   ADD PRIMARY KEY (`id`),
   ADD KEY `id_creador` (`id_creador`);
-
---
--- Indices de la tabla `reproduce`
---
-ALTER TABLE `reproduce`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_cancion` (`id_cancion`),
-  ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `suscripcion`
@@ -370,22 +309,10 @@ ALTER TABLE `disco`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
--- AUTO_INCREMENT de la tabla `genero`
---
-ALTER TABLE `genero`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
-
---
 -- AUTO_INCREMENT de la tabla `lista_reproduccion`
 --
 ALTER TABLE `lista_reproduccion`
   MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
-
---
--- AUTO_INCREMENT de la tabla `reproduce`
---
-ALTER TABLE `reproduce`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=10;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
@@ -401,8 +328,7 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `cancion`
 --
 ALTER TABLE `cancion`
-  ADD CONSTRAINT `id_disco` FOREIGN KEY (`id_disco`) REFERENCES `disco` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_genero` FOREIGN KEY (`id_genero`) REFERENCES `genero` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+  ADD CONSTRAINT `id_disco` FOREIGN KEY (`id_disco`) REFERENCES `disco` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `comenta`
@@ -429,13 +355,6 @@ ALTER TABLE `lista_cancion`
 --
 ALTER TABLE `lista_reproduccion`
   ADD CONSTRAINT `id_creador` FOREIGN KEY (`id_creador`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `reproduce`
---
-ALTER TABLE `reproduce`
-  ADD CONSTRAINT `reproduce_ibfk_1` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE,
-  ADD CONSTRAINT `reproduce_ibfk_2` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `suscripcion`
