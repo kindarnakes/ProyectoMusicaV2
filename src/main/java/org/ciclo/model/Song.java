@@ -1,24 +1,38 @@
 package org.ciclo.model;
 
-import java.util.Set;
 
-public class Song implements ISong {
+import java.util.Set;
+import java.io.Serializable;
+import javax.persistence.*;
+
+@Entity
+@Table(name = "cancion")
+public class Song implements ISong, Serializable {
+
+
+    private static final long serialVersionUID = 1L;
+
 
     /**
      * Database Id
      */
+    @Id
+    @Column(name="id")
     private int Id;
     /**
      * Name of song
      */
+    @Column(name="nombre")
     private String name;
     /**
      * Duration of song
      */
+    @Column(name="duracion")
     private int duration;
     /**
      * Genre of song
      */
+
     private Genre genre;
     /**
      * Song playlist
