@@ -166,7 +166,7 @@ public class Artist {
      * Disc to remove of Artist
      *
      * @param disc Disc to remove
-     * @return True if remove, false if not
+     * @return True if remove, false if not.
      */
     public boolean removeDisc(Disc disc) {
         return this._Discs.remove(disc);
