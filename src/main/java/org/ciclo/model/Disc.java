@@ -34,11 +34,13 @@ public class Disc{
     /**
      * Disc artist
      */
-	@ManyToOne()
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@JoinColumn(name="id_autor")
     private Artist _artist;
     /**
      * Disc's songs collection
      */
+	@OneToMany(mappedBy = "disc",cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private Set<Song> _songs;
 
     /**
