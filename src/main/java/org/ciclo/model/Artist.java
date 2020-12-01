@@ -1,9 +1,12 @@
 package org.ciclo.model;
 
 import java.util.Set;
+import javax.persistence.CascadeType;
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.Id;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 /**
@@ -37,6 +40,7 @@ public class Artist {
     /**
      * Artist's discs collection
      */
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "Discs")
     private Set<Disc> _Discs;
 
     /**
