@@ -3,9 +3,9 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 13-11-2020 a las 12:43:37
+-- Tiempo de generación: 01-12-2020 a las 09:30:10
 -- Versión del servidor: 10.4.14-MariaDB
--- Versión de PHP: 7.4.11
+-- Versión de PHP: 7.2.34
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 START TRANSACTION;
@@ -194,8 +194,7 @@ INSERT INTO `lista_reproduccion` (`id`, `nombre`, `descripcion`, `id_creador`) V
 (1, 'sabina', 'ggasfasfagsgsdgsdgsdg', 2),
 (2, 'Heroes', 'sdggfjyu,fdnhsdg', 1),
 (3, 'Mezcla', 'rehfhfhfgj', 1),
-(4, 'Los Intocables', 'Somos los intocable nen', 9),
-(5, 'aleatiro', 'fnerveruigfper,gpèr', 11);
+(4, 'Los Intocables', 'Somos los intocable nen', 9);
 
 -- --------------------------------------------------------
 
@@ -423,7 +422,7 @@ ALTER TABLE `disco`
 --
 ALTER TABLE `lista_cancion`
   ADD CONSTRAINT `id_cancion` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `lista_reproduccion`
