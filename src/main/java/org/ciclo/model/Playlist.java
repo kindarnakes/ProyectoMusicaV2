@@ -72,8 +72,8 @@ public class Playlist{
         this.id = id;
         this.description = description;
         this.creator = creator;
-        //this.susbcribers = susbcribers;
-        //this.songs = songs;
+        this.susbcribers = susbcribers;
+        this.songs = songs;
     }
 
 
