@@ -40,7 +40,7 @@ public class Artist {
     /**
      * Artist's discs collection
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "Discs")
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "_artist")
     private Set<Disc> _Discs;
 
     /**
