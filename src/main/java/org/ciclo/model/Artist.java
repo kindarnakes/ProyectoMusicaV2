@@ -38,9 +38,9 @@ public class Artist {
     @Column(name = "nacionalidad")
     private String _nationality;
     /**
-     * Artist's discs collection
+     * Artist's discs collection.
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "Discs")
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "_artist")
     private Set<Disc> _Discs;
 
     /**
