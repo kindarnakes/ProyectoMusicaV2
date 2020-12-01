@@ -5,6 +5,7 @@ import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import java.util.Set;
+
 @Entity
 @Table(name="lista_reproduccion")
 public class Playlist implements IPlaylists {
