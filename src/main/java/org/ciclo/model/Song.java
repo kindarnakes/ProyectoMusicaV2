@@ -29,11 +29,7 @@ public class Song implements Serializable {
      */
     @Column(name="duracion")
     private int duration;
-    /**
-     * Genre of song
-     */
 
-    private Genre genre;
     /**
      * Song playlist
      */
@@ -122,14 +118,6 @@ public class Song implements Serializable {
         this.duration = duration;
     }
 
-    /**
-     * Genre setter
-     *
-     * @param genre Genre to assign
-     */
-    public void setGenre(Genre genre) {
-        this.genre = genre;
-    }
 
     /**
      * Disc setter
@@ -174,16 +162,6 @@ public class Song implements Serializable {
         return duration;
     }
 
-    /**
-     * Genre getter
-     *
-     * @return Genre of song
-     */
-
-    public Genre getGenre() {
-        // TODO Auto-generated method stub
-        return genre;
-    }
 
     /**
      * Playlist getter
@@ -208,7 +186,7 @@ public class Song implements Serializable {
         return disc;
     }
 
-    public int compareTo(ISong o) {
+    public int compareTo(Song o) {
 
         return this.name.compareTo(o.getName());
     }

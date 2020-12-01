@@ -1,5 +1,6 @@
 package org.ciclo.model;
 
+import javax.persistence.*;
 import java.time.LocalDate;
 import java.util.Set;
 
@@ -7,7 +8,7 @@ import java.util.Set;
  * Disc class
  */
 @Entity
-@Table (name="disco")
+@Table(name="disco")
 public class Disc{
     /**
      * Database Id
@@ -68,7 +69,7 @@ public class Disc{
      *
      * @return Disc's id
      */
-    @Override
+
     public Integer getId() {
         return _id;
     }
@@ -87,7 +88,7 @@ public class Disc{
      *
      * @return Disc's name
      */
-    @Override
+
     public String getName() {
         return _name;
     }
@@ -106,7 +107,7 @@ public class Disc{
      *
      * @return Disc's ReleaseDate
      */
-    @Override
+
     public LocalDate getReleaseDate() {
         return _ReleaseDate;
     }
@@ -125,7 +126,7 @@ public class Disc{
      *
      * @return Disc's photo
      */
-    @Override
+
     public String getPhoto() {
         return _photo;
     }
@@ -144,7 +145,6 @@ public class Disc{
      *
      * @return Disc's artist
      */
-    @Override
     public Artist getArtist() {
         return _artist;
     }
@@ -163,7 +163,6 @@ public class Disc{
      *
      * @return Disc's songs
      */
-    @Override
     public Set<Song> getSongs() {
         return _songs;
     }
@@ -197,17 +196,16 @@ public class Disc{
         return this._songs.remove(song);
     }
 
-    @Override
     public int compareTo(Disc o) {
         return o.getName().compareTo(this._name);
     }
 
-    @Override
+
     public int hashCode() {
         return _id.hashCode();
     }
 
-    @Override
+
     public boolean equals(Object o) {
         if (this == o) return true;
         if (!(o instanceof Disc)) return false;
@@ -217,7 +215,7 @@ public class Disc{
         return _id.equals(disc._id);
     }
 
-    @Override
+
     public String toString() {
         return "Disc{" + "_id=" + _id + ", _name=" + _name + ", _ReleaseDate=" + _ReleaseDate + ", _photo=" + _photo + ", _artist=" + _artist + ", _songs=" + _songs + '}';
     }
