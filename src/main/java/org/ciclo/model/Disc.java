@@ -6,31 +6,39 @@ import java.util.Set;
 /**
  * Disc class
  */
-public class Disc implements IDisc {
+@Entity
+@Table (name="disco")
+public class Disc{
     /**
      * Database Id
      */
+	@Id
+	@Column(name = "id")
     private Integer _id;
     /**
      * Disc name
      */
+	@Column(name = "nombre")
     private String _name;
     /**
      * Disc releaseDate
      */
+	@Column(name = "fecha_publicacion")
     private LocalDate _ReleaseDate;
     /**
      * Url to disc photo
      */
+	@Column(name = "foto")
     private String _photo;
     /**
      * Disc artist
      */
-    private IArtist _artist;
+	@ManyToOne()
+    private Artist _artist;
     /**
      * Disc's songs collection
      */
-    private Set<ISong> _songs;
+    private Set<Song> _songs;
 
     /**
      * Constructor
@@ -47,7 +55,7 @@ public class Disc implements IDisc {
      * @param _artist
      * @param _songs
      */
-    public Disc(String _name, LocalDate _ReleaseDate, String _photo, IArtist _artist, Set<ISong> _songs) {
+    public Disc(String _name, LocalDate _ReleaseDate, String _photo, Artist _artist, Set<Song> _songs) {
         this._name = _name;
         this._ReleaseDate = _ReleaseDate;
         this._photo = _photo;
@@ -137,7 +145,7 @@ public class Disc implements IDisc {
      * @return Disc's artist
      */
     @Override
-    public IArtist getArtist() {
+    public Artist getArtist() {
         return _artist;
     }
 
@@ -146,7 +154,7 @@ public class Disc implements IDisc {
      *
      * @param _artist Artist to assign
      */
-    public void setArtist(IArtist _artist) {
+    public void setArtist(Artist _artist) {
         this._artist = _artist;
     }
 
@@ -156,7 +164,7 @@ public class Disc implements IDisc {
      * @return Disc's songs
      */
     @Override
-    public Set<ISong> getSongs() {
+    public Set<Song> getSongs() {
         return _songs;
     }
 
@@ -165,7 +173,7 @@ public class Disc implements IDisc {
      *
      * @param _songs Songs to assign
      */
-    public void setSongs(Set<ISong> _songs) {
+    public void setSongs(Set<Song> _songs) {
         this._songs = _songs;
     }
 
@@ -175,7 +183,7 @@ public class Disc implements IDisc {
      * @param song Song to add
      * @return True if add, false if not
      */
-    public boolean addSong(ISong song) {
+    public boolean addSong(Song song) {
         return this._songs.add(song);
     }
 
@@ -185,12 +193,12 @@ public class Disc implements IDisc {
      * @param song Song to remove
      * @return True if remove, false if not
      */
-    public boolean removeSong(ISong song) {
+    public boolean removeSong(Song song) {
         return this._songs.remove(song);
     }
 
     @Override
-    public int compareTo(IDisc o) {
+    public int compareTo(Disc o) {
         return o.getName().compareTo(this._name);
     }
 
