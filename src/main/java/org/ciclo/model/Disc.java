@@ -35,7 +35,7 @@ public class Disc{
      * Disc artist
      */
 	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
-	@JoinColumn(name="id_autor")
+	@JoinColumn(name="id_artista")
     private Artist _artist;
     /**
      * Disc's songs collection
