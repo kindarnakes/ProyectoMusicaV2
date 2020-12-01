@@ -16,6 +16,4 @@ public interface IPlaylists extends Comparable<IPlaylists>, Serializable { //San
     Set<IUser> getSusbcribers(); //Lazy
 
     Set<ISong> getSongs(); //Lazy
-
-    Set<IComments> getComments(); //Lazy
 }

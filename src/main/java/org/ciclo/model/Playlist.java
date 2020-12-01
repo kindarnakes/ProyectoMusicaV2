@@ -1,23 +1,33 @@
 package org.ciclo.model;
 
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.util.Set;
-
+@Entity
+@Table(name="lista_reproduccion")
 public class Playlist implements IPlaylists {
     /**
      * Name of Playlist
      */
+    @Column(name="nombre")
     private String name;
     /**
      * Database Id
      */
+    @Id
+    @Column(name = "id")
     private int id;
     /**
      * Description of Playlist
      */
+    @Column(name="descripcion")
     private String description;
     /**
      * Creator of Playlist
      */
+    @Column(name="id_creador")
     private IUser creator;
     /**
      * Susbcribers of Playlist
@@ -27,10 +37,6 @@ public class Playlist implements IPlaylists {
      * Songs of Playlist
      */
     private Set<ISong> songs;
-    /**
-     * Comments of Playlist
-     */
-    private Set<IComments> comments;
 
 
     /**
@@ -58,9 +64,9 @@ public class Playlist implements IPlaylists {
         this.id = id;
         this.description = description;
         this.creator = creator;
-        this.susbcribers = susbcribers;
-        this.songs = songs;
-        this.comments = comments;
+        //this.susbcribers = susbcribers;
+        //this.songs = songs;
+        //this.comments = comments;
     }
 
 
@@ -109,7 +115,7 @@ public class Playlist implements IPlaylists {
      * @param susbcribers Susbcribers to assign
      */
 
-    public void setSusbcribers(Set<IUser> susbcribers) {
+   public void setSusbcribers(Set<IUser> susbcribers) {
         this.susbcribers = susbcribers;
     }
 
@@ -121,16 +127,6 @@ public class Playlist implements IPlaylists {
 
     public void setSongs(Set<ISong> songs) {
         this.songs = songs;
-    }
-
-    /**
-     * Comments setter
-     *
-     * @param comments Comments to assign
-     */
-
-    public void setComments(Set<IComments> comments) {
-        this.comments = comments;
     }
 
 
@@ -203,18 +199,6 @@ public class Playlist implements IPlaylists {
     public Set<ISong> getSongs() {
         // TODO Auto-generated method stub
         return songs;
-    }
-
-    /**
-     * Comments getter
-     *
-     * @return Comments of Playlist
-     */
-
-    @Override
-    public Set<IComments> getComments() {
-        // TODO Auto-generated method stub
-        return comments;
     }
 
 
