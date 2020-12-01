@@ -7,7 +7,7 @@ import javax.persistence.*;
 
 @Entity
 @Table(name = "cancion")
-public class Song implements ISong, Serializable {
+public class Song implements Serializable {
 
 
     private static final long serialVersionUID = 1L;
@@ -37,17 +37,11 @@ public class Song implements ISong, Serializable {
     /**
      * Song playlist
      */
-    private Set<IPlaylists> list;
+    private Set<Playlist> list;
     /**
      * Song of disc
      */
-    private IDisc disc;
-    /**
-     * Song reproduction
-     */
-    private Set<IReproduction> Reproductions;
-
-
+    private Disc disc;
     /**
      * Constructor
      */
@@ -64,7 +58,7 @@ public class Song implements ISong, Serializable {
      * @param list
      * @param disc
      */
-    public Song(String name, int duration, Set<IPlaylists> list, IDisc disc
+    public Song(String name, int duration, Set<Playlist> list, Disc disc
     ) {
         super();
         this.name = name;
@@ -82,7 +76,7 @@ public class Song implements ISong, Serializable {
      * @param duration
      * @param disc
      */
-    public Song(String name, int duration, IDisc disc) {
+    public Song(String name, int duration, Disc disc) {
         super();
         this.name = name;
         this.duration = duration;
@@ -95,7 +89,7 @@ public class Song implements ISong, Serializable {
      *
      * @param list Playlist to assign
      */
-    public void setList(Set<IPlaylists> list) {
+    public void setList(Set<Playlist> list) {
         this.list = list;
     }
 
@@ -143,25 +137,16 @@ public class Song implements ISong, Serializable {
      * @param disc Disc to assign
      */
 
-    public void setDisc(IDisc disc) {
+    public void setDisc(Disc disc) {
         this.disc = disc;
     }
 
-    /**
-     * Reproductions setter
-     *
-     * @param reproductions Reproductions to assign
-     */
-    public void setReproductions(Set<IReproduction> reproductions) {
-        Reproductions = reproductions;
-    }
 
     /**
      * Id getter
      *
      * @return Id of song
      */
-    @Override
     public Integer getId() {
 
         return Id;
@@ -173,7 +158,6 @@ public class Song implements ISong, Serializable {
      * @return Name of song
      */
 
-    @Override
     public String getName() {
 
         return name;
@@ -185,7 +169,6 @@ public class Song implements ISong, Serializable {
      * @return Duration of song
      */
 
-    @Override
     public Integer getDuration() {
         // TODO Auto-generated method stub
         return duration;
@@ -197,8 +180,7 @@ public class Song implements ISong, Serializable {
      * @return Genre of song
      */
 
-    @Override
-    public IGenre getGenre() {
+    public Genre getGenre() {
         // TODO Auto-generated method stub
         return genre;
     }
@@ -210,8 +192,7 @@ public class Song implements ISong, Serializable {
      */
 
 
-    @Override
-    public Set<IPlaylists> getLists() {
+    public Set<Playlist> getLists() {
         // TODO Auto-generated method stub
         return list;
     }
@@ -222,25 +203,11 @@ public class Song implements ISong, Serializable {
      * @return Disc of song
      */
 
-    @Override
-    public IDisc getDisc() {
+    public Disc getDisc() {
         // TODO Auto-generated method stub
         return disc;
     }
 
-    /**
-     * Reproductions getter
-     *
-     * @return Reproductions of song
-     */
-
-    @Override
-    public Set<IReproduction> getReproductions() {
-        // TODO Auto-generated method stub
-        return Reproductions;
-    }
-
-    @Override
     public int compareTo(ISong o) {
 
         return this.name.compareTo(o.getName());

@@ -11,7 +11,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table (name="artista")
-public class Artist implements IArtist {
+public class Artist {
 
     /**
      * Database Id
@@ -37,7 +37,7 @@ public class Artist implements IArtist {
     /**
      * Artist's discs collection
      */
-    private Set<IDisc> _Discs;
+    private Set<Disc> _Discs;
 
     /**
      * Constructor
@@ -63,7 +63,6 @@ public class Artist implements IArtist {
      *
      * @return Artist's id
      */
-    @Override
     public Integer getId() {
         return _id;
     }
@@ -82,7 +81,6 @@ public class Artist implements IArtist {
      *
      * @return Artist's name
      */
-    @Override
     public String getName() {
         return _name;
     }
@@ -101,7 +99,6 @@ public class Artist implements IArtist {
      *
      * @return Artist's photo
      */
-    @Override
     public String getPhoto() {
         return _photo;
     }
@@ -120,7 +117,6 @@ public class Artist implements IArtist {
      *
      * @return Artist's nationality
      */
-    @Override
     public String getFrom() {
         return _nationality;
     }
@@ -139,8 +135,7 @@ public class Artist implements IArtist {
      *
      * @return Artist's discs
      */
-    @Override
-    public Set<IDisc> getDiscs() {
+    public Set<Disc> getDiscs() {
         return _Discs;
     }
 
@@ -149,7 +144,7 @@ public class Artist implements IArtist {
      *
      * @param _Discs Disc to assign
      */
-    public void setDiscs(Set<IDisc> _Discs) {
+    public void setDiscs(Set<Disc> _Discs) {
         this._Discs = _Discs;
     }
 
@@ -159,7 +154,7 @@ public class Artist implements IArtist {
      * @param disc Disc to add
      * @return True if add, false if not
      */
-    public boolean addDisc(IDisc disc) {
+    public boolean addDisc(Disc disc) {
         return this._Discs.add(disc);
     }
 
@@ -169,12 +164,11 @@ public class Artist implements IArtist {
      * @param disc Disc to remove
      * @return True if remove, false if not
      */
-    public boolean removeDisc(IDisc disc) {
+    public boolean removeDisc(Disc disc) {
         return this._Discs.remove(disc);
     }
 
-    @Override
-    public int compareTo(IArtist o) {
+    public int compareTo(Artist o) {
         return o.getName().compareTo(this._name);
     }
 
