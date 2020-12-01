@@ -1,44 +1,45 @@
 package org.ciclo.model;
 
+import javax.persistence.*;
 import java.util.Set;
 
 /**
  * Person using the system
  */
-public class User implements IUser {
+@Entity
+@Table(name = "usuario")
+public class User{
 
     /**
      * Database Id
      */
+    @Id
+    @Column(name = "id")
     private Integer _id;
     /**
      * User nickname
      */
+    @Column(name = "nombre")
     private String _name;
     /**
      * Url to user photo
      */
+    @Column(name = "correo")
     private String _photo;
     /**
      * User's email
      */
+    @Column(name = "foto")
     private String _email;
     /**
      * Playlists created by user
      */
-    private Set<IPlaylists> _created;
+    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "creator")
+    private Set<Playlist> _created;
     /**
      * Playlists to which the user is subscribed
      */
-    private Set<IPlaylists> _subscribed;
-    /**
-     * User's comments
-     */
-    private Set<IComments> _comments;
-    /**
-     * User's reproductions of a songs
-     */
-    private Set<IReproduction> _reproductions;
+    private Set<Playlist> _subscribed;
 
     /**
      * Constructor
@@ -103,7 +104,7 @@ public class User implements IUser {
      *
      * @return Set of playlist created
      */
-    public Set<IPlaylists> getCreated() {
+    public Set<Playlist> getCreated() {
         return this._created;
     }
 
@@ -113,29 +114,10 @@ public class User implements IUser {
      *
      * @return Set of playlist subscribed
      */
-    public Set<IPlaylists> getSubscribed() {
+    public Set<Playlist> getSubscribed() {
         return this._subscribed;
     }
 
-
-    /**
-     * Comments getter
-     *
-     * @return Set of user's comments
-     */
-    public Set<IComments> getComments() {
-        return this._comments;
-    }
-
-
-    /**
-     * Reproductions getter
-     *
-     * @return Set of user's reproductions
-     */
-    public Set<IReproduction> getReproductions() {
-        return this._reproductions;
-    }
 
     /**
      * Id setter
@@ -178,7 +160,7 @@ public class User implements IUser {
      *
      * @param _created Set of playlist to assign
      */
-    public void setCreated(Set<IPlaylists> _created) {
+    public void setCreated(Set<Playlist> _created) {
         this._created = _created;
     }
 
@@ -187,27 +169,10 @@ public class User implements IUser {
      *
      * @param _subscribed Set of playlist to assign
      */
-    public void setSuscribed(Set<IPlaylists> _subscribed) {
+    public void setSuscribed(Set<Playlist> _subscribed) {
         this._subscribed = _subscribed;
     }
 
-    /**
-     * Comments setter
-     *
-     * @param _comments Set of comments to assign
-     */
-    public void setComments(Set<IComments> _comments) {
-        this._comments = _comments;
-    }
-
-    /**
-     * Reproductions setter
-     *
-     * @param _reproductions Set of reproductions to assign
-     */
-    public void setReproductions(Set<IReproduction> _reproductions) {
-        this._reproductions = _reproductions;
-    }
 
     /**
      * Add a user created playlist
@@ -215,7 +180,7 @@ public class User implements IUser {
      * @param rp playlist to add
      * @return True if add, false if not
      */
-    public boolean create(IPlaylists rp) {
+    public boolean create(Playlist rp) {
         return this._created.add(rp);
     }
 
@@ -225,7 +190,7 @@ public class User implements IUser {
      * @param rp playlist to subscribe
      * @return True if subscribe, false if not
      */
-    public boolean subscribe(IPlaylists rp) {
+    public boolean subscribe(Playlist rp) {
         return this._subscribed.add(rp);
     }
 
@@ -235,42 +200,12 @@ public class User implements IUser {
      * @param rp playlist to unsubscribe
      * @return True if unsubscribe, false if not
      */
-    public boolean unsubscribe(IPlaylists rp) {
+    public boolean unsubscribe(Playlist rp) {
         return this._subscribed.remove(rp);
     }
 
-    /**
-     * Assign a comment
-     *
-     * @param comment comment to add
-     * @return True if add, false if not
-     */
-    public boolean comment(IComments comment) {
-        return this._comments.add(comment);
-    }
 
-    /**
-     * Remove a comment
-     *
-     * @param comment comment to remove
-     * @return True if remove, false if not
-     */
-    public boolean uncomment(IComments comment) {
-        return this._comments.remove(comment);
-    }
-
-    /**
-     * Assign a reproduction
-     *
-     * @param reproduction reproduction to add
-     * @return True if add, false if not
-     */
-    public boolean reproduce(IReproduction reproduction) {
-        return this._reproductions.add(reproduction);
-    }
-
-    @Override
-    public int compareTo(IUser o) {
+    public int compareTo(User o) {
         return o.getEmail().compareTo(this._email);
     }
 

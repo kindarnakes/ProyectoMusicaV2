@@ -50,7 +50,7 @@ public class PlaylistUpdateFormController implements Initializable {
     private final Controller c = new Controller();
 
     @FXML
-    TableView<ISong> tableExample1;
+    TableView<Song> tableExample1;
     @FXML
     TableColumn<Song, String> c11;
     @FXML
@@ -61,9 +61,9 @@ public class PlaylistUpdateFormController implements Initializable {
     TableColumn<Song, String> c41;
 
     ObservableList<Song> _list;
-    ObservableList<ISong> _listIncluded;
+    ObservableList<Song> _listIncluded;
     FilteredList<Song> _listFiltered;
-    FilteredList<ISong> _listIncludedFiltered;
+    FilteredList<Song> _listIncludedFiltered;
     PlaylistDAO playlistDAO = null;
 
     int id = 0;
@@ -152,7 +152,7 @@ public class PlaylistUpdateFormController implements Initializable {
 
     public void updateTable() {
         _list = FXCollections.observableList(SongDAO.listAll());
-        for (ISong p : _listIncluded) {
+        for (Song p : _listIncluded) {
             _list.remove(p);
         }
         _listFiltered = new FilteredList<>(_list);
@@ -166,7 +166,7 @@ public class PlaylistUpdateFormController implements Initializable {
     public void filter() {
         if (titleFilter.isSelected()) {
             Predicate<Song> songPredicate = i -> i.getName().startsWith(filter.getText());
-            Predicate<ISong> isongPredicate = i -> i.getName().startsWith(filter.getText());
+            Predicate<Song> isongPredicate = i -> i.getName().startsWith(filter.getText());
             if (_listFiltered != null) {
                 _listFiltered.setPredicate(songPredicate);
             }
@@ -174,14 +174,14 @@ public class PlaylistUpdateFormController implements Initializable {
         } else if (artistFilter.isSelected()) {
 
             Predicate<Song> songPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
-            Predicate<ISong> isongPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
+            Predicate<Song> isongPredicate = i -> i.getDisc().getArtist().getName().startsWith(filter.getText());
             if (_listFiltered != null) {
                 _listFiltered.setPredicate(songPredicate);
             }
             _listIncludedFiltered.setPredicate(isongPredicate);
         } else if (discFilter.isSelected()) {
             Predicate<Song> songPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
-            Predicate<ISong> isongPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
+            Predicate<Song> isongPredicate = i -> i.getDisc().getName().startsWith(filter.getText());
             if (_listFiltered != null) {
                 _listFiltered.setPredicate(songPredicate);
             }

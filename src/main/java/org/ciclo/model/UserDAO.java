@@ -25,13 +25,11 @@ public class UserDAO extends User {
 
 
     public UserDAO(User u) {
-        this.setComments(u.getComments());
         this.setCreated(u.getCreated());
         this.setEmail(u.getEmail());
         this.setId(u.getId());
         this.setName(u.getName());
         this.setPhoto(u.getPhoto());
-        this.setReproductions(u.getReproductions());
         this.setSuscribed(u.getSubscribed());
     }
 

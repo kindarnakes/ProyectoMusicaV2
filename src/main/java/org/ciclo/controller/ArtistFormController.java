@@ -12,7 +12,6 @@ import org.ciclo.MainApp;
 import org.ciclo.model.Artist;
 import org.ciclo.model.ArtistDAO;
 import org.ciclo.model.Disc;
-import org.ciclo.model.IDisc;
 
 import java.io.IOException;
 import java.net.URL;
@@ -29,7 +28,7 @@ public class ArtistFormController implements Initializable {
     @FXML
     TextField photo;
     @FXML
-    TableView<IDisc> table;
+    TableView<Disc> table;
     @FXML
     TableColumn<Disc, String> c1;
     @FXML
@@ -83,7 +82,7 @@ public class ArtistFormController implements Initializable {
             photo.setText(artist.getPhoto());
             artist.loadDiscs();
 
-            table.setItems(FXCollections.observableList(new ArrayList<>(artist.getDiscs())));
+            table.setItems(FXCollections.observableList(new ArrayList(artist.getDiscs())));
             c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
             c2.setCellValueFactory(cellData -> new SimpleObjectProperty<>(cellData.getValue().getReleaseDate()));
         }

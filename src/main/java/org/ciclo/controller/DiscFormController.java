@@ -13,7 +13,7 @@ import org.ciclo.Utils.Utils;
 import org.ciclo.model.Artist;
 import org.ciclo.model.ArtistDAO;
 import org.ciclo.model.DiscDAO;
-import org.ciclo.model.ISong;
+import org.ciclo.model.Song;
 
 import java.io.IOException;
 import java.net.URL;
@@ -35,11 +35,11 @@ public class DiscFormController implements Initializable {
     @FXML
     Label error;
     @FXML
-    TableView<ISong> table;
+    TableView<Song> table;
     @FXML
-    TableColumn<ISong, String> c1;
+    TableColumn<Song, String> c1;
     @FXML
-    TableColumn<ISong, Integer> c2;
+    TableColumn<Song, Integer> c2;
 
     int id = 0;
     private final Controller c = new Controller();
@@ -47,7 +47,7 @@ public class DiscFormController implements Initializable {
 
     ObservableList<Artist> artistObservableList;
     FilteredList<Artist> artistFilteredList;
-    ObservableList<ISong> songs;
+    ObservableList<Song> songs;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -109,7 +109,7 @@ public class DiscFormController implements Initializable {
         release.setValue(discDAO.getReleaseDate());
         artistList.getSelectionModel().select((Artist) discDAO.getArtist());
         discDAO.loadSongs();
-        songs = FXCollections.observableList(new ArrayList<>(discDAO.getSongs()));
+        songs = FXCollections.observableList(new ArrayList(discDAO.getSongs()));
         table.setItems(songs);
         c1.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
         c2.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getDuration()).asObject());

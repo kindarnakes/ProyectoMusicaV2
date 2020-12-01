@@ -44,9 +44,9 @@ public class UserFormController implements Initializable {
     @FXML
     TableColumn<Playlist, String> created;
     @FXML
-    TableView<IPlaylists> table2;
+    TableView<Playlist> table2;
     @FXML
-    TableView<IPlaylists> table;
+    TableView<Playlist> table;
     @FXML
     TableColumn<Playlist, String> c1;
     @FXML
@@ -67,9 +67,9 @@ public class UserFormController implements Initializable {
     TextField filter;
 
     ObservableList<Playlist> _list;
-    ObservableList<IPlaylists> _listSubscribed;
+    ObservableList<Playlist> _listSubscribed;
     FilteredList<Playlist> _listFiltered;
-    FilteredList<IPlaylists> _listSubscribedFiltered;
+    FilteredList<Playlist> _listSubscribedFiltered;
 
     Controller c = new Controller();
     UserDAO userDAO;
@@ -103,7 +103,7 @@ public class UserFormController implements Initializable {
 
     public void updateTable() {
         _list = FXCollections.observableList(PlaylistDAO.List_All_Playlist());
-        for (IPlaylists p : userDAO.getSubscribed()) {
+        for (Playlist p : userDAO.getSubscribed()) {
             _list.remove(p);
         }
         _listFiltered = new FilteredList<>(_list);
@@ -197,7 +197,7 @@ public class UserFormController implements Initializable {
 
     private void filter() {
 
-        Predicate<IPlaylists> playPredicate = i -> i.getName().startsWith(filter.getText());
+        Predicate<Playlist> playPredicate = i -> i.getName().startsWith(filter.getText());
         if (_listFiltered != null) {
             _listFiltered.setPredicate(playPredicate);
         }

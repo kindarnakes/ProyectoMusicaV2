@@ -1,14 +1,11 @@
 package org.ciclo.model;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Id;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Set;
 
 @Entity
 @Table(name="lista_reproduccion")
-public class Playlist implements IPlaylists {
+public class Playlist{
     /**
      * Name of Playlist
      */
@@ -28,16 +25,17 @@ public class Playlist implements IPlaylists {
     /**
      * Creator of Playlist
      */
-    @Column(name="id_creador")
-    private IUser creator;
+    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @JoinColumn(name="id_creador")
+    private User creator;
     /**
      * Susbcribers of Playlist
      */
-    private Set<IUser> susbcribers;
+    private Set<User> susbcribers;
     /**
      * Songs of Playlist
      */
-    private Set<ISong> songs;
+    private Set<Song> songs;
 
 
     /**
@@ -56,10 +54,8 @@ public class Playlist implements IPlaylists {
      * @param creator
      * @param susbcribers
      * @param songs
-     * @param comments
      */
-    public Playlist(String name, int id, String description, IUser creator, Set<IUser> susbcribers, Set<ISong> songs,
-                    Set<IComments> comments) {
+    public Playlist(String name, int id, String description, User creator, Set<User> susbcribers, Set<Song> songs) {
         super();
         this.name = name;
         this.id = id;
@@ -106,7 +102,7 @@ public class Playlist implements IPlaylists {
      * @param creator Creator to assign
      */
 
-    public void setCreator(IUser creator) {
+    public void setCreator(User creator) {
         this.creator = creator;
     }
 
@@ -116,7 +112,7 @@ public class Playlist implements IPlaylists {
      * @param susbcribers Susbcribers to assign
      */
 
-   public void setSusbcribers(Set<IUser> susbcribers) {
+   public void setSusbcribers(Set<User> susbcribers) {
         this.susbcribers = susbcribers;
     }
 
@@ -126,7 +122,7 @@ public class Playlist implements IPlaylists {
      * @param songs Songs to assign
      */
 
-    public void setSongs(Set<ISong> songs) {
+    public void setSongs(Set<Song> songs) {
         this.songs = songs;
     }
 
@@ -136,7 +132,6 @@ public class Playlist implements IPlaylists {
      *
      * @return Name of Playlist
      */
-    @Override
     public String getName() {
         // TODO Auto-generated method stub
         return name;
@@ -148,7 +143,6 @@ public class Playlist implements IPlaylists {
      * @return Id of Playlist
      */
 
-    @Override
     public Integer getId() {
         // TODO Auto-generated method stub
         return id;
@@ -160,7 +154,6 @@ public class Playlist implements IPlaylists {
      * @return Description of Playlist
      */
 
-    @Override
     public String getDescription() {
         // TODO Auto-generated method stub
         return description;
@@ -172,8 +165,7 @@ public class Playlist implements IPlaylists {
      * @return Creator of Playlist
      */
 
-    @Override
-    public IUser getCreator() {
+    public User getCreator() {
         // TODO Auto-generated method stub
         return creator;
     }
@@ -184,8 +176,7 @@ public class Playlist implements IPlaylists {
      * @return Suscribers of Playlist
      */
 
-    @Override
-    public Set<IUser> getSusbcribers() {
+    public Set<User> getSusbcribers() {
         // TODO Auto-generated method stub
         return susbcribers;
     }
@@ -196,15 +187,12 @@ public class Playlist implements IPlaylists {
      * @return Songs of Playlist
      */
 
-    @Override
-    public Set<ISong> getSongs() {
+    public Set<Song> getSongs() {
         // TODO Auto-generated method stub
         return songs;
     }
 
-
-    @Override
-    public int compareTo(IPlaylists o) {
+    public int compareTo(Playlist o) {
 
         return this.name.compareTo(o.getName());
     }
