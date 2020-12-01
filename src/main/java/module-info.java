@@ -13,6 +13,4 @@ module org.ciclo {
     opens org.ciclo.controller to javafx.fxml;
     exports org.ciclo.controller;
 
-    opens org.ciclo.model.connect to java.xml.bind;
-    exports org.ciclo.model;
 }
