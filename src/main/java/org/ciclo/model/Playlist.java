@@ -31,10 +31,21 @@ public class Playlist{
     /**
      * Susbcribers of Playlist
      */
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "suscripcion",
+            joinColumns = { @JoinColumn(name = "id_lista") },
+            inverseJoinColumns = { @JoinColumn(name = "id_usuario") }
+    )
     private Set<User> susbcribers;
     /**
      * Songs of Playlist
-     */
+     */    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "lista_cancion",
+            joinColumns = { @JoinColumn(name = "id_lista") },
+            inverseJoinColumns = { @JoinColumn(name = "id_cancion") }
+    )
     private Set<Song> songs;
 
 

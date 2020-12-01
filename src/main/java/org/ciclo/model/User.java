@@ -39,6 +39,12 @@ public class User{
     /**
      * Playlists to which the user is subscribed
      */
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "suscripcion",
+            joinColumns = { @JoinColumn(name = "id_usuario") },
+            inverseJoinColumns = { @JoinColumn(name = "id_lista") }
+    )
     private Set<Playlist> _subscribed;
 
     /**

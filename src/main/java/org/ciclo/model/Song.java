@@ -33,7 +33,12 @@ public class Song implements Serializable {
     /**
      * Song playlist
      */
-    @ManyToMany
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "lista_cancion",
+            joinColumns = { @JoinColumn(name = "id_cancion") },
+            inverseJoinColumns = { @JoinColumn(name = "id_lista") }
+    )
     private Set<Playlist> list;
     /**
      * Song of disc
