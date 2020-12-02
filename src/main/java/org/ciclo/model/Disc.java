@@ -36,7 +36,7 @@ public class Disc implements Serializable {
     /**
      * Disc artist
      */
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch= FetchType.EAGER)
 	@JoinColumn(name="id_artista")
     private Artist _artist;
     /**
