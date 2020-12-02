@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 02-12-2020 a las 13:43:38
+-- Tiempo de generación: 02-12-2020 a las 20:59:15
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.2.34
 
@@ -20,8 +20,7 @@ SET time_zone = "+00:00";
 --
 -- Base de datos: `bd_musica`
 --
-CREATE DATABASE IF NOT EXISTS bd_musica;
-USE bd_musica;
+
 -- --------------------------------------------------------
 
 --
@@ -29,10 +28,10 @@ USE bd_musica;
 --
 
 CREATE TABLE `artista` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(120) NOT NULL,
-  `nacionalidad` varchar(50) NOT NULL,
-  `foto` text NOT NULL
+                           `id` int(11) NOT NULL,
+                           `nombre` varchar(120) NOT NULL,
+                           `nacionalidad` varchar(50) NOT NULL,
+                           `foto` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -52,10 +51,10 @@ INSERT INTO `artista` (`id`, `nombre`, `nacionalidad`, `foto`) VALUES
 --
 
 CREATE TABLE `cancion` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(120) NOT NULL,
-  `duracion` int(11) NOT NULL,
-  `id_disco` int(11) NOT NULL
+                           `id` int(11) NOT NULL,
+                           `nombre` varchar(120) NOT NULL,
+                           `duracion` int(11) NOT NULL,
+                           `id_disco` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -76,41 +75,15 @@ INSERT INTO `cancion` (`id`, `nombre`, `duracion`, `id_disco`) VALUES
 -- --------------------------------------------------------
 
 --
--- Estructura de tabla para la tabla `comenta`
---
-
-CREATE TABLE `comenta` (
-  `id` int(11) NOT NULL,
-  `id_usuario` int(11) NOT NULL,
-  `id_lista` int(11) NOT NULL,
-  `mensaje` text NOT NULL,
-  `instante` timestamp NOT NULL DEFAULT current_timestamp() ON UPDATE current_timestamp()
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
-
---
--- Volcado de datos para la tabla `comenta`
---
-
-INSERT INTO `comenta` (`id`, `id_usuario`, `id_lista`, `mensaje`, `instante`) VALUES
-(1, 1, 2, 'gsdgsdgdsgsdgsdg', '2020-10-29 09:58:21'),
-(2, 1, 3, 'fghgfjfgjfgjgfj', '2020-10-29 09:58:30'),
-(3, 2, 1, 'xcbxchfdhdfh', '2020-10-29 09:58:36'),
-(4, 1, 3, 'dsgsgsdgsdg', '2020-10-20 08:58:37'),
-(5, 1, 3, 'rwerewrwerewrewr', '2020-10-06 08:58:50'),
-(6, 2, 1, 'hdnfdn', '2020-10-06 08:59:00');
-
--- --------------------------------------------------------
-
---
 -- Estructura de tabla para la tabla `disco`
 --
 
 CREATE TABLE `disco` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(120) NOT NULL,
-  `fecha_publicacion` date NOT NULL,
-  `foto` varchar(255) NOT NULL,
-  `id_artista` int(11) NOT NULL
+                         `id` int(11) NOT NULL,
+                         `nombre` varchar(120) NOT NULL,
+                         `fecha_publicacion` date NOT NULL,
+                         `foto` varchar(255) NOT NULL,
+                         `id_artista` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -134,8 +107,8 @@ INSERT INTO `disco` (`id`, `nombre`, `fecha_publicacion`, `foto`, `id_artista`) 
 --
 
 CREATE TABLE `lista_cancion` (
-  `id_lista` int(11) NOT NULL,
-  `id_cancion` int(11) NOT NULL
+                                 `id_lista` int(11) NOT NULL,
+                                 `id_cancion` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -159,10 +132,10 @@ INSERT INTO `lista_cancion` (`id_lista`, `id_cancion`) VALUES
 --
 
 CREATE TABLE `lista_reproduccion` (
-  `id` int(11) NOT NULL,
-  `nombre` varchar(120) NOT NULL,
-  `descripcion` varchar(255) NOT NULL,
-  `id_creador` int(11) DEFAULT NULL
+                                      `id` int(11) NOT NULL,
+                                      `nombre` varchar(120) NOT NULL,
+                                      `descripcion` varchar(255) NOT NULL,
+                                      `id_creador` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -183,8 +156,8 @@ INSERT INTO `lista_reproduccion` (`id`, `nombre`, `descripcion`, `id_creador`) V
 --
 
 CREATE TABLE `suscripcion` (
-  `id_usuario` int(11) NOT NULL,
-  `id_lista` int(11) NOT NULL
+                               `id_usuario` int(11) NOT NULL,
+                               `id_lista` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -202,10 +175,10 @@ INSERT INTO `suscripcion` (`id_usuario`, `id_lista`) VALUES
 --
 
 CREATE TABLE `usuario` (
-  `id` int(11) NOT NULL,
-  `correo` varchar(60) NOT NULL,
-  `nombre` varchar(60) NOT NULL,
-  `foto` text NOT NULL
+                           `id` int(11) NOT NULL,
+                           `correo` varchar(60) NOT NULL,
+                           `nombre` varchar(60) NOT NULL,
+                           `foto` text NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 --
@@ -226,58 +199,50 @@ INSERT INTO `usuario` (`id`, `correo`, `nombre`, `foto`) VALUES
 -- Indices de la tabla `artista`
 --
 ALTER TABLE `artista`
-  ADD PRIMARY KEY (`id`);
+    ADD PRIMARY KEY (`id`);
 
 --
 -- Indices de la tabla `cancion`
 --
 ALTER TABLE `cancion`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_disco` (`id_disco`);
-
---
--- Indices de la tabla `comenta`
---
-ALTER TABLE `comenta`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_usu` (`id_usuario`),
-  ADD KEY `id_list` (`id_lista`);
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `id_disco` (`id_disco`);
 
 --
 -- Indices de la tabla `disco`
 --
 ALTER TABLE `disco`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_artista` (`id_artista`);
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `id_artista` (`id_artista`);
 
 --
 -- Indices de la tabla `lista_cancion`
 --
 ALTER TABLE `lista_cancion`
-  ADD PRIMARY KEY (`id_lista`,`id_cancion`),
-  ADD KEY `id_cancion` (`id_cancion`);
+    ADD PRIMARY KEY (`id_lista`,`id_cancion`),
+    ADD KEY `id_cancion` (`id_cancion`);
 
 --
 -- Indices de la tabla `lista_reproduccion`
 --
 ALTER TABLE `lista_reproduccion`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id_creador` (`id_creador`);
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `id_creador` (`id_creador`);
 
 --
 -- Indices de la tabla `suscripcion`
 --
 ALTER TABLE `suscripcion`
-  ADD PRIMARY KEY (`id_usuario`,`id_lista`),
-  ADD KEY `id_lista` (`id_lista`),
-  ADD KEY `id_usuario` (`id_usuario`);
+    ADD PRIMARY KEY (`id_usuario`,`id_lista`),
+    ADD KEY `id_lista` (`id_lista`),
+    ADD KEY `id_usuario` (`id_usuario`);
 
 --
 -- Indices de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  ADD PRIMARY KEY (`id`),
-  ADD KEY `id` (`id`);
+    ADD PRIMARY KEY (`id`),
+    ADD KEY `id` (`id`);
 
 --
 -- AUTO_INCREMENT de las tablas volcadas
@@ -287,37 +252,31 @@ ALTER TABLE `usuario`
 -- AUTO_INCREMENT de la tabla `artista`
 --
 ALTER TABLE `artista`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `cancion`
 --
 ALTER TABLE `cancion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
-
---
--- AUTO_INCREMENT de la tabla `comenta`
---
-ALTER TABLE `comenta`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
 
 --
 -- AUTO_INCREMENT de la tabla `disco`
 --
 ALTER TABLE `disco`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=9;
 
 --
 -- AUTO_INCREMENT de la tabla `lista_reproduccion`
 --
 ALTER TABLE `lista_reproduccion`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `usuario`
 --
 ALTER TABLE `usuario`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
+    MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- Restricciones para tablas volcadas
@@ -327,40 +286,33 @@ ALTER TABLE `usuario`
 -- Filtros para la tabla `cancion`
 --
 ALTER TABLE `cancion`
-  ADD CONSTRAINT `id_disco` FOREIGN KEY (`id_disco`) REFERENCES `disco` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
-
---
--- Filtros para la tabla `comenta`
---
-ALTER TABLE `comenta`
-  ADD CONSTRAINT `id_list` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_usu` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT `id_disco` FOREIGN KEY (`id_disco`) REFERENCES `disco` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `disco`
 --
 ALTER TABLE `disco`
-  ADD CONSTRAINT `id_artista` FOREIGN KEY (`id_artista`) REFERENCES `artista` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+    ADD CONSTRAINT `id_artista` FOREIGN KEY (`id_artista`) REFERENCES `artista` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `lista_cancion`
 --
 ALTER TABLE `lista_cancion`
-  ADD CONSTRAINT `id_cancion` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
+    ADD CONSTRAINT `id_cancion` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `lista_reproduccion`
 --
 ALTER TABLE `lista_reproduccion`
-  ADD CONSTRAINT `id_creador` FOREIGN KEY (`id_creador`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
+    ADD CONSTRAINT `id_creador` FOREIGN KEY (`id_creador`) REFERENCES `usuario` (`id`) ON DELETE SET NULL ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `suscripcion`
 --
 ALTER TABLE `suscripcion`
-  ADD CONSTRAINT `id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `suscripcion_ibfk_1` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+    ADD CONSTRAINT `id_usuario` FOREIGN KEY (`id_usuario`) REFERENCES `usuario` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+    ADD CONSTRAINT `suscripcion_ibfk_1` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
