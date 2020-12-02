@@ -4,9 +4,31 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
 
+
+@org.hibernate.annotations.NamedQuery(
+        name = "getAll",
+        query = "FROM Playlist",
+        timeout = 1
+)
+@org.hibernate.annotations.NamedQuery(
+        name = "getNamed",
+        query = "FROM Playlist WHERE name = :name",
+        timeout = 1
+)
+@org.hibernate.annotations.NamedQuery(
+        name = "getBySong",
+        query = "SELECT DISTINCT p FROM Playlist p JOIN p.songs Song WHERE Song.id = :id",
+        timeout = 1
+)
+@org.hibernate.annotations.NamedQuery(
+        name = "getByUser",
+        query = "SELECT DISTINCT p FROM Playlist p JOIN p.creator User WHERE User.id = :id",
+        timeout = 1
+)
+
 @Entity
 @Table(name="lista_reproduccion")
-public class Playlist implements Serializable {
+public class Playlist implements Serializable, Comparable<Playlist> {
     /**
      * Name of Playlist
      */
@@ -27,7 +49,7 @@ public class Playlist implements Serializable {
     /**
      * Creator of Playlist
      */
-    @ManyToOne(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinColumn(name="id_creador")
     private User creator;
     /**
@@ -63,16 +85,14 @@ public class Playlist implements Serializable {
      * Parametrized Constructor
      *
      * @param name
-     * @param id
      * @param description
      * @param creator
      * @param susbcribers
      * @param songs
      */
-    public Playlist(String name, int id, String description, User creator, Set<User> susbcribers, Set<Song> songs) {
+    public Playlist(String name, String description, User creator, Set<User> susbcribers, Set<Song> songs) {
         super();
         this.name = name;
-        this.id = id;
         this.description = description;
         this.creator = creator;
         this.susbcribers = susbcribers;
@@ -117,6 +137,9 @@ public class Playlist implements Serializable {
 
     public void setCreator(User creator) {
         this.creator = creator;
+        if(!creator.getCreated().contains(this)){
+        creator.create(this);
+        }
     }
 
     /**

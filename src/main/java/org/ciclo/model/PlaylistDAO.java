@@ -1,12 +1,14 @@
 package org.ciclo.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import org.ciclo.model.connectManager.Connect;
+import org.hibernate.Session;
+import org.hibernate.internal.SessionImpl;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
+
 
 public class PlaylistDAO extends Playlist {
     /**
@@ -24,12 +26,12 @@ public class PlaylistDAO extends Playlist {
      */
 
     public PlaylistDAO(Playlist p) {
-        this.setCreator(p.getCreator());
         this.setId(p.getId());
         this.setName(p.getName());
         this.setDescription(p.getDescription());
         this.setSongs(p.getSongs());
         this.setSusbcribers(p.getSusbcribers());
+        this.setCreator(p.getCreator());
     }
 
     /**
@@ -49,8 +51,12 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static List<Playlist> List_All_Playlist() {
-        List<Playlist> playlist = new ArrayList<>();
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getAll");
+        List<Playlist> playlist = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
         return playlist;
     }
 
@@ -62,8 +68,11 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static Playlist List_Playlist_By_Id(Integer id) {
-        Playlist p = new Playlist();
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Playlist p = manager.find(Playlist.class, id);
+        manager.getTransaction().commit();
+        manager.close();
         return p;
     }
 
@@ -75,9 +84,14 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static List<Playlist> listByName(String name) {
-        List<Playlist> playlists = new ArrayList<>();
-
-        return playlists;
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getNamed");
+        qu.setParameter("name", name);
+        List<Playlist> playlist = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
+        return playlist;
     }
 
     /**
@@ -89,9 +103,14 @@ public class PlaylistDAO extends Playlist {
 
 
     public static List<Playlist> listBySong(Song song) {
-        List<Playlist> playlists = new ArrayList<>();
-
-        return playlists;
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getBySong");
+        qu.setParameter("id", song.getId());
+        List<Playlist> playlist = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
+        return playlist;
     }
 
     /**
@@ -102,9 +121,14 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static List<Playlist> listUserCreated(User user) {
-        List<Playlist> playlists = new ArrayList<>();
-
-        return playlists;
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getByUser");
+        qu.setParameter("id", user.getId());
+        List<Playlist> playlist = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
+        return playlist;
     }
 
     /**
@@ -116,7 +140,17 @@ public class PlaylistDAO extends Playlist {
 
     public boolean update() {
         boolean update = false;
+        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+        p.setId(this.getId());
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        p = manager.merge(p);
+        manager.getTransaction().commit();
+        manager.close();
 
+        if (this.equals(p)) {
+            update = true;
+        }
 
         return update;
     }
@@ -130,7 +164,15 @@ public class PlaylistDAO extends Playlist {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Playlist p = manager.find(Playlist.class, id);
+        if (p != null) {
+            manager.remove(p);
+            removed = true;
+        }
+        manager.getTransaction().commit();
+        manager.close();
         return removed;
     }
 
@@ -144,6 +186,16 @@ public class PlaylistDAO extends Playlist {
     public boolean remove() {
         boolean removed = false;
 
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Playlist p = manager.find(Playlist.class, this.getId());
+        if (p != null) {
+            manager.remove(p);
+            removed = true;
+        }
+        manager.getTransaction().commit();
+        manager.close();
+
         return removed;
     }
 
@@ -155,7 +207,15 @@ public class PlaylistDAO extends Playlist {
 
     public boolean save() {
         boolean saved = false;
-
+        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        System.out.println(p.getCreator().getEmail());
+        manager.merge(p.getCreator());
+        manager.persist(p);
+        saved = manager.contains(p);
+        manager.getTransaction().commit();
+        manager.close();
         return saved;
     }
 

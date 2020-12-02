@@ -380,7 +380,7 @@ public class Controller implements IController {
 
     @Override
     public boolean createPlaylist(String name, String description, User creator) {
-        Playlist playlist = new Playlist(name, -1, description, creator, null, null);
+        Playlist playlist = new Playlist(name, description, creator, null, null);
         PlaylistDAO playlistDAO = new PlaylistDAO(playlist);
         return playlistDAO.save();
     }

@@ -3,12 +3,14 @@ package org.ciclo.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Person using the system
  */
 @Entity
 @Table(name = "usuario")
+@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 public class User implements Serializable {
 
     /**
@@ -113,6 +115,9 @@ public class User implements Serializable {
      * @return Set of playlist created
      */
     public Set<Playlist> getCreated() {
+        if(this._created == null){
+            this._created = new TreeSet<>();
+        }
         return this._created;
     }
 
@@ -189,6 +194,12 @@ public class User implements Serializable {
      * @return True if add, false if not
      */
     public boolean create(Playlist rp) {
+        if(_created == null){
+            this._created = new TreeSet<>();
+        }
+        if(rp.getCreator() != this){
+        rp.setCreator(this);
+        }
         return this._created.add(rp);
     }
 

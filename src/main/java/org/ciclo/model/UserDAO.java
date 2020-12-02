@@ -1,5 +1,8 @@
 package org.ciclo.model;
 
+import org.ciclo.model.connectManager.Connect;
+
+import javax.persistence.*;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -64,8 +67,13 @@ public class UserDAO extends User {
      */
 
     public static User listById(Integer id) {
-        User user = new User();
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        User user = manager.find(User.class, id);
+        user.getCreated().forEach(playlist -> {});
+        user.getSubscribed().forEach(playlist -> {});
+        manager.getTransaction().commit();
+        manager.close();
         return user;
     }
 
@@ -222,6 +230,13 @@ public class UserDAO extends User {
 
         return user;
 
+    }
+
+    public User toUser(){
+        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+        u.setId(this.getId());
+
+        return u;
     }
 
 }
