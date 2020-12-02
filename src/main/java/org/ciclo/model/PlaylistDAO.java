@@ -210,8 +210,9 @@ public class PlaylistDAO extends Playlist {
         Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-        System.out.println(p.getCreator().getEmail());
-        manager.merge(p.getCreator());
+        if(p.getCreator().getId() != null){
+            p.setCreator(manager.find(User.class, p.getCreator().getId()));
+        }
         manager.persist(p);
         saved = manager.contains(p);
         manager.getTransaction().commit();
