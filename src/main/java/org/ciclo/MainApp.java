@@ -5,8 +5,12 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import org.ciclo.model.Song;
 
+import javax.persistence.EntityManager;
+import javax.persistence.Persistence;
 import java.io.IOException;
+import java.util.List;
 
 
 public class MainApp extends Application {
@@ -36,7 +40,9 @@ public class MainApp extends Application {
     }
 
     public static void main(String[] args) {
-        launch();
-    }
 
+        launch();
+
+
+    }
 }

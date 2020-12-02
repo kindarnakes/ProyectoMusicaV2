@@ -1,5 +1,9 @@
 package org.ciclo.model;
 
+import org.ciclo.model.connectManager.Connect;
+
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -8,6 +12,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class SongDAO extends Song {
+
+    static EntityManager manager;
 
 
     /**
@@ -48,7 +54,9 @@ public class SongDAO extends Song {
      */
 
     public static List<Song> listAll() {
-        List<Song> songs = new ArrayList<>();
+        manager= Connect.getManager();
+        List<Song> songs = manager.createQuery("FROM Song").getResultList();
+        manager.close();
 
         return songs;
     }
@@ -61,8 +69,10 @@ public class SongDAO extends Song {
      */
 
     public static Song listById(Integer id) {
-        Song song = new Song();
-
+        EntityManager manager=Connect.getManager();
+        Song song = manager.find(Song.class,id);
+        System.out.println(song);
+        manager.close();
         return song;
     }
 
@@ -74,10 +84,14 @@ public class SongDAO extends Song {
      */
 
     public static List<Song> listByName(String name) {
-        List<Song> songs = new ArrayList<>();
+        EntityManager manager=Connect.getManager();
+        List<Song> song=(List<Song>) manager.createQuery("Select s FROM Song s WHERE s.name = :songName").setParameter("songName", name).getResultList();
 
-        return songs;
+       return song;
+
     }
+
+
 
     /**
      * Update a song
@@ -87,6 +101,17 @@ public class SongDAO extends Song {
 
     public boolean update() {
         boolean update = false;
+        Song song=new SongDAO();
+
+        manager=Connect.getManager();
+        manager.getTransaction().begin();
+        if(song!=null) {
+            manager.merge(this);
+            update=true;
+        }
+
+        manager.getTransaction().commit();
+        manager.close();
 
         return update;
     }
@@ -113,7 +138,9 @@ public class SongDAO extends Song {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
-
+        manager=Connect.getManager();
+        manager.getTransaction().begin();
+        manager.createQuery("DELETE s FROM Song s WHERE s._Id = :idSong").setParameter("idSong", id);
         return removed;
     }
 

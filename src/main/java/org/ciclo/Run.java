@@ -11,49 +11,49 @@ import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
 import java.time.LocalDate;
 
+import org.ciclo.model.ArtistDAO;
+import org.ciclo.model.DiscDAO;
+import org.ciclo.model.Song;
+import org.ciclo.model.SongDAO;
+
+import javax.persistence.EntityManager;
+import javax.swing.text.html.parser.Entity;
+import java.net.ConnectException;
+import java.util.List;
+
 public class Run {
 
 
 
     public static void main(String[] args) {
-        //MainApp.main(args);
-        EntityManager manager = Connect.getManager();
+       // MainApp.main(args);
+/*
+        SongDAO.listAll().forEach(song -> {
+            System.out.println(song.getDisc().getArtist().getName());
+        });
 
+        System.out.println("asda");
 
-        /*Playlist s = manager.find(Playlist.class, 1);
-        System.out.println(s.getName());*/
-
-
-        //Artist a = manager.find(Artist.class, 1);
-        Disc d = manager.find(Disc.class, 1);
-        Song s = new Song("prueba", 56, d);
-
-        manager.getTransaction().begin();
-        manager.persist(s);
-        System.out.println(s.getId() + " " + s.getDisc().getName() + " " + s.getDisc().getArtist().getName());
-        manager.getTransaction().commit();
+        System.out.println(SongDAO.listById(1));
 
 
 
-        /*Artist a = ArtistDAO.List_Artist_By_Id(2);
-        ArtistDAO artistDAO = new ArtistDAO(a);
 
-        artistDAO.loadDiscs();
+ */
+        System.out.println(SongDAO.listByName("Godzilla"));
 
-        artistDAO.getDiscs().forEach((Disc) ->{
-            DiscDAO disc = new DiscDAO((Disc) Disc);
-            disc.loadSongs();
-            System.out.println("Autor: " + disc.getArtist().getName() + " Disco: " + disc.getName());
-            disc.getSongs().forEach((song) ->{
-                System.out.println("\t" + song.getName());
-            });
-        } );
-        System.out.println();
 
-        List<Disc> song = DiscDAO.listByName("19 dias y 500 noches");
-        song.forEach((s)->{
-            System.out.println(s.getName() + " " + s.getArtist().getName());
-        });*/
 
-    }
-}
+
+}}
+    /*
+        EntityManager manager=Connect.getManager();
+        List<Song> autores=manager.createQuery("FROM Autor").getResultList();
+        System.out.println("Autores: "+autores.size());
+        for(Song a:autores) {
+            System.out.println(a);
+        }
+        manager.close();
+
+
+     */
