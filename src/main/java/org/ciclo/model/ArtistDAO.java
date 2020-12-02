@@ -7,7 +7,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.TreeSet;
-
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import org.ciclo.model.connectManager.Connect;
 
 public class ArtistDAO extends Artist {
 
@@ -23,7 +25,6 @@ public class ArtistDAO extends Artist {
      *
      * @param a Artis to update
      */
-
     public ArtistDAO(Artist a) {
         this.setId(a.getId());
         this.setName(a.getName());
@@ -36,7 +37,6 @@ public class ArtistDAO extends Artist {
      *
      * @param id id of the artist
      */
-
     public ArtistDAO(Integer id) {
         this(ArtistDAO.List_Artist_By_Id(id));
     }
@@ -47,7 +47,14 @@ public class ArtistDAO extends Artist {
      * @return All the artist
      */
     public static List<Artist> List_All_Artist() {
-        List<Artist> artists = new ArrayList<>();
+
+        EntityManager manager = Connect.getManager();
+        List<Artist> artists = manager.createQuery("FROM Artist").getResultList();
+        for (Artist artist : artists) {
+            System.out.println(artist);
+        }
+        manager.close();
+
         return artists;
     }
 
@@ -58,7 +65,10 @@ public class ArtistDAO extends Artist {
      * @return the artist with that id
      */
     public static Artist List_Artist_By_Id(Integer id) {
-        Artist artist = new Artist();
+        EntityManager manager = Connect.getManager();
+        Artist artist = manager.find(Artist.class, id);
+        System.out.println(artist);
+        manager.close();
         return artist;
     }
 
@@ -68,10 +78,14 @@ public class ArtistDAO extends Artist {
      * @param name unique for all the artist
      * @return the artist with that name
      */
-
     public static Artist List_Artist_By_Name(String name) {
-        Artist artist = new Artist();
-        return artist;
+
+        EntityManager manager = Connect.getManager();
+        String queryString = "SELECT * from Artist where nombre = LIKE ?";
+        Query query = manager.createQuery(queryString);
+        manager.close();
+        return (Artist) (List<Module>) query.getResultList();
+
     }
 
     /**
@@ -82,6 +96,15 @@ public class ArtistDAO extends Artist {
     public boolean Insert_Artist() {
         boolean result = false;
 
+        Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
+
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        if (artist != null) {
+            manager.persist(artist);
+        }
+        manager.getTransaction().commit();
+        manager.close();
         return result;
     }
 
@@ -90,9 +113,20 @@ public class ArtistDAO extends Artist {
      *
      * @return true if the artist has been updated, false if not
      */
-
     public boolean Update_Artist() {
         boolean result = false;
+
+        Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
+
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        if (artist != null) {
+            manager.merge(artist);
+            result = true;
+        }
+
+        manager.getTransaction().commit();
+        manager.close();
 
         return result;
     }
@@ -105,17 +139,27 @@ public class ArtistDAO extends Artist {
      */
     public static boolean Remove_Artist_by_Id(Integer id) {
         boolean result = false;
+        Artist artist = new Artist();
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
 
+        if (artist != null) {
+            artist = manager.find(Artist.class, id);
+            manager.remove(artist);
+            result = true;
+        }
+
+        manager.getTransaction().commit();
+        manager.close();
         return result;
     }
-
+     
     /**
      * Remove a artist by name
      *
      * @param name unique for all the artist
      * @return true if the artist has been removed, false if not
      */
-
     public static boolean Remove_Artist_by_Name(String name) {
         boolean result = false;
 
@@ -138,12 +182,10 @@ public class ArtistDAO extends Artist {
      *
      * @return
      */
-
     public boolean loadDiscs() {
         boolean loaded = false;
 
         return loaded;
     }
-
 
 }
