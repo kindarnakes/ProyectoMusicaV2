@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 01-12-2020 a las 09:30:10
+-- Tiempo de generación: 02-12-2020 a las 13:43:38
 -- Versión del servidor: 10.4.14-MariaDB
 -- Versión de PHP: 7.2.34
 
@@ -55,7 +55,6 @@ CREATE TABLE `cancion` (
   `id` int(11) NOT NULL,
   `nombre` varchar(120) NOT NULL,
   `duracion` int(11) NOT NULL,
-  `id_genero` int(11) DEFAULT NULL,
   `id_disco` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
@@ -63,16 +62,16 @@ CREATE TABLE `cancion` (
 -- Volcado de datos para la tabla `cancion`
 --
 
-INSERT INTO `cancion` (`id`, `nombre`, `duracion`, `id_genero`, `id_disco`) VALUES
-(1, '19 dias y 500 noches', 240, 2, 1),
-(2, 'Maldito duende', 300, 1, 3),
-(6, '19 dias y 500 noches', 858, 1, 4),
-(7, 'Portales', 251, NULL, 6),
-(8, 'La Mentira', 255, NULL, 6),
-(9, 'Godzilla', 164, NULL, 5),
-(10, 'Lobos', 142, NULL, 5),
-(11, 'Los Cantantes', 137, NULL, 8),
-(12, 'Emocional', 133, NULL, 7);
+INSERT INTO `cancion` (`id`, `nombre`, `duracion`, `id_disco`) VALUES
+(1, '19 dias y 500 noches', 240, 1),
+(2, 'Maldito duende', 300, 3),
+(6, '19 dias y 500 noches', 858, 4),
+(7, 'Portales', 251, 6),
+(8, 'La Mentira', 255, 6),
+(9, 'Godzilla', 164, 5),
+(10, 'Lobos', 142, 5),
+(11, 'Los Cantantes', 137, 8),
+(12, 'Emocional', 133, 7);
 
 -- --------------------------------------------------------
 
@@ -174,7 +173,8 @@ INSERT INTO `lista_reproduccion` (`id`, `nombre`, `descripcion`, `id_creador`) V
 (1, 'sabina', 'ggasfasfagsgsdgsdgsdg', 2),
 (2, 'Heroes', 'sdggfjyu,fdnhsdg', 1),
 (3, 'Mezcla', 'rehfhfhfgj', 1),
-(4, 'Los Intocables', 'Somos los intocable nen', 9);
+(4, 'Los Intocables', 'Somos los intocable nen', 9),
+(5, 'aleatiro', 'fnerveruigfper,gpèr', 11);
 
 -- --------------------------------------------------------
 
@@ -233,7 +233,6 @@ ALTER TABLE `artista`
 --
 ALTER TABLE `cancion`
   ADD PRIMARY KEY (`id`),
-  ADD KEY `id_genero` (`id_genero`),
   ADD KEY `id_disco` (`id_disco`);
 
 --
@@ -348,7 +347,7 @@ ALTER TABLE `disco`
 --
 ALTER TABLE `lista_cancion`
   ADD CONSTRAINT `id_cancion` FOREIGN KEY (`id_cancion`) REFERENCES `cancion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
-  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+  ADD CONSTRAINT `id_lista` FOREIGN KEY (`id_lista`) REFERENCES `lista_reproduccion` (`id`) ON DELETE NO ACTION ON UPDATE CASCADE;
 
 --
 -- Filtros para la tabla `lista_reproduccion`

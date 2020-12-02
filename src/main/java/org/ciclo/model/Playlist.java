@@ -42,7 +42,8 @@ public class Playlist implements Serializable {
     private Set<User> susbcribers;
     /**
      * Songs of Playlist
-     */    @ManyToMany(cascade = { CascadeType.ALL })
+     */
+    @ManyToMany(cascade = { CascadeType.ALL })
     @JoinTable(
             name = "lista_cancion",
             joinColumns = { @JoinColumn(name = "id_lista") },
