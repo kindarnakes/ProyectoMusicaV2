@@ -4,6 +4,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.Set;
+import java.util.TreeSet;
 
 /**
  * Disc class
@@ -208,6 +209,7 @@ public class Disc implements Serializable {
     public int hashCode() {
         return _id.hashCode();
     }
+
 
 
     public boolean equals(Object o) {

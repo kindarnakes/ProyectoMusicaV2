@@ -135,7 +135,18 @@ public class Song implements Serializable {
      */
 
     public void setDisc(Disc disc) {
+
         this.disc = disc;
+      /*  if(!disc.getSongs().contains(this)){
+            disc.
+        }
+
+
+
+
+
+       */
+
     }
 
 

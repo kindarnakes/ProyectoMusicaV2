@@ -105,7 +105,7 @@ public class SongDAO extends Song {
         manager=Connect.getManager();
         manager.getTransaction().begin();
         if(song!=null) {
-            manager.merge(this);
+            manager.merge(song);
             update=true;
         }
 
@@ -125,16 +125,19 @@ public class SongDAO extends Song {
 
     public boolean save() {
         boolean saved = false;
-        Song song=new Song(this.getName(),this.getDuration(),this.getDisc());
+        Song song=new Song(this.getName(),this.getDuration(),this.getLists(),this.getDisc());
+        song.setId(this.getId());
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-
+        setDisc(manager.merge(getDisc()));
+        if(song.getId() != null){
+            song.setDisc(manager.find(Disc.class, song.getDisc().getId()));
+        }
         manager.persist(song);
         saved = manager.contains(song);
         manager.getTransaction().commit();
         manager.close();
         return saved;
-
 
 
     }
