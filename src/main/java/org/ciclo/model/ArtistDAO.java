@@ -76,10 +76,13 @@ public class ArtistDAO extends Artist {
     public static Artist List_Artist_By_Name(String name) {
 
         EntityManager manager = Connect.getManager();
-        String queryString = "SELECT * from Artist where nombre = LIKE ?";
-        Query query = manager.createQuery(queryString);
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getNamed");
+        qu.setParameter("name", name);
+        Artist artist = (Artist) qu.getSingleResult();
+        manager.getTransaction().commit();
         manager.close();
-        return (Artist) (List<Module>) query.getResultList();
+        return artist;
 
     }
 
@@ -92,7 +95,7 @@ public class ArtistDAO extends Artist {
         boolean result = false;
 
         Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
-
+        artist.setDiscs(this.getDiscs());
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
         if (artist != null) {
@@ -157,7 +160,7 @@ public class ArtistDAO extends Artist {
      */
     public static boolean Remove_Artist_by_Name(String name) {
         boolean result = false;
-
+       
         return result;
     }
 
@@ -168,19 +171,42 @@ public class ArtistDAO extends Artist {
      */
     public boolean remove_Artist() {
         boolean result = false;
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Artist a = manager.find(Artist.class, this.getId());
+        if (a != null) {
+            manager.remove(a);
+            result = true;
+        }
+        manager.getTransaction().commit();
+        manager.close();
         return result;
     }
-
+    
     /**
      * Load all the disc from the artist
      *
      * @return
      */
-    public boolean loadDiscs() {
+    public boolean loadDiscs() {      
         boolean loaded = false;
-
+        
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Artist a = new Artist(this.getName(),this.getFrom(),this.getPhoto());
+        a.setDiscs(this.getDiscs());  
+        a.setId(this.getId());
+        a = manager.merge(a);
+        a.getDiscs().forEach(disc -> {
+        });
+        this.setDiscs(a.getDiscs());
+        manager.getTransaction().commit();
+        manager.close();
+        if(this.getDiscs()!= null){
+            loaded = true;
+        }
         return loaded;
+        
     }
 
 }
