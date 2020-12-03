@@ -7,11 +7,11 @@ import javax.persistence.Persistence;
 
 public class Connect {
 
-    private static final EntityManagerFactory emf =  Persistence.createEntityManagerFactory("aplicacion");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("aplicacion");
     private static EntityManager manager = null;
 
-    public static EntityManager getManager(){
-        if(manager == null || !manager.isOpen()){
+    public static EntityManager getManager() {
+        if (manager == null || !manager.isOpen()) {
             manager = emf.createEntityManager();
         }
         return manager;

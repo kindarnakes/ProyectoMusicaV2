@@ -44,7 +44,7 @@ public class ArtistFormController implements Initializable {
             ArtistDAO artistDAO = new ArtistDAO(artist);
             artistDAO.Insert_Artist();
         } else {
-            ArtistDAO artistDAO = (ArtistDAO) artist;
+            ArtistDAO artistDAO = artist;
             artistDAO.setName(name.getText());
             artistDAO.setNationality(from.getText());
             artistDAO.setPhoto(photo.getText());

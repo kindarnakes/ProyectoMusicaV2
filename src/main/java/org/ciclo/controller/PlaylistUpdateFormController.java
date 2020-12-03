@@ -9,7 +9,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.*;
+import org.ciclo.model.PlaylistDAO;
+import org.ciclo.model.Song;
+import org.ciclo.model.SongDAO;
+import org.ciclo.model.User;
 
 import java.io.IOException;
 import java.net.URL;
@@ -112,7 +115,7 @@ public class PlaylistUpdateFormController implements Initializable {
 
         tableExample1.setOnMouseClicked(event -> {
             if (event.getClickCount() == 2) {
-                Song song = (Song) tableExample1.getSelectionModel().getSelectedItem();
+                Song song = tableExample1.getSelectionModel().getSelectedItem();
                 if (song != null && c.removeSongToPlaylist(playlistDAO, song)) {
                     if (_list == null || _list.size() == 0) {
                         updateTable();

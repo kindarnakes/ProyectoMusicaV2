@@ -1,21 +1,26 @@
 package org.ciclo.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.*;
+
+@org.hibernate.annotations.NamedQuery(
+        name = "getNamedArtist",
+        query = "FROM Artist WHERE name = :name",
+        timeout = 1)
 
 /**
  * Artist class
  */
 @Entity
-@Table (name="artista")
+@Table(name = "artista")
 public class Artist implements Serializable {
 
     /**
      * Database Id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer _id;
     /**

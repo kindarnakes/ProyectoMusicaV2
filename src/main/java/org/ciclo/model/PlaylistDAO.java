@@ -1,15 +1,14 @@
 package org.ciclo.model;
 
 import org.ciclo.model.connectManager.Connect;
-import org.hibernate.Session;
-import org.hibernate.internal.SessionImpl;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Inheritance;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-
+@Inheritance
 public class PlaylistDAO extends Playlist {
     /**
      * Constructor
@@ -26,12 +25,21 @@ public class PlaylistDAO extends Playlist {
      */
 
     public PlaylistDAO(Playlist p) {
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        if(p instanceof PlaylistDAO){
+            p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+            p.setId(this.getId());
+        }
+        p = manager.merge(p);
         this.setId(p.getId());
         this.setName(p.getName());
         this.setDescription(p.getDescription());
         this.setSongs(p.getSongs());
         this.setSusbcribers(p.getSusbcribers());
         this.setCreator(p.getCreator());
+        manager.getTransaction().commit();
+        manager.close();
     }
 
     /**
@@ -53,7 +61,7 @@ public class PlaylistDAO extends Playlist {
     public static List<Playlist> List_All_Playlist() {
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getAll");
+        Query qu = manager.createNamedQuery("getAllPlaylist");
         List<Playlist> playlist = qu.getResultList();
         manager.getTransaction().commit();
         manager.close();
@@ -210,9 +218,6 @@ public class PlaylistDAO extends Playlist {
         Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-        if(p.getCreator().getId() != null){
-            p.setCreator(manager.find(User.class, p.getCreator().getId()));
-        }
         manager.persist(p);
         saved = manager.contains(p);
         manager.getTransaction().commit();
@@ -229,7 +234,15 @@ public class PlaylistDAO extends Playlist {
 
     public boolean addSong(Song song) {
         boolean added = false;
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+        p.setId(this.getId());
+        p = manager.merge(p);
+        song = manager.merge(song);
+        added = p.getSongs().add(song);
+        manager.getTransaction().commit();
+        manager.close();
         return added;
     }
 
@@ -243,6 +256,15 @@ public class PlaylistDAO extends Playlist {
     public boolean removeSong(Song song) {
         boolean remove = false;
 
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+        p.setId(this.getId());
+        p = manager.merge(p);
+        song = manager.merge(song);
+        remove = p.getSongs().remove(song);
+        manager.getTransaction().commit();
+        manager.close();
         return remove;
     }
 
@@ -255,8 +277,13 @@ public class PlaylistDAO extends Playlist {
 
 
     public static List<Playlist> listPlaylistSuscribers(User user) {
-        List<Playlist> playlist = new ArrayList<>();
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getBySubscriber");
+        qu.setParameter("id", user.getId());
+        List<Playlist> playlist = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
         return playlist;
 
     }
@@ -269,8 +296,19 @@ public class PlaylistDAO extends Playlist {
 
     public boolean loadSongs() {
         boolean loaded = false;
-
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+        p.setId(this.getId());
+        p = manager.merge(p);
+        p.getSongs().forEach(song -> {
+        });
+        this.setSongs(p.getSongs());
+        manager.getTransaction().commit();
+        manager.close();
+        if(this.getSongs() != null){
+            loaded = true;
+        }
         return loaded;
     }
 

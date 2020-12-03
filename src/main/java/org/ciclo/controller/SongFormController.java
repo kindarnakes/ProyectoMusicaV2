@@ -88,7 +88,7 @@ public class SongFormController implements Initializable {
             songDAO = new SongDAO(id);
             name.setText(songDAO.getName());
             duration.getValueFactory().setValue(songDAO.getDuration());
-            tableExample.getSelectionModel().select((Disc) songDAO.getDisc());
+            tableExample.getSelectionModel().select(songDAO.getDisc());
         }
     }
 
