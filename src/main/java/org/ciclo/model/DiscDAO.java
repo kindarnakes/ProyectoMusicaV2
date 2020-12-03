@@ -1,9 +1,17 @@
+
 package org.ciclo.model;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.EntityManager;
+
+import org.ciclo.model.connectManager.Connect;
+
+
+
 public class DiscDAO extends Disc {
+	   public static EntityManager manager;
     /**
      * Constructor
      */
@@ -45,7 +53,11 @@ public class DiscDAO extends Disc {
      */
 
     public static List<Disc> listAll() {
-        List<Disc> disc = new ArrayList<>();
+       
+        manager=Connect.getManager();
+        List<Disc> disc=manager.createQuery("FROM Disc").getResultList();
+      
+        manager.close();
 
         return disc;
     }
@@ -58,7 +70,12 @@ public class DiscDAO extends Disc {
      */
 
     public static Disc listById(Integer id) {
-        Disc disc = new Disc();
+    	 manager=Connect.getManager();
+    	 Disc disc=manager.find(Disc.class, id);
+    	 
+        
+        manager.close();
+        
 
         return disc;
     }
@@ -72,8 +89,9 @@ public class DiscDAO extends Disc {
 
 
     public static List<Disc> listByName(String name) {
-        List<Disc> disc = new ArrayList<>();
-
+    	 manager=Connect.getManager();
+    	 List<Disc> disc=(List<Disc>) manager.createQuery("Select d FROM Disc d WHERE d._name = :discName").setParameter("discName", name).getResultList();
+    	 manager.close();
         return disc;
     }
 
@@ -85,8 +103,18 @@ public class DiscDAO extends Disc {
 
     public boolean update() {
         boolean update = false;
-
-
+        Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),this.getArtist(),this.getSongs());
+        
+        manager=Connect.getManager();
+        manager.getTransaction().begin();
+        if(disc!=null) {
+        	manager.merge(this);
+        	update=true;
+        }
+        
+        manager.getTransaction().commit();
+        manager.close();
+        
         return update;
     }
 
@@ -98,9 +126,24 @@ public class DiscDAO extends Disc {
      */
 
     public static boolean remove(Integer id) {
-        boolean removed = false;
+    	 Disc disc=new Disc();
+    	 boolean removed = false;
+         manager=Connect.getManager();
+         manager.getTransaction().begin();
+         
+         if(disc!=null) {
+          disc= manager.find(Disc.class, id);
+         manager.remove(disc);
+         removed=true;
+         }
+         
+        
+         
+         manager.getTransaction().commit();
+         manager.close();
+   
 
-        return removed;
+         return removed;
     }
 
     /**
@@ -110,9 +153,19 @@ public class DiscDAO extends Disc {
      */
 
     public boolean remove() {
-        boolean removed = false;
+    	  boolean removed = false;
 
-        return removed;
+          EntityManager manager = Connect.getManager();
+          manager.getTransaction().begin();
+          Disc disc = manager.find(Disc.class, this.getId());
+          if (disc != null) {
+              manager.remove(disc);
+              removed = true;
+          }
+          manager.getTransaction().commit();
+          manager.close();
+
+          return removed;
     }
 
     /**
@@ -122,9 +175,16 @@ public class DiscDAO extends Disc {
      */
 
     public boolean save() {
-        boolean saved = false;
-
-        return saved;
+    	   boolean saved = false;
+    	   Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),this.getArtist(),this.getSongs());
+           EntityManager manager = Connect.getManager();
+           manager.getTransaction().begin();
+           
+           manager.persist(disc);
+           saved = manager.contains(disc);
+           manager.getTransaction().commit();
+           manager.close();
+           return saved;
     }
 
     /**
@@ -136,6 +196,12 @@ public class DiscDAO extends Disc {
 
     public static List<Disc> searchByAuthor(Artist artist) {
         List<Disc> discs = new ArrayList<>();
+        manager=Connect.getManager();
+        
+   	 List<Disc> disc=(List<Disc>) manager.createQuery("SELECT DISTINCT d FROM Disc d JOIN d.artist Artist "
+   	 		+ "WHERE Artist._id = :id ").setParameter("id", artist.getId()).getResultList();
+   	 manager.close();
+   	 
 
         return discs;
 
