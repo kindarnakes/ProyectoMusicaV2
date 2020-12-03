@@ -9,40 +9,40 @@ import java.util.Set;
  * Disc class
  */
 @Entity
-@Table(name="disco")
+@Table(name = "disco")
 public class Disc implements Serializable {
     /**
      * Database Id
      */
-	@Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name = "id")
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private Integer _id;
     /**
      * Disc name
      */
-	@Column(name = "nombre")
+    @Column(name = "nombre")
     private String _name;
     /**
      * Disc releaseDate
      */
-	@Column(name = "fecha_publicacion")
+    @Column(name = "fecha_publicacion")
     private LocalDate _ReleaseDate;
     /**
      * Url to disc photo
      */
-	@Column(name = "foto")
+    @Column(name = "foto")
     private String _photo;
     /**
      * Disc artist
      */
-	@ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch= FetchType.EAGER)
-	@JoinColumn(name="id_artista")
+    @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_artista")
     private Artist _artist;
     /**
      * Disc's songs collection
      */
-	@OneToMany(mappedBy = "disc",cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "disc", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
     private Set<Song> _songs;
 
     /**

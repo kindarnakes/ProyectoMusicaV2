@@ -107,7 +107,7 @@ public class DiscFormController implements Initializable {
         name.setText(discDAO.getName());
         photo.setText(discDAO.getPhoto());
         release.setValue(discDAO.getReleaseDate());
-        artistList.getSelectionModel().select((Artist) discDAO.getArtist());
+        artistList.getSelectionModel().select(discDAO.getArtist());
         discDAO.loadSongs();
         songs = FXCollections.observableList(new ArrayList(discDAO.getSongs()));
         table.setItems(songs);

@@ -3,11 +3,6 @@ package org.ciclo.model;
 import org.ciclo.model.connectManager.Connect;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -54,7 +49,7 @@ public class SongDAO extends Song {
      */
 
     public static List<Song> listAll() {
-        manager= Connect.getManager();
+        manager = Connect.getManager();
         List<Song> songs = manager.createQuery("FROM Song").getResultList();
         manager.close();
 
@@ -69,8 +64,8 @@ public class SongDAO extends Song {
      */
 
     public static Song listById(Integer id) {
-        EntityManager manager=Connect.getManager();
-        Song song = manager.find(Song.class,id);
+        EntityManager manager = Connect.getManager();
+        Song song = manager.find(Song.class, id);
         System.out.println(song);
         manager.close();
         return song;
@@ -84,13 +79,12 @@ public class SongDAO extends Song {
      */
 
     public static List<Song> listByName(String name) {
-        EntityManager manager=Connect.getManager();
-        List<Song> song=(List<Song>) manager.createQuery("Select s FROM Song s WHERE s.name = :songName").setParameter("songName", name).getResultList();
+        EntityManager manager = Connect.getManager();
+        List<Song> song = (List<Song>) manager.createQuery("Select s FROM Song s WHERE s.name = :songName").setParameter("songName", name).getResultList();
 
-       return song;
+        return song;
 
     }
-
 
 
     /**
@@ -101,13 +95,13 @@ public class SongDAO extends Song {
 
     public boolean update() {
         boolean update = false;
-        Song song=new SongDAO();
+        Song song = new SongDAO();
 
-        manager=Connect.getManager();
+        manager = Connect.getManager();
         manager.getTransaction().begin();
-        if(song!=null) {
+        if (song != null) {
             manager.merge(this);
-            update=true;
+            update = true;
         }
 
         manager.getTransaction().commit();
@@ -138,7 +132,7 @@ public class SongDAO extends Song {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
-        manager=Connect.getManager();
+        manager = Connect.getManager();
         manager.getTransaction().begin();
         manager.createQuery("DELETE s FROM Song s WHERE s._Id = :idSong").setParameter("idSong", id);
         return removed;

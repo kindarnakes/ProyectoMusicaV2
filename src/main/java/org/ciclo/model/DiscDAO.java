@@ -1,9 +1,7 @@
 package org.ciclo.model;
 
-import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.TreeSet;
 
 public class DiscDAO extends Disc {
     /**

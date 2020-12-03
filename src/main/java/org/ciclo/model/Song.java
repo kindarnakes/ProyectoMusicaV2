@@ -1,9 +1,9 @@
 package org.ciclo.model;
 
 
-import java.util.Set;
-import java.io.Serializable;
 import javax.persistence.*;
+import java.io.Serializable;
+import java.util.Set;
 
 @Entity
 @Table(name = "cancion")
@@ -17,36 +17,37 @@ public class Song implements Serializable {
      * Database Id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
-    @Column(name="id")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "id")
     private int Id;
     /**
      * Name of song
      */
-    @Column(name="nombre")
+    @Column(name = "nombre")
     private String name;
     /**
      * Duration of song
      */
-    @Column(name="duracion")
+    @Column(name = "duracion")
     private int duration;
 
     /**
      * Song playlist
      */
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "lista_cancion",
-            joinColumns = { @JoinColumn(name = "id_cancion") },
-            inverseJoinColumns = { @JoinColumn(name = "id_lista") }
+            joinColumns = {@JoinColumn(name = "id_cancion")},
+            inverseJoinColumns = {@JoinColumn(name = "id_lista")}
     )
     private Set<Playlist> list;
     /**
      * Song of disc
      */
     @ManyToOne(cascade = {CascadeType.PERSIST, CascadeType.MERGE}, fetch = FetchType.EAGER)
-    @JoinColumn(name="id_disco")
+    @JoinColumn(name = "id_disco")
     private Disc disc;
+
     /**
      * Constructor
      */

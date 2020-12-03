@@ -1,21 +1,21 @@
 package org.ciclo.model;
 
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
-import javax.persistence.*;
 
 /**
  * Artist class
  */
 @Entity
-@Table (name="artista")
+@Table(name = "artista")
 public class Artist implements Serializable {
 
     /**
      * Database Id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer _id;
     /**

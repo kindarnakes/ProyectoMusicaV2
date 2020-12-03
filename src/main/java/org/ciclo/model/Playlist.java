@@ -6,7 +6,7 @@ import java.util.Set;
 
 
 @org.hibernate.annotations.NamedQuery(
-        name = "getAll",
+        name = "getAllPlaylist",
         query = "FROM Playlist",
         timeout = 1
 )
@@ -26,50 +26,55 @@ import java.util.Set;
         timeout = 1
 )
 
+@org.hibernate.annotations.NamedQuery(
+        name = "getBySubscriber",
+        query = "SELECT DISTINCT p FROM Playlist p JOIN p.susbcribers User WHERE User.id = :id",
+        timeout = 1
+)
 @Entity
-@Table(name="lista_reproduccion")
+@Table(name = "lista_reproduccion")
 public class Playlist implements Serializable, Comparable<Playlist> {
     /**
      * Name of Playlist
      */
-    @Column(name="nombre")
+    @Column(name = "nombre")
     private String name;
     /**
      * Database Id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private int id;
     /**
      * Description of Playlist
      */
-    @Column(name="descripcion")
+    @Column(name = "descripcion")
     private String description;
     /**
      * Creator of Playlist
      */
     @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
-    @JoinColumn(name="id_creador")
+    @JoinColumn(name = "id_creador")
     private User creator;
     /**
      * Susbcribers of Playlist
      */
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "suscripcion",
-            joinColumns = { @JoinColumn(name = "id_lista") },
-            inverseJoinColumns = { @JoinColumn(name = "id_usuario") }
+            joinColumns = {@JoinColumn(name = "id_lista")},
+            inverseJoinColumns = {@JoinColumn(name = "id_usuario")}
     )
     private Set<User> susbcribers;
     /**
      * Songs of Playlist
      */
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "lista_cancion",
-            joinColumns = { @JoinColumn(name = "id_lista") },
-            inverseJoinColumns = { @JoinColumn(name = "id_cancion") }
+            joinColumns = {@JoinColumn(name = "id_lista")},
+            inverseJoinColumns = {@JoinColumn(name = "id_cancion")}
     )
     private Set<Song> songs;
 
@@ -94,7 +99,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
         super();
         this.name = name;
         this.description = description;
-        this.creator = creator;
+        this.setCreator(creator);
         this.susbcribers = susbcribers;
         this.songs = songs;
     }
@@ -137,8 +142,8 @@ public class Playlist implements Serializable, Comparable<Playlist> {
 
     public void setCreator(User creator) {
         this.creator = creator;
-        if(!creator.getCreated().contains(this)){
-        creator.create(this);
+        if (!creator.getCreated().contains(this)) {
+            creator.create(this);
         }
     }
 
@@ -148,7 +153,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      * @param susbcribers Susbcribers to assign
      */
 
-   public void setSusbcribers(Set<User> susbcribers) {
+    public void setSusbcribers(Set<User> susbcribers) {
         this.susbcribers = susbcribers;
     }
 

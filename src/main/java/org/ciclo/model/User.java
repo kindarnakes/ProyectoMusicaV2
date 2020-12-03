@@ -8,16 +8,27 @@ import java.util.TreeSet;
 /**
  * Person using the system
  */
+
+@org.hibernate.annotations.NamedQuery(
+        name = "getAllUsers",
+        query = "FROM User",
+        timeout = 1
+)
+@org.hibernate.annotations.NamedQuery(
+        name = "getUserByEmail",
+        query = "FROM User WHERE _email = :email",
+        timeout = 1
+)
+
 @Entity
 @Table(name = "usuario")
-@Inheritance(strategy= InheritanceType.SINGLE_TABLE)
 public class User implements Serializable {
 
     /**
      * Database Id
      */
     @Id
-    @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer _id;
     /**
@@ -28,7 +39,7 @@ public class User implements Serializable {
     /**
      * Url to user photo
      */
-    @Column(name = "foto", columnDefinition="TEXT")
+    @Column(name = "foto", columnDefinition = "TEXT")
     private String _photo;
     /**
      * User's email
@@ -38,16 +49,16 @@ public class User implements Serializable {
     /**
      * Playlists created by user
      */
-    @OneToMany(fetch = FetchType.LAZY, cascade = {CascadeType.PERSIST, CascadeType.MERGE}, mappedBy = "creator")
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "creator")
     private Set<Playlist> _created;
     /**
      * Playlists to which the user is subscribed
      */
-    @ManyToMany(cascade = { CascadeType.ALL })
+    @ManyToMany(cascade = {CascadeType.ALL})
     @JoinTable(
             name = "suscripcion",
-            joinColumns = { @JoinColumn(name = "id_usuario") },
-            inverseJoinColumns = { @JoinColumn(name = "id_lista") }
+            joinColumns = {@JoinColumn(name = "id_usuario")},
+            inverseJoinColumns = {@JoinColumn(name = "id_lista")}
     )
     private Set<Playlist> _subscribed;
 
@@ -115,7 +126,7 @@ public class User implements Serializable {
      * @return Set of playlist created
      */
     public Set<Playlist> getCreated() {
-        if(this._created == null){
+        if (this._created == null) {
             this._created = new TreeSet<>();
         }
         return this._created;
@@ -194,11 +205,11 @@ public class User implements Serializable {
      * @return True if add, false if not
      */
     public boolean create(Playlist rp) {
-        if(_created == null){
+        if (_created == null) {
             this._created = new TreeSet<>();
         }
-        if(rp.getCreator() != this){
-        rp.setCreator(this);
+        if (rp.getCreator() != this) {
+            rp.setCreator(this);
         }
         return this._created.add(rp);
     }

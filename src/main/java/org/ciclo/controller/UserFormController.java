@@ -20,7 +20,9 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import org.ciclo.MainApp;
 import org.ciclo.Utils.Utils;
-import org.ciclo.model.*;
+import org.ciclo.model.Playlist;
+import org.ciclo.model.PlaylistDAO;
+import org.ciclo.model.UserDAO;
 
 import java.io.IOException;
 import java.net.URL;
@@ -116,14 +118,14 @@ public class UserFormController implements Initializable {
     public void save() throws IOException {
         if (name.getText() != null && !name.getText().equals("")) {
             if (email.getText() != null && !email.getText().equals("") && email.getText().matches("^[a-z0-9._%+-]+@[a-z0-9.-]+\\.[a-z]{2,6}$")) {
-                if(id == 0){
+                if (id == 0) {
                     if (c.createUser(name.getText(), email.getText(), photo.getText())) {
                         update();
                         back();
                     } else {
                         Utils.popUp("Error de guardado", "No se ha podido guardar");
                     }
-                }else{
+                } else {
                     if (c.updateUser(this.userDAO, name.getText(), email.getText(), photo.getText())) {
                         update();
                         back();
@@ -131,7 +133,7 @@ public class UserFormController implements Initializable {
                         Utils.popUp("Error de guardado", "No se ha podido guardar");
                     }
                 }
-            }else{
+            } else {
                 error1.setText("Debe escribir un correo válido");
             }
         } else {
@@ -164,7 +166,7 @@ public class UserFormController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        if(table != null && table1 != null && filter != null){
+        if (table != null && table1 != null && filter != null) {
             table1.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
                     Playlist playlist = table1.getSelectionModel().getSelectedItem();
@@ -177,7 +179,7 @@ public class UserFormController implements Initializable {
 
             table.setOnMouseClicked(event -> {
                 if (event.getClickCount() == 2) {
-                    Playlist playlist = (Playlist) table.getSelectionModel().getSelectedItem();
+                    Playlist playlist = table.getSelectionModel().getSelectedItem();
                     if (playlist != null && c.userSubscribePlaylist(this.userDAO, playlist)) {
                         if (_list == null || _list.size() == 0) {
                             updateTable();

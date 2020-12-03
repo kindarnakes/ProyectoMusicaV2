@@ -1,15 +1,10 @@
 package org.ciclo.model;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.TreeSet;
+import org.ciclo.model.connectManager.Connect;
+
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
-import org.ciclo.model.connectManager.Connect;
+import java.util.List;
 
 public class ArtistDAO extends Artist {
 
@@ -153,7 +148,7 @@ public class ArtistDAO extends Artist {
         manager.close();
         return result;
     }
-     
+
     /**
      * Remove a artist by name
      *

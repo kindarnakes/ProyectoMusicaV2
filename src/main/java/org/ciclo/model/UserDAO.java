@@ -2,15 +2,10 @@ package org.ciclo.model;
 
 import org.ciclo.model.connectManager.Connect;
 
-import javax.persistence.*;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import javax.persistence.EntityManager;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Set;
-import java.util.TreeSet;
 
 public class UserDAO extends User {
     /**
@@ -54,7 +49,12 @@ public class UserDAO extends User {
 
 
     public static List<User> listAll() {
-        List<User> user = new ArrayList<>();
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getAllUsers");
+        List<User> user = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
 
         return user;
     }
@@ -70,8 +70,10 @@ public class UserDAO extends User {
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
         User user = manager.find(User.class, id);
-        user.getCreated().forEach(playlist -> {});
-        user.getSubscribed().forEach(playlist -> {});
+        user.getCreated().forEach(playlist -> {
+        });
+        user.getSubscribed().forEach(playlist -> {
+        });
         manager.getTransaction().commit();
         manager.close();
         return user;
@@ -98,8 +100,16 @@ public class UserDAO extends User {
      */
 
     public static User listByEmail(String email) {
-        User user = new User();
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getUserByEmail");
+        qu.setParameter("email", email);
+        User user = (User) qu.getSingleResult();
+        user.getCreated().forEach(playlist -> {
 
+        });
+        manager.getTransaction().commit();
+        manager.close();
         return user;
     }
 
@@ -232,7 +242,7 @@ public class UserDAO extends User {
 
     }
 
-    public User toUser(){
+    public User toUser() {
         User u = new User(this.getName(), this.getPhoto(), this.getEmail());
         u.setId(this.getId());
 
