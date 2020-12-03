@@ -4,6 +4,11 @@ import java.io.Serializable;
 import java.util.Set;
 import javax.persistence.*;
 
+@org.hibernate.annotations.NamedQuery(
+        name = "getNamedArtist",
+        query = "FROM Artist WHERE name = :name",
+        timeout = 1)
+
 /**
  * Artist class
  */
