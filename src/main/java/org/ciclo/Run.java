@@ -26,7 +26,7 @@ public class Run {
 
 
     public static void main(String[] args) {
-       // MainApp.main(args);
+        MainApp.main(args);
 /*
         SongDAO.listAll().forEach(song -> {
             System.out.println(song.getDisc().getArtist().getName());
@@ -38,9 +38,11 @@ public class Run {
 
 
 
-
  */
-        System.out.println(SongDAO.listByName("Godzilla"));
+
+
+
+
 
 
 

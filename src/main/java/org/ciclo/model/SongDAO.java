@@ -101,8 +101,7 @@ public class SongDAO extends Song {
 
     public boolean update() {
         boolean update = false;
-        Song song=new SongDAO();
-
+        Song song=new Song(this.getName(),this.getDuration(),this.getDisc());
         manager=Connect.getManager();
         manager.getTransaction().begin();
         if(song!=null) {
@@ -116,6 +115,8 @@ public class SongDAO extends Song {
         return update;
     }
 
+
+
     /**
      * Save and insert a somg
      *
@@ -124,9 +125,18 @@ public class SongDAO extends Song {
 
     public boolean save() {
         boolean saved = false;
+        Song song=new Song(this.getName(),this.getDuration(),this.getDisc());
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
 
-
+        manager.persist(song);
+        saved = manager.contains(song);
+        manager.getTransaction().commit();
+        manager.close();
         return saved;
+
+
+
     }
 
     /**
@@ -138,11 +148,24 @@ public class SongDAO extends Song {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
+        Song song=new Song();
         manager=Connect.getManager();
         manager.getTransaction().begin();
-        manager.createQuery("DELETE s FROM Song s WHERE s._Id = :idSong").setParameter("idSong", id);
+        if(song!=null) {
+            song = manager.find(Song.class, id);
+            manager.remove(song);
+            removed = true;
+        }
+
+        manager.getTransaction().commit();
+        manager.close();
         return removed;
-    }
+
+
+
+        }
+
+
 
     /**
      * Remove the song
@@ -153,7 +176,18 @@ public class SongDAO extends Song {
     public boolean remove() {
         boolean removed = false;
 
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Song song = manager.find(Song.class, this.getId());
+        if (song != null) {
+            manager.remove(song);
+            removed = true;
+        }
+        manager.getTransaction().commit();
+        manager.close();
+
         return removed;
+
     }
 
     /**
@@ -166,6 +200,12 @@ public class SongDAO extends Song {
     public static List<Song> searchByDisc(Disc disc) {
         List<Song> songs = new ArrayList<>();
 
+
+        manager=Connect.getManager();
+
+        List<Song> song=(List<Song>) manager.createQuery("SELECT DISTINCT s FROM Song s JOIN d.disc Disc "
+                + "WHERE Disc.Id = :id ").setParameter("id", disc.getId()).getResultList();
+        manager.close();
         return songs;
     }
 
@@ -179,6 +219,12 @@ public class SongDAO extends Song {
     public static List<Song> ListSongByPlaylist(Playlist playlist) {
         List<Song> songs = new ArrayList<>();
 
+
+        manager=Connect.getManager();
+
+        List<Song> song=(List<Song>) manager.createQuery("SELECT DISTINCT s FROM Song s JOIN s.list Playlist "
+                + "WHERE Playlist.id = :id ").setParameter("id", playlist.getId()).getResultList();
+        manager.close();
         return songs;
     }
 
