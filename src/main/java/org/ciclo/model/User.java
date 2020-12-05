@@ -214,7 +214,7 @@ public class User implements Serializable {
         if (_created == null) {
             this._created = new TreeSet<>();
         }
-        if (rp.getCreator() != this) {
+        if (!rp.getCreator().equals(this)) {
             rp.setCreator(this);
         }
         return this._created.add(rp);
