@@ -137,7 +137,7 @@ public class PlaylistUpdateFormController implements Initializable {
 
     public void showData() {
         if (id != 0) {
-            playlistDAO = new PlaylistDAO(id);
+            this.playlistDAO = new PlaylistDAO(id);
             name.setText(playlistDAO.getName());
             description.setText(playlistDAO.getDescription());
             playlistDAO.loadSongs();

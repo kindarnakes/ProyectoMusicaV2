@@ -1,5 +1,7 @@
 package org.ciclo.model;
 
+import org.hibernate.annotations.DiscriminatorFormula;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -54,13 +56,13 @@ public class Playlist implements Serializable, Comparable<Playlist> {
     /**
      * Creator of Playlist
      */
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_creador")
     private User creator;
     /**
      * Susbcribers of Playlist
      */
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "suscripcion",
             joinColumns = {@JoinColumn(name = "id_lista")},
@@ -70,7 +72,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
     /**
      * Songs of Playlist
      */
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "lista_cancion",
             joinColumns = {@JoinColumn(name = "id_lista")},
@@ -142,7 +144,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
 
     public void setCreator(User creator) {
         this.creator = creator;
-        if (!creator.getCreated().contains(this)) {
+        if ( creator!= null &&  !creator.getCreated().contains(this)) {
             creator.create(this);
         }
     }

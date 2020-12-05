@@ -1,14 +1,15 @@
 package org.ciclo.model;
 
 import org.ciclo.model.connectManager.Connect;
+import org.hibernate.Session;
 
+import javax.persistence.Entity;
 import javax.persistence.EntityManager;
 import javax.persistence.Inheritance;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
-@Inheritance
 public class PlaylistDAO extends Playlist {
     /**
      * Constructor
@@ -28,16 +29,18 @@ public class PlaylistDAO extends Playlist {
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
         if(p instanceof PlaylistDAO){
-            p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
-            p.setId(this.getId());
+            int i = p.getId();
+            p = new Playlist(p.getName(), p.getDescription(), p.getCreator(), p.getSusbcribers(), p.getSongs());
+            p.setId(i);
         }
-        p = manager.merge(p);
-        this.setId(p.getId());
-        this.setName(p.getName());
-        this.setDescription(p.getDescription());
-        this.setSongs(p.getSongs());
-        this.setSusbcribers(p.getSusbcribers());
-        this.setCreator(p.getCreator());
+        Session session = manager.unwrap(Session.class);
+        session.load(p.getCreator(), p.getCreator().getId());
+            this.setId(p.getId());
+            this.setName(p.getName());
+            this.setDescription(p.getDescription());
+            this.setSongs(p.getSongs());
+            this.setSusbcribers(p.getSusbcribers());
+            this.setCreator(p.getCreator());
         manager.getTransaction().commit();
         manager.close();
     }
@@ -218,7 +221,8 @@ public class PlaylistDAO extends Playlist {
         Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-        manager.persist(p);
+        Session session = manager.unwrap(Session.class);
+        session.saveOrUpdate(p);
         saved = manager.contains(p);
         manager.getTransaction().commit();
         manager.close();
@@ -239,8 +243,8 @@ public class PlaylistDAO extends Playlist {
         Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
         p.setId(this.getId());
         p = manager.merge(p);
-        song = manager.merge(song);
-        added = p.getSongs().add(song);
+        p.getSongs().add(song);
+        added = p.getSongs().contains(song);
         manager.getTransaction().commit();
         manager.close();
         return added;
@@ -255,14 +259,16 @@ public class PlaylistDAO extends Playlist {
 
     public boolean removeSong(Song song) {
         boolean remove = false;
-
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
         Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
         p.setId(this.getId());
         p = manager.merge(p);
         song = manager.merge(song);
-        remove = p.getSongs().remove(song);
+        p.getSongs().remove(song);
+        song.getLists().remove(p);
+        remove = !p.getSongs().contains(song);
+        song.getLists().remove(this);
         manager.getTransaction().commit();
         manager.close();
         return remove;

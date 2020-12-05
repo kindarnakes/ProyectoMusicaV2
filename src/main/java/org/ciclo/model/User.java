@@ -54,7 +54,7 @@ public class User implements Serializable {
     /**
      * Playlists to which the user is subscribed
      */
-    @ManyToMany(cascade = {CascadeType.ALL})
+    @ManyToMany(cascade = {CascadeType.MERGE})
     @JoinTable(
             name = "suscripcion",
             joinColumns = {@JoinColumn(name = "id_usuario")},
