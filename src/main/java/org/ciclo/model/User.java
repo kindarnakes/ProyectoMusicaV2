@@ -19,6 +19,12 @@ import java.util.TreeSet;
         query = "FROM User WHERE _email = :email",
         timeout = 1
 )
+@org.hibernate.annotations.NamedQuery(
+        name = "getUserAnon",
+        query = "FROM User WHERE _email = 'anonimo'",
+        timeout = 1
+)
+
 
 @Entity
 @Table(name = "usuario")
@@ -54,7 +60,7 @@ public class User implements Serializable {
     /**
      * Playlists to which the user is subscribed
      */
-    @ManyToMany(cascade = {CascadeType.MERGE})
+    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
     @JoinTable(
             name = "suscripcion",
             joinColumns = {@JoinColumn(name = "id_usuario")},
@@ -221,6 +227,9 @@ public class User implements Serializable {
      * @return True if subscribe, false if not
      */
     public boolean subscribe(Playlist rp) {
+        if(!rp.getSusbcribers().contains(this)){
+            rp.getSusbcribers().add(this);
+        }
         return this._subscribed.add(rp);
     }
 
@@ -231,6 +240,9 @@ public class User implements Serializable {
      * @return True if unsubscribe, false if not
      */
     public boolean unsubscribe(Playlist rp) {
+        if(rp.getSusbcribers().contains(this)){
+            rp.getSusbcribers().remove(this);
+        }
         return this._subscribed.remove(rp);
     }
 

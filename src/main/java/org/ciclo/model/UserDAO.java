@@ -1,6 +1,7 @@
 package org.ciclo.model;
 
 import org.ciclo.model.connectManager.Connect;
+import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -121,6 +122,16 @@ public class UserDAO extends User {
 
     public boolean save() {
         boolean saved = false;
+        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+        u.setCreated(this.getCreated());
+        u.setSuscribed(this.getSubscribed());
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Session session = manager.unwrap(Session.class);
+        session.saveOrUpdate(u);
+        saved = manager.contains(u);
+        manager.getTransaction().commit();
+        manager.close();
 
         return saved;
     }
@@ -134,6 +145,20 @@ public class UserDAO extends User {
 
     public boolean update() {
         boolean update = false;
+        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+        u.setCreated(this.getCreated());
+        u.setSuscribed(this.getSubscribed());
+        u.setId(this.getId());
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        u = manager.merge(u);
+        manager.getTransaction().commit();
+        manager.close();
+
+        if (this.equals(u)) {
+            update = true;
+        }
+
 
         return update;
     }
@@ -147,6 +172,15 @@ public class UserDAO extends User {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        User u = manager.find(User.class, id);
+        if (u != null) {
+            manager.remove(u);
+            removed = true;
+        }
+        manager.getTransaction().commit();
+        manager.close();
 
         return removed;
     }
@@ -160,6 +194,16 @@ public class UserDAO extends User {
 
     public boolean remove() {
         boolean removed = false;
+
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        User u = manager.find(User.class, this.getId());
+        if (u != null) {
+            manager.remove(u);
+            removed = true;
+        }
+        manager.getTransaction().commit();
+        manager.close();
 
         return removed;
     }
@@ -186,6 +230,18 @@ public class UserDAO extends User {
 
     public boolean subscribe(Playlist playlist) {
         boolean subscribed = false;
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+        u.setCreated(this.getCreated());
+        u.setSuscribed(this.getSubscribed());
+        u.setId(this.getId());
+        u = manager.merge(u);
+        playlist = manager.merge(playlist);
+        u.subscribe(playlist);
+        subscribed = u.getSubscribed().contains(playlist);
+        manager.getTransaction().commit();
+        manager.close();
 
         return subscribed;
     }
@@ -200,6 +256,18 @@ public class UserDAO extends User {
 
     public boolean unsubscribe(Playlist playlist) {
         boolean unsubscribed = false;
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+        u.setCreated(this.getCreated());
+        u.setSuscribed(this.getSubscribed());
+        u.setId(this.getId());
+        u = manager.merge(u);
+        playlist = manager.merge(playlist);
+        u.unsubscribe(playlist);
+        unsubscribed = !u.getSubscribed().contains(playlist);
+        manager.getTransaction().commit();
+        manager.close();
 
         return unsubscribed;
     }

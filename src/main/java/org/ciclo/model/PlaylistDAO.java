@@ -3,10 +3,7 @@ package org.ciclo.model;
 import org.ciclo.model.connectManager.Connect;
 import org.hibernate.Session;
 
-import javax.persistence.Entity;
-import javax.persistence.EntityManager;
-import javax.persistence.Inheritance;
-import javax.persistence.Query;
+import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -34,13 +31,23 @@ public class PlaylistDAO extends Playlist {
             p.setId(i);
         }
         Session session = manager.unwrap(Session.class);
-        session.load(p.getCreator(), p.getCreator().getId());
+        if(p.getCreator().getId() != null) {
+            session.load(p.getCreator(), p.getCreator().getId());
+            this.setCreator(p.getCreator());
+        }else{
+            try{
+            Query qu = manager.createNamedQuery("getUserAnon");
+            User u = (User) qu.getSingleResult();
+            this.setCreator(u);
+            p.setCreator(u);
+            }catch (PersistenceException ex){
+            }
+        }
             this.setId(p.getId());
             this.setName(p.getName());
             this.setDescription(p.getDescription());
             this.setSongs(p.getSongs());
             this.setSusbcribers(p.getSusbcribers());
-            this.setCreator(p.getCreator());
         manager.getTransaction().commit();
         manager.close();
     }
@@ -243,7 +250,8 @@ public class PlaylistDAO extends Playlist {
         Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
         p.setId(this.getId());
         p = manager.merge(p);
-        p.getSongs().add(song);
+        song = manager.merge(song);
+        p.addSong(song);
         added = p.getSongs().contains(song);
         manager.getTransaction().commit();
         manager.close();
@@ -265,10 +273,8 @@ public class PlaylistDAO extends Playlist {
         p.setId(this.getId());
         p = manager.merge(p);
         song = manager.merge(song);
-        p.getSongs().remove(song);
-        song.getLists().remove(p);
+        p.removeSong(song);
         remove = !p.getSongs().contains(song);
-        song.getLists().remove(this);
         manager.getTransaction().commit();
         manager.close();
         return remove;
