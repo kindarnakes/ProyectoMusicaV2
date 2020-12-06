@@ -234,7 +234,7 @@ public class DiscDAO extends Disc {
         
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-        if(this.getArtist()!=null) {
+      
          Disc d= manager.find(Disc.class, this.getId());
          
          
@@ -252,7 +252,7 @@ public class DiscDAO extends Disc {
              loaded = true;
          }
          
-        }
+        
         
       
         return loaded;
