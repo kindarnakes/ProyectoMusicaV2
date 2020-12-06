@@ -161,6 +161,9 @@ public class Disc implements Serializable {
      */
     public void setArtist(Artist _artist) {
         this._artist = _artist;
+        if ( _artist!= null &&  !_artist.getDiscs().contains(this)) {
+        	_artist.addDisc(this);
+        }
     }
 
     /**
@@ -228,3 +231,4 @@ public class Disc implements Serializable {
 
 
 }
+
