@@ -45,9 +45,6 @@ public class ArtistDAO extends Artist {
 
         EntityManager manager = Connect.getManager();
         List<Artist> artists = manager.createQuery("FROM Artist").getResultList();
-        for (Artist artist : artists) {
-            System.out.println(artist);
-        }
         manager.close();
 
         return artists;
@@ -62,7 +59,6 @@ public class ArtistDAO extends Artist {
     public static Artist List_Artist_By_Id(Integer id) {
         EntityManager manager = Connect.getManager();
         Artist artist = manager.find(Artist.class, id);
-        System.out.println(artist);
         manager.close();
         return artist;
     }
