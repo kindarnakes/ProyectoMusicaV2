@@ -1,4 +1,4 @@
-   
+  
 package org.ciclo.model;
 
 import java.util.ArrayList;
@@ -29,14 +29,20 @@ public class DiscDAO extends Disc {
     public DiscDAO(Disc d) {
     	EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
+        if(this.getArtist()!=null) {
+   
         Artist a = manager.merge(this.getArtist());
         this.setArtist(a);
+        }
+       
         
         this.setId(d.getId());
         this.setName(d.getName());
         this.setPhoto(d.getPhoto());
         this.setReleaseDate(d.getReleaseDate());
         this.setSongs(d.getSongs());
+        manager.getTransaction().commit();
+        manager.close();
 
     }
 
@@ -240,3 +246,5 @@ public class DiscDAO extends Disc {
         return loaded;
     }
 }
+       
+
