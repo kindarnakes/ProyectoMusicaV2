@@ -161,9 +161,7 @@ public class Disc implements Serializable {
      */
     public void setArtist(Artist _artist) {
         this._artist = _artist;
-        if ( _artist!= null &&  !_artist.getDiscs().contains(this)) {
-        	_artist.addDisc(this);
-        }
+      
     }
 
     /**
@@ -191,15 +189,12 @@ public class Disc implements Serializable {
      * @return True if add, false if not
      */
     public boolean addSong(Song song) {
-        this._songs = _songs;
         if(_songs==null){
             this._songs=new TreeSet<>();
         }
         if(!song.getDisc().equals(this)){
             song.setDisc(this);
         }
-
-
         return this._songs.add(song);
     }
 
@@ -220,6 +215,9 @@ public class Disc implements Serializable {
 
 
     public int hashCode() {
+        if(this._id == null)
+            return new Integer(-1).hashCode();
+
         return _id.hashCode();
     }
 
@@ -241,4 +239,6 @@ public class Disc implements Serializable {
 
 
 }
+
+
 
