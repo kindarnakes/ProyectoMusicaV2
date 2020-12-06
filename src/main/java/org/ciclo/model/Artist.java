@@ -142,8 +142,8 @@ public class Artist implements Serializable {
      * @return Artist's discs
      */
     public Set<Disc> getDiscs() {
-        if(this._Discs == null){
-            this._Discs = new TreeSet<>();
+        if (_Discs == null) {
+            this._Discs= new TreeSet<>();
         }
         return _Discs;
     }

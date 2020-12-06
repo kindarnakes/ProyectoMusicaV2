@@ -115,7 +115,7 @@ public class ArtistDAO extends Artist {
         boolean result = false;
 
         Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
-
+        artist.setId((this.getId()));
         EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
         if (artist != null) {
@@ -191,19 +191,26 @@ public class ArtistDAO extends Artist {
     public boolean loadDiscs() {      
         boolean loaded = false;
         
-        EntityManager manager = Connect.getManager();
+       EntityManager manager = Connect.getManager();
         manager.getTransaction().begin();
-        Artist a = new Artist(this.getName(),this.getFrom(),this.getPhoto());
-        a.setDiscs(this.getDiscs());  
-        a.setId(this.getId());
-        a = manager.merge(a);
-        a.getDiscs().forEach(disc -> {
-        });
-        this.setDiscs(a.getDiscs());
-        manager.getTransaction().commit();
-        manager.close();
-        if(this.getDiscs()!= null){
-            loaded = true;
+        if(this.getDiscs()!=null) {
+         Artist a= manager.find(Artist.class, this.getId());
+         
+         
+        
+         a.setId(this.getId());
+        
+         a.getDiscs().forEach(disc -> {
+         });
+         this.setDiscs(a.getDiscs());
+        
+        
+         manager.getTransaction().commit();
+         manager.close();
+         if(this.getDiscs() != null){
+             loaded = true;
+         }
+         
         }
         return loaded;
         
