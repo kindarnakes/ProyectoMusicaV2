@@ -231,20 +231,30 @@ public class DiscDAO extends Disc {
 
     public boolean loadSongs() {
         boolean loaded = false;
+        
         EntityManager manager = Connect.getManager();
-        Artist a = manager.merge(this.getArtist());
         manager.getTransaction().begin();
-        Disc disc = new Disc(this.getName(), this.getReleaseDate(), this.getPhoto(), a, this.getSongs());
-        disc.setId(this.getId());
-        disc = manager.merge(disc);
-        disc.getSongs().forEach(song -> {
-        });
-        this.setSongs(disc.getSongs());
-        manager.getTransaction().commit();
-        manager.close();
-        if(this.getSongs() != null){
-            loaded = true;
+        if(this.getArtist()!=null) {
+         Disc d= manager.find(Disc.class, this.getId());
+         
+         
+        
+         d.setId(this.getId());
+        
+         d.getSongs().forEach(song -> {
+         });
+         this.setSongs(d.getSongs());
+        
+        
+         manager.getTransaction().commit();
+         manager.close();
+         if(this.getSongs() != null){
+             loaded = true;
+         }
+         
         }
+        
+      
         return loaded;
     }
 }
