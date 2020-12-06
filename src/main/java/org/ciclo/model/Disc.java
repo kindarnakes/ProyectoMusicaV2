@@ -43,7 +43,7 @@ public class Disc implements Serializable {
     /**
      * Disc's songs collection
      */
-    @OneToMany(mappedBy = "disc", cascade = {CascadeType.ALL}, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "disc", cascade = {CascadeType.PERSIST}, fetch = FetchType.LAZY)
     private Set<Song> _songs;
 
     /**
@@ -239,6 +239,8 @@ public class Disc implements Serializable {
 
 
 }
+
+
 
 
 
