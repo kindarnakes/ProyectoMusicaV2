@@ -1,5 +1,7 @@
 package org.ciclo.model;
 
+import org.hibernate.annotations.DiscriminatorFormula;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -54,28 +56,19 @@ public class Playlist implements Serializable, Comparable<Playlist> {
     /**
      * Creator of Playlist
      */
-    @ManyToOne(fetch = FetchType.EAGER, cascade = {CascadeType.MERGE, CascadeType.PERSIST})
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.MERGE)
     @JoinColumn(name = "id_creador")
     private User creator;
     /**
      * Susbcribers of Playlist
      */
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "suscripcion",
-            joinColumns = {@JoinColumn(name = "id_lista")},
-            inverseJoinColumns = {@JoinColumn(name = "id_usuario")}
-    )
+    @ManyToMany(mappedBy = "_subscribed")
     private Set<User> susbcribers;
     /**
      * Songs of Playlist
      */
-    @ManyToMany(cascade = {CascadeType.ALL})
-    @JoinTable(
-            name = "lista_cancion",
-            joinColumns = {@JoinColumn(name = "id_lista")},
-            inverseJoinColumns = {@JoinColumn(name = "id_cancion")}
-    )
+
+    @ManyToMany(mappedBy = "list")
     private Set<Song> songs;
 
 
@@ -142,7 +135,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
 
     public void setCreator(User creator) {
         this.creator = creator;
-        if (!creator.getCreated().contains(this)) {
+        if ( creator!= null &&  !creator.getCreated().contains(this)) {
             creator.create(this);
         }
     }
@@ -207,7 +200,9 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      */
 
     public User getCreator() {
-        // TODO Auto-generated method stub
+        if(this.creator == null){
+            this.creator = new User("anonimo", "anonimo", "anonimo");
+        }
         return creator;
     }
 
@@ -231,6 +226,59 @@ public class Playlist implements Serializable, Comparable<Playlist> {
     public Set<Song> getSongs() {
         // TODO Auto-generated method stub
         return songs;
+    }
+
+    /**
+     * Add a subscription to playlist
+     *
+     * @param u User to subscribe
+     * @return True if subscribe, false if not
+     */
+    public boolean subscribe(User u) {
+        if(!u.getSubscribed().contains(this)){
+            u.subscribe(this);
+        }
+        return this.susbcribers.add(u);
+    }
+
+    /**
+     * Remove a subscription to playlist
+     *
+     * @param u User to unsubscribe
+     * @return True if unsubscribe, false if not
+     */
+    public boolean unsubscribe(User u) {
+        if(u.getSubscribed().contains(this)){
+            u.unsubscribe(this);
+        }
+        return this.susbcribers.remove(u);
+    }
+
+
+    /**
+     * Add a song to playlist
+     *
+     * @param s Song to add
+     * @return True if add, false if not
+     */
+    public boolean addSong(Song s) {
+        if(!s.getLists().contains(this)){
+            s.getLists().add(this);
+        }
+        return this.songs.add(s);
+    }
+
+    /**
+     * Remove a song to playlist
+     *
+     * @param s Song to unsubscribe
+     * @return True if remove, false if not
+     */
+    public boolean removeSong(Song s) {
+        if(s.getLists().contains(this)){
+            s.getLists().remove(this);
+        }
+        return this.susbcribers.remove(s);
     }
 
     public int compareTo(Playlist o) {

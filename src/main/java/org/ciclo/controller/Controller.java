@@ -443,6 +443,7 @@ public class Controller implements IController {
     public boolean createPlaylist(String name, String description, User creator) {
         Playlist playlist = new Playlist(name, description, creator, null, null);
         PlaylistDAO playlistDAO = new PlaylistDAO(playlist);
+        System.out.println(playlist.getClass());
         return playlistDAO.save();
     }
 
