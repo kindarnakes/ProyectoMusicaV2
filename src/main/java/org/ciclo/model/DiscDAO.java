@@ -1,5 +1,3 @@
-
-
 package org.ciclo.model;
 
 import java.util.ArrayList;
@@ -110,7 +108,8 @@ public class DiscDAO extends Disc {
         manager=Connect.getManager();
         manager.getTransaction().begin();
         if(disc!=null) {
-        	manager.merge(this);
+        	manager.merge(disc);
+        	manager.merge(this.getArtist());
         	update=true;
         }
         
@@ -237,3 +236,4 @@ public class DiscDAO extends Disc {
     }
 }
        
+      
