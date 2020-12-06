@@ -3,6 +3,7 @@ package org.ciclo.model;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
+import java.util.TreeSet;
 
 @org.hibernate.annotations.NamedQuery(
         name = "getNamedArtist",
@@ -141,6 +142,9 @@ public class Artist implements Serializable {
      * @return Artist's discs
      */
     public Set<Disc> getDiscs() {
+        if(this._Discs == null){
+            this._Discs = new TreeSet<>();
+        }
         return _Discs;
     }
 
@@ -160,6 +164,12 @@ public class Artist implements Serializable {
      * @return True if add, false if not
      */
     public boolean addDisc(Disc disc) {
+        if (_Discs == null) {
+            this._Discs= new TreeSet<>();
+        }
+        if (!disc.getArtist().equals(this)) {
+            disc.setArtist(this);
+        }
         return this._Discs.add(disc);
     }
 
