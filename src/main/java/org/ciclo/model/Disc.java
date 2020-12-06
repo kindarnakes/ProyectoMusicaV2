@@ -192,14 +192,14 @@ public class Disc implements Serializable {
      */
     public boolean addSong(Song song) {
         this._songs = _songs;
-       /* if(_songs==null){
+        if(_songs==null){
             this._songs=new TreeSet<>();
         }
         if(!song.getDisc().equals(this)){
             song.setDisc(this);
         }
-        
-        */
+
+
         return this._songs.add(song);
     }
 
