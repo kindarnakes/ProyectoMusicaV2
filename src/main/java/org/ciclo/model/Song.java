@@ -34,7 +34,7 @@ public class Song implements Serializable {
     /**
      * Song playlist
      */
-    @ManyToMany(cascade = {CascadeType.PERSIST, CascadeType.REMOVE})
+    @ManyToMany(cascade = {CascadeType.MERGE.PERSIST})
     @JoinTable(
             name = "lista_cancion",
             joinColumns = {@JoinColumn(name = "id_cancion")},
@@ -205,32 +205,6 @@ public class Song implements Serializable {
     public Disc getDisc() {
         // TODO Auto-generated method stub
         return disc;
-    }
-
-    /**
-     * Add a song to playlist
-     *
-     * @param p Playlist to add
-     * @return True if add, false if not
-     */
-    public boolean addPlaylist(Playlist p) {
-        if(!p.getSongs().contains(this)){
-            p.addSong(this);
-        }
-        return this.list.add(p);
-    }
-
-    /**
-     * Remove a subscription to playlist
-     *
-     * @param p Playlist to remove
-     * @return True if unsubscribe, false if not
-     */
-    public boolean removePlaylist(Playlist p) {
-        if(p.getSongs().contains(this)){
-            p.removeSong(this);
-        }
-        return this.list.remove(p);
     }
 
     public int compareTo(Song o) {
