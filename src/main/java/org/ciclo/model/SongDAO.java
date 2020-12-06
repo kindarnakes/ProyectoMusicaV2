@@ -102,17 +102,18 @@ public class SongDAO extends Song {
     public boolean update() {
         boolean update = false;
         Song song=new Song(this.getName(),this.getDuration(),this.getDisc());
+        song.setId((this.getId()));
         manager=Connect.getManager();
         manager.getTransaction().begin();
-        if(song!=null) {
-            manager.merge(song);
+        song=manager.merge(song);
+        manager.getTransaction().commit();
+        manager.close();
+        if(this.equals(song)) {
             update=true;
         }
 
-        manager.getTransaction().commit();
-        manager.close();
-
         return update;
+
     }
 
 
