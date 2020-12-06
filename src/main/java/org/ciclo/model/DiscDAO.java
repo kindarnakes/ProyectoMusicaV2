@@ -103,13 +103,14 @@ public class DiscDAO extends Disc {
 
     public boolean update() {
         boolean update = false;
+	manager.merge(this.getArtist());
         Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),this.getArtist(),this.getSongs());
         
         manager=Connect.getManager();
         manager.getTransaction().begin();
         if(disc!=null) {
         	manager.merge(disc);
-        	manager.merge(this.getArtist());
+        	
         	update=true;
         }
         
