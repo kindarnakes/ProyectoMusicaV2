@@ -28,12 +28,22 @@ public class DiscDAO extends Disc {
      */
 
     public DiscDAO(Disc d) {
-        this.setArtist(d.getArtist());
+    	EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        if(this.getArtist()!=null) {
+   
+        Artist a = manager.merge(this.getArtist());
+        this.setArtist(a);
+        }
+       
+        
         this.setId(d.getId());
         this.setName(d.getName());
         this.setPhoto(d.getPhoto());
         this.setReleaseDate(d.getReleaseDate());
         this.setSongs(d.getSongs());
+        manager.getTransaction().commit();
+        manager.close();
 
     }
 
@@ -74,9 +84,7 @@ public class DiscDAO extends Disc {
     public static Disc listById(Integer id) {
     	 manager=Connect.getManager();
     	 Disc disc=manager.find(Disc.class, id);
-    	 
-        
-         manager.close();
+    	 manager.close();
         
 
         return disc;
@@ -105,12 +113,15 @@ public class DiscDAO extends Disc {
 
     public boolean update() {
         boolean update = false;
-        Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),this.getArtist(),this.getSongs());
+        Artist a =manager.merge(this.getArtist());
+        Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),a,this.getSongs());
         
         manager=Connect.getManager();
         manager.getTransaction().begin();
         if(disc!=null) {
-        	manager.merge(this);
+        	
+        	manager.merge(disc);
+        	
         	update=true;
         }
         
@@ -221,8 +232,9 @@ public class DiscDAO extends Disc {
     public boolean loadSongs() {
         boolean loaded = false;
         EntityManager manager = Connect.getManager();
+        Artist a = manager.merge(this.getArtist());
         manager.getTransaction().begin();
-        Disc disc = new Disc(this.getName(), this.getReleaseDate(), this.getPhoto(), this.getArtist(), this.getSongs());
+        Disc disc = new Disc(this.getName(), this.getReleaseDate(), this.getPhoto(), a, this.getSongs());
         disc.setId(this.getId());
         disc = manager.merge(disc);
         disc.getSongs().forEach(song -> {
@@ -236,4 +248,3 @@ public class DiscDAO extends Disc {
         return loaded;
     }
 }
-       
