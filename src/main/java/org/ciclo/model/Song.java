@@ -34,7 +34,7 @@ public class Song implements Serializable {
     /**
      * Song playlist
      */
-    @ManyToMany(cascade = {CascadeType.MERGE.PERSIST})
+    @ManyToMany(cascade = {CascadeType.MERGE, CascadeType.PERSIST})
     @JoinTable(
             name = "lista_cancion",
             joinColumns = {@JoinColumn(name = "id_cancion")},
