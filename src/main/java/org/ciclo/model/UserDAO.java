@@ -88,8 +88,13 @@ public class UserDAO extends User {
      */
 
     public static List<User> listByName(String name) {
-        List<User> user = new ArrayList<>();
-
+        EntityManager manager = Connect.getManager();
+        manager.getTransaction().begin();
+        Query qu = manager.createNamedQuery("getNamedUser");
+        qu.setParameter("name", name);
+        List<User> user = qu.getResultList();
+        manager.getTransaction().commit();
+        manager.close();
         return user;
     }
 

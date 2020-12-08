@@ -24,6 +24,11 @@ import java.util.TreeSet;
         query = "FROM User WHERE _email = 'anonimo'",
         timeout = 1
 )
+@org.hibernate.annotations.NamedQuery(
+        name = "getNamedUser",
+        query = "FROM User WHERE _name = :name",
+        timeout = 1
+)
 
 
 @Entity
