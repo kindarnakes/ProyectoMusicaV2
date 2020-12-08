@@ -29,6 +29,11 @@ import java.util.TreeSet;
         query = "FROM User WHERE _name = :name",
         timeout = 1
 )
+@org.hibernate.annotations.NamedQuery(
+        name = "getUserBySubscriber",
+        query = "SELECT DISTINCT u FROM User u JOIN u._subscribed Playlist WHERE Playlist.id = :id",
+        timeout = 1
+)
 
 
 @Entity
@@ -232,9 +237,7 @@ public class User implements Serializable {
      * @return True if subscribe, false if not
      */
     public boolean subscribe(Playlist rp) {
-        if(!rp.getSusbcribers().contains(this)){
-            rp.getSusbcribers().add(this);
-        }
+        rp.getSusbcribers().add(this);
         return this._subscribed.add(rp);
     }
 
@@ -245,9 +248,7 @@ public class User implements Serializable {
      * @return True if unsubscribe, false if not
      */
     public boolean unsubscribe(Playlist rp) {
-        if(rp.getSusbcribers().contains(this)){
-            rp.getSusbcribers().remove(this);
-        }
+        rp.getSusbcribers().remove(this);
         return this._subscribed.remove(rp);
     }
 

@@ -83,8 +83,6 @@ public class UserFormController implements Initializable {
         name.setText(userDAO.getName());
         email.setText(userDAO.getEmail());
         photo.setText(userDAO.getPhoto());
-        userDAO.loadSubscribed();
-        userDAO.loadCreated();
 
         _listSubscribed = FXCollections.observableList(new ArrayList<>(userDAO.getSubscribed()));
         _listSubscribedFiltered = new FilteredList<>(_listSubscribed);

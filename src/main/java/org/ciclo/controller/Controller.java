@@ -382,17 +382,6 @@ public class Controller implements IController {
         return UserDAO.remove(id);
     }
 
-    /**
-     * Remove a user by email
-     *
-     * @param email unique for all user
-     * @return the method remove a user
-     */
-
-    @Override
-    public boolean removeUser(String email) {
-        return UserDAO.remove(email);
-    }
 
     /**
      * List all playlist

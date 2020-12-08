@@ -4,6 +4,7 @@ import org.ciclo.model.connectManager.Connect;
 import org.hibernate.Session;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
@@ -50,12 +51,19 @@ public class UserDAO extends User {
 
 
     public static List<User> listAll() {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getAllUsers");
-        List<User> user = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        List<User> user = new ArrayList<>();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getAllUsers");
+            user = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
 
         return user;
     }
@@ -68,15 +76,22 @@ public class UserDAO extends User {
      */
 
     public static User listById(Integer id) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        User user = manager.find(User.class, id);
-        user.getCreated().forEach(playlist -> {
-        });
-        user.getSubscribed().forEach(playlist -> {
-        });
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        User user = new User();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            user = manager.find(User.class, id);
+            user.getCreated().forEach(playlist -> {
+            });
+            user.getSubscribed().forEach(playlist -> {
+            });
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return user;
     }
 
@@ -88,13 +103,20 @@ public class UserDAO extends User {
      */
 
     public static List<User> listByName(String name) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getNamedUser");
-        qu.setParameter("name", name);
-        List<User> user = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        List<User> user = new ArrayList<>();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getNamedUser");
+            qu.setParameter("name", name);
+            user = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return user;
     }
 
@@ -106,16 +128,23 @@ public class UserDAO extends User {
      */
 
     public static User listByEmail(String email) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getUserByEmail");
-        qu.setParameter("email", email);
-        User user = (User) qu.getSingleResult();
-        user.getCreated().forEach(playlist -> {
+        EntityManager manager = null;
+        User user = new User();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getUserByEmail");
+            qu.setParameter("email", email);
+            user = (User) qu.getSingleResult();
+            user.getCreated().forEach(playlist -> {
 
-        });
-        manager.getTransaction().commit();
-        manager.close();
+            });
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return user;
     }
 
@@ -127,16 +156,22 @@ public class UserDAO extends User {
 
     public boolean save() {
         boolean saved = false;
-        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
-        u.setCreated(this.getCreated());
-        u.setSuscribed(this.getSubscribed());
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Session session = manager.unwrap(Session.class);
-        session.saveOrUpdate(u);
-        saved = manager.contains(u);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+            u.setCreated(this.getCreated());
+            u.setSuscribed(this.getSubscribed());
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Session session = manager.unwrap(Session.class);
+            session.saveOrUpdate(u);
+            saved = manager.contains(u);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
 
         return saved;
     }
@@ -150,20 +185,25 @@ public class UserDAO extends User {
 
     public boolean update() {
         boolean update = false;
-        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
-        u.setCreated(this.getCreated());
-        u.setSuscribed(this.getSubscribed());
-        u.setId(this.getId());
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        u = manager.merge(u);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+            u.setCreated(this.getCreated());
+            u.setSuscribed(this.getSubscribed());
+            u.setId(this.getId());
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            u = manager.merge(u);
+            manager.getTransaction().commit();
+            manager.close();
 
-        if (this.equals(u)) {
-            update = true;
+            if (this.equals(u)) {
+                update = true;
+            }
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
-
 
         return update;
     }
@@ -177,15 +217,21 @@ public class UserDAO extends User {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        User u = manager.find(User.class, id);
-        if (u != null) {
-            manager.remove(u);
-            removed = true;
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            User u = manager.find(User.class, id);
+            if (u != null) {
+                manager.remove(u);
+                removed = true;
+            }
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
-        manager.getTransaction().commit();
-        manager.close();
 
         return removed;
     }
@@ -199,32 +245,26 @@ public class UserDAO extends User {
 
     public boolean remove() {
         boolean removed = false;
+        EntityManager manager = null;
+        try {
 
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        User u = manager.find(User.class, this.getId());
-        if (u != null) {
-            manager.remove(u);
-            removed = true;
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            User u = manager.find(User.class, this.getId());
+            if (u != null) {
+                manager.remove(u);
+                removed = true;
+            }
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
-        manager.getTransaction().commit();
-        manager.close();
 
         return removed;
     }
 
-    /**
-     * Remove a user with that email
-     *
-     * @param email uniqe for all the user
-     * @return true if the user has been removed, false if not
-     */
-
-    public static boolean remove(String email) {
-        boolean removed = false;
-
-        return removed;
-    }
 
     /**
      * Subscribe a user in a playlist
@@ -235,18 +275,24 @@ public class UserDAO extends User {
 
     public boolean subscribe(Playlist playlist) {
         boolean subscribed = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
-        u.setCreated(this.getCreated());
-        u.setSuscribed(this.getSubscribed());
-        u.setId(this.getId());
-        u = manager.merge(u);
-        playlist = manager.merge(playlist);
-        u.subscribe(playlist);
-        subscribed = u.getSubscribed().contains(playlist);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+            u.setCreated(this.getCreated());
+            u.setSuscribed(this.getSubscribed());
+            u.setId(this.getId());
+            u = manager.merge(u);
+            playlist = manager.merge(playlist);
+            u.subscribe(playlist);
+            subscribed = u.getSubscribed().contains(playlist);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
 
         return subscribed;
     }
@@ -261,45 +307,28 @@ public class UserDAO extends User {
 
     public boolean unsubscribe(Playlist playlist) {
         boolean unsubscribed = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
-        u.setCreated(this.getCreated());
-        u.setSuscribed(this.getSubscribed());
-        u.setId(this.getId());
-        u = manager.merge(u);
-        playlist = manager.merge(playlist);
-        u.unsubscribe(playlist);
-        unsubscribed = !u.getSubscribed().contains(playlist);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            User u = new User(this.getName(), this.getPhoto(), this.getEmail());
+            u.setCreated(this.getCreated());
+            u.setSuscribed(this.getSubscribed());
+            u.setId(this.getId());
+            u = manager.merge(u);
+            playlist = manager.merge(playlist);
+            u.unsubscribe(playlist);
+            unsubscribed = !u.getSubscribed().contains(playlist);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
 
         return unsubscribed;
     }
 
-    /**
-     * Load all user creator
-     *
-     * @return true if the user has been loaded, false if not
-     */
-
-    public boolean loadCreated() {
-        boolean load = false;
-
-        return load;
-    }
-
-    /**
-     * Load all user subcribed
-     *
-     * @return true if the user has been loaded, false if not
-     */
-
-    public boolean loadSubscribed() {
-        boolean load = false;
-
-        return load;
-    }
 
     /**
      * Load all user susbcriber in a playlist
@@ -310,16 +339,21 @@ public class UserDAO extends User {
 
     public static List<User> listUserSubscribed(Playlist playlist) {
         List<User> user = new ArrayList<>();
-
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getUserBySubscriber");
+            qu.setParameter("id", playlist.getId());
+            user = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return user;
 
-    }
-
-    public User toUser() {
-        User u = new User(this.getName(), this.getPhoto(), this.getEmail());
-        u.setId(this.getId());
-
-        return u;
     }
 
 }

@@ -3,7 +3,9 @@ package org.ciclo.model;
 import org.ciclo.model.connectManager.Connect;
 import org.hibernate.Session;
 
-import javax.persistence.*;
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
+import javax.persistence.Query;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -23,33 +25,41 @@ public class PlaylistDAO extends Playlist {
      */
 
     public PlaylistDAO(Playlist p) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        if(p instanceof PlaylistDAO){
-            int i = p.getId();
-            p = new Playlist(p.getName(), p.getDescription(), p.getCreator(), p.getSusbcribers(), p.getSongs());
-            p.setId(i);
-        }
-        Session session = manager.unwrap(Session.class);
-        if(p.getCreator().getId() != null) {
-            session.load(p.getCreator(), p.getCreator().getId());
-            this.setCreator(p.getCreator());
-        }else{
-            try{
-            Query qu = manager.createNamedQuery("getUserAnon");
-            User u = (User) qu.getSingleResult();
-            this.setCreator(u);
-            p.setCreator(u);
-            }catch (PersistenceException ex){
+
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            if (p instanceof PlaylistDAO) {
+                int i = p.getId();
+                p = new Playlist(p.getName(), p.getDescription(), p.getCreator(), p.getSusbcribers(), p.getSongs());
+                p.setId(i);
             }
-        }
+            Session session = manager.unwrap(Session.class);
+            if (p.getCreator().getId() != null) {
+                session.load(p.getCreator(), p.getCreator().getId());
+                this.setCreator(p.getCreator());
+            } else {
+                try {
+                    Query qu = manager.createNamedQuery("getUserAnon");
+                    User u = (User) qu.getSingleResult();
+                    this.setCreator(u);
+                    p.setCreator(u);
+                } catch (PersistenceException ex) {
+                }
+            }
             this.setId(p.getId());
             this.setName(p.getName());
             this.setDescription(p.getDescription());
             this.setSongs(p.getSongs());
             this.setSusbcribers(p.getSusbcribers());
-        manager.getTransaction().commit();
-        manager.close();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+
+        }
     }
 
     /**
@@ -69,12 +79,20 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static List<Playlist> List_All_Playlist() {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getAllPlaylist");
-        List<Playlist> playlist = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        List<Playlist> playlist = new ArrayList<>();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getAllPlaylist");
+            playlist = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+
+        }
         return playlist;
     }
 
@@ -86,11 +104,18 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static Playlist List_Playlist_By_Id(Integer id) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Playlist p = manager.find(Playlist.class, id);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        Playlist p = new Playlist();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            p = manager.find(Playlist.class, id);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return p;
     }
 
@@ -102,13 +127,20 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static List<Playlist> listByName(String name) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getNamed");
-        qu.setParameter("name", name);
-        List<Playlist> playlist = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        List<Playlist> playlist = new ArrayList<>();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getNamed");
+            qu.setParameter("name", name);
+            playlist = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return playlist;
     }
 
@@ -121,13 +153,19 @@ public class PlaylistDAO extends Playlist {
 
 
     public static List<Playlist> listBySong(Song song) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getBySong");
-        qu.setParameter("id", song.getId());
-        List<Playlist> playlist = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        List<Playlist> playlist = new ArrayList<>();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getBySong");
+            qu.setParameter("id", song.getId());
+            playlist = qu.getResultList();
+            manager.getTransaction().commit();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return playlist;
     }
 
@@ -139,13 +177,22 @@ public class PlaylistDAO extends Playlist {
      */
 
     public static List<Playlist> listUserCreated(User user) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getByUser");
-        qu.setParameter("id", user.getId());
-        List<Playlist> playlist = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+
+        EntityManager manager = null;
+        List<Playlist> playlist = new ArrayList<>();
+
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getByUser");
+            qu.setParameter("id", user.getId());
+            playlist = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return playlist;
     }
 
@@ -158,16 +205,22 @@ public class PlaylistDAO extends Playlist {
 
     public boolean update() {
         boolean update = false;
-        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
-        p.setId(this.getId());
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        p = manager.merge(p);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+            p.setId(this.getId());
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            p = manager.merge(p);
+            manager.getTransaction().commit();
+            manager.close();
 
-        if (this.equals(p)) {
-            update = true;
+            if (this.equals(p)) {
+                update = true;
+            }
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
 
         return update;
@@ -182,15 +235,21 @@ public class PlaylistDAO extends Playlist {
 
     public static boolean remove(Integer id) {
         boolean removed = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Playlist p = manager.find(Playlist.class, id);
-        if (p != null) {
-            manager.remove(p);
-            removed = true;
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Playlist p = manager.find(Playlist.class, id);
+            if (p != null) {
+                manager.remove(p);
+                removed = true;
+            }
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
-        manager.getTransaction().commit();
-        manager.close();
         return removed;
     }
 
@@ -203,16 +262,22 @@ public class PlaylistDAO extends Playlist {
 
     public boolean remove() {
         boolean removed = false;
+        EntityManager manager = null;
 
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Playlist p = manager.find(Playlist.class, this.getId());
-        if (p != null) {
-            manager.remove(p);
-            removed = true;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Playlist p = manager.find(Playlist.class, this.getId());
+            if (p != null) {
+                manager.remove(p);
+                removed = true;
+            }
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
-        manager.getTransaction().commit();
-        manager.close();
 
         return removed;
     }
@@ -225,14 +290,20 @@ public class PlaylistDAO extends Playlist {
 
     public boolean save() {
         boolean saved = false;
-        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Session session = manager.unwrap(Session.class);
-        session.saveOrUpdate(p);
-        saved = manager.contains(p);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Session session = manager.unwrap(Session.class);
+            session.saveOrUpdate(p);
+            saved = manager.contains(p);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return saved;
     }
 
@@ -245,16 +316,22 @@ public class PlaylistDAO extends Playlist {
 
     public boolean addSong(Song song) {
         boolean added = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
-        p.setId(this.getId());
-        p = manager.merge(p);
-        song = manager.merge(song);
-        p.addSong(song);
-        added = p.getSongs().contains(song);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+            p.setId(this.getId());
+            p = manager.merge(p);
+            song = manager.merge(song);
+            p.addSong(song);
+            added = p.getSongs().contains(song);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return added;
     }
 
@@ -267,16 +344,22 @@ public class PlaylistDAO extends Playlist {
 
     public boolean removeSong(Song song) {
         boolean remove = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
-        p.setId(this.getId());
-        p = manager.merge(p);
-        song = manager.merge(song);
-        p.removeSong(song);
-        remove = !p.getSongs().contains(song);
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+            p.setId(this.getId());
+            p = manager.merge(p);
+            song = manager.merge(song);
+            p.removeSong(song);
+            remove = !p.getSongs().contains(song);
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return remove;
     }
 
@@ -289,13 +372,20 @@ public class PlaylistDAO extends Playlist {
 
 
     public static List<Playlist> listPlaylistSuscribers(User user) {
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getBySubscriber");
-        qu.setParameter("id", user.getId());
-        List<Playlist> playlist = qu.getResultList();
-        manager.getTransaction().commit();
-        manager.close();
+        EntityManager manager = null;
+        List<Playlist> playlist = new ArrayList<>();
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getBySubscriber");
+            qu.setParameter("id", user.getId());
+            playlist = qu.getResultList();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
+        }
         return playlist;
 
     }
@@ -308,18 +398,24 @@ public class PlaylistDAO extends Playlist {
 
     public boolean loadSongs() {
         boolean loaded = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
-        p.setId(this.getId());
-        p = manager.merge(p);
-        p.getSongs().forEach(song -> {
-        });
-        this.setSongs(p.getSongs());
-        manager.getTransaction().commit();
-        manager.close();
-        if(this.getSongs() != null){
-            loaded = true;
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Playlist p = new Playlist(this.getName(), this.getDescription(), this.getCreator(), this.getSusbcribers(), this.getSongs());
+            p.setId(this.getId());
+            p = manager.merge(p);
+            p.getSongs().forEach(song -> {
+            });
+            this.setSongs(p.getSongs());
+            manager.getTransaction().commit();
+            manager.close();
+            if (this.getSongs() != null) {
+                loaded = true;
+            }
+        } catch (PersistenceException ex) {
+            if (manager != null)
+                manager.close();
         }
         return loaded;
     }

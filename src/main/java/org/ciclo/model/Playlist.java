@@ -1,7 +1,5 @@
 package org.ciclo.model;
 
-import org.hibernate.annotations.DiscriminatorFormula;
-
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Set;
@@ -135,7 +133,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
 
     public void setCreator(User creator) {
         this.creator = creator;
-        if ( creator!= null &&  !creator.getCreated().contains(this)) {
+        if (creator != null && !creator.getCreated().contains(this)) {
             creator.create(this);
         }
     }
@@ -200,7 +198,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      */
 
     public User getCreator() {
-        if(this.creator == null){
+        if (this.creator == null) {
             this.creator = new User("anonimo", "anonimo", "anonimo");
         }
         return creator;
@@ -235,7 +233,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      * @return True if subscribe, false if not
      */
     public boolean subscribe(User u) {
-        if(!u.getSubscribed().contains(this)){
+        if (!u.getSubscribed().contains(this)) {
             u.subscribe(this);
         }
         return this.susbcribers.add(u);
@@ -248,7 +246,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      * @return True if unsubscribe, false if not
      */
     public boolean unsubscribe(User u) {
-        if(u.getSubscribed().contains(this)){
+        if (u.getSubscribed().contains(this)) {
             u.unsubscribe(this);
         }
         return this.susbcribers.remove(u);
@@ -262,9 +260,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      * @return True if add, false if not
      */
     public boolean addSong(Song s) {
-        if(!s.getLists().contains(this)){
-            s.getLists().add(this);
-        }
+        s.getLists().add(this);
         return this.songs.add(s);
     }
 
@@ -275,9 +271,7 @@ public class Playlist implements Serializable, Comparable<Playlist> {
      * @return True if remove, false if not
      */
     public boolean removeSong(Song s) {
-        if(s.getLists().contains(this)){
-            s.getLists().remove(this);
-        }
+        s.getLists().remove(this);
         return this.susbcribers.remove(s);
     }
 

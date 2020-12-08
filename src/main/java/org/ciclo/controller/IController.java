@@ -62,8 +62,6 @@ public interface IController {
 
     boolean removeUser(Integer id);
 
-    boolean removeUser(String email);
-
     //Playlist
     List<Playlist> listAllPlaylist();
 
