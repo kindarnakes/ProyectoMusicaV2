@@ -6,7 +6,9 @@
         <setting name="validation-enabled" value="true" />
         <setting name="provider-name" value="Hibernate" />
         <datasource-mapping>
+          <factory-entry name="MariaDB" />
           <factory-entry name="aplicacion" value="11c474d1-76e2-4f25-9aba-afd81bccbe99" />
+          <factory-entry name="h2" />
         </datasource-mapping>
         <naming-strategy-map>
           <unit-entry name="aplicacion" />
