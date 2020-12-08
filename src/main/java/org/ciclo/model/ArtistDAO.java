@@ -1,10 +1,12 @@
 package org.ciclo.model;
 
+import java.util.ArrayList;
 import org.ciclo.model.connectManager.Connect;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
+import javax.persistence.PersistenceException;
 
 public class ArtistDAO extends Artist {
 
@@ -42,11 +44,17 @@ public class ArtistDAO extends Artist {
      * @return All the artist
      */
     public static List<Artist> List_All_Artist() {
-
-        EntityManager manager = Connect.getManager();
-        List<Artist> artists = manager.createQuery("FROM Artist").getResultList();
-        manager.close();
-
+        List<Artist> artists = new ArrayList<>();
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            artists = manager.createQuery("FROM Artist").getResultList();
+            manager.clear();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
+        }
         return artists;
     }
 
@@ -57,9 +65,17 @@ public class ArtistDAO extends Artist {
      * @return the artist with that id
      */
     public static Artist List_Artist_By_Id(Integer id) {
-        EntityManager manager = Connect.getManager();
-        Artist artist = manager.find(Artist.class, id);
-        manager.close();
+        EntityManager manager = null;
+        Artist artist = new Artist();
+        try {
+            manager = Connect.getManager();
+            artist = manager.find(Artist.class, id);
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
+        }
         return artist;
     }
 
@@ -70,14 +86,22 @@ public class ArtistDAO extends Artist {
      * @return the artist with that name
      */
     public static Artist List_Artist_By_Name(String name) {
+        Artist artist = new Artist();
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Query qu = manager.createNamedQuery("getNamed");
+            qu.setParameter("name", name);
+            artist = (Artist) qu.getSingleResult();
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
+        }
 
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Query qu = manager.createNamedQuery("getNamed");
-        qu.setParameter("name", name);
-        Artist artist = (Artist) qu.getSingleResult();
-        manager.getTransaction().commit();
-        manager.close();
         return artist;
 
     }
@@ -89,16 +113,23 @@ public class ArtistDAO extends Artist {
      */
     public boolean Insert_Artist() {
         boolean result = false;
-
-        Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
-        artist.setDiscs(this.getDiscs());
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        if (artist != null) {
-            manager.persist(artist);
+        EntityManager manager = null;
+        try {
+            Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
+            artist.setDiscs(this.getDiscs());
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            if (artist != null) {
+                manager.persist(artist);
+            }
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
         }
-        manager.getTransaction().commit();
-        manager.close();
+
         return result;
     }
 
@@ -109,18 +140,24 @@ public class ArtistDAO extends Artist {
      */
     public boolean Update_Artist() {
         boolean result = false;
+        EntityManager manager = null;
+        try {
+            Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
+            artist.setId((this.getId()));
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            if (artist != null) {
+                manager.merge(artist);
+                result = true;
+            }
 
-        Artist artist = new Artist(this.getName(), this.getPhoto(), this.getFrom());
-        artist.setId((this.getId()));
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        if (artist != null) {
-            manager.merge(artist);
-            result = true;
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
         }
-
-        manager.getTransaction().commit();
-        manager.close();
 
         return result;
     }
@@ -133,18 +170,27 @@ public class ArtistDAO extends Artist {
      */
     public static boolean Remove_Artist_by_Id(Integer id) {
         boolean result = false;
-        Artist artist = new Artist();
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
+        EntityManager manager = null;
 
-        if (artist != null) {
-            artist = manager.find(Artist.class, id);
-            manager.remove(artist);
-            result = true;
+        try {
+            Artist artist = new Artist();
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+
+            if (artist != null) {
+                artist = manager.find(Artist.class, id);
+                manager.remove(artist);
+                result = true;
+            }
+
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
         }
 
-        manager.getTransaction().commit();
-        manager.close();
         return result;
     }
 
@@ -156,7 +202,7 @@ public class ArtistDAO extends Artist {
      */
     public static boolean Remove_Artist_by_Name(String name) {
         boolean result = false;
-       
+
         return result;
     }
 
@@ -167,49 +213,62 @@ public class ArtistDAO extends Artist {
      */
     public boolean remove_Artist() {
         boolean result = false;
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        Artist a = manager.find(Artist.class, this.getId());
-        if (a != null) {
-            manager.remove(a);
-            result = true;
+        EntityManager manager = null;
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            Artist a = manager.find(Artist.class, this.getId());
+            if (a != null) {
+                manager.remove(a);
+                result = true;
+            }
+            manager.getTransaction().commit();
+            manager.close();
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
         }
-        manager.getTransaction().commit();
-        manager.close();
+
         return result;
     }
-    
+
     /**
      * Load all the disc from the artist
      *
      * @return
      */
-    public boolean loadDiscs() {      
+    public boolean loadDiscs() {
         boolean loaded = false;
-        
-       EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-        if(this.getDiscs()!=null) {
-         Artist a= manager.find(Artist.class, this.getId());
-         
-         
-        
-         a.setId(this.getId());
-        
-         a.getDiscs().forEach(disc -> {
-         });
-         this.setDiscs(a.getDiscs());
-        
-        
-         manager.getTransaction().commit();
-         manager.close();
-         if(this.getDiscs() != null){
-             loaded = true;
-         }
-         
+        EntityManager manager = null;
+        Artist a = new Artist();
+
+        try {
+            manager = Connect.getManager();
+            manager.getTransaction().begin();
+            if (this.getDiscs() != null) {
+                a = manager.find(Artist.class, this.getId());
+
+                a.setId(this.getId());
+
+                a.getDiscs().forEach(disc -> {
+                });
+                this.setDiscs(a.getDiscs());
+
+                manager.getTransaction().commit();
+                manager.close();
+                if (this.getDiscs() != null) {
+                    loaded = true;
+                }
+            }
+
+        } catch (PersistenceException ex) {
+            if (manager != null) {
+                manager.close();
+            }
         }
         return loaded;
-        
+
     }
 
 }
