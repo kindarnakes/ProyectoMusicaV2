@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.persistence.EntityManager;
+import javax.persistence.PersistenceException;
 
 import org.ciclo.model.connectManager.Connect;
 
@@ -58,12 +59,19 @@ public class DiscDAO extends Disc {
      */
 
     public static List<Disc> listAll() {
-       
-        manager=Connect.getManager();
-        List<Disc> disc=manager.createQuery("FROM Disc").getResultList();
-        
+    	List<Disc> disc= new ArrayList<>();
+       try {
+    	   manager=Connect.getManager();
+           disc=manager.createQuery("FROM Disc").getResultList();
+            
+          
+            manager.close();
+	} catch (PersistenceException e) {
+		if(manager != null)
+            manager.close();
+		// TODO: handle exception
+	}
       
-        manager.close();
 
         return disc;
     }
@@ -77,8 +85,18 @@ public class DiscDAO extends Disc {
 
     public static Disc listById(Integer id) {
     	 manager=Connect.getManager();
-    	 Disc disc=manager.find(Disc.class, id);
-    	 manager.close();
+    	 Disc disc= new Disc();
+    	 try {
+    		 disc=manager.find(Disc.class, id);
+    		 manager.close();
+			
+		} catch (PersistenceException e) {
+			// TODO: handle exception
+			if(manager != null)
+                manager.close();
+		}
+    	 
+    	 
         
 
         return disc;
@@ -93,9 +111,19 @@ public class DiscDAO extends Disc {
 
 
     public static List<Disc> listByName(String name) {
+    	List<Disc> disc= new ArrayList<>();
     	 manager=Connect.getManager();
-    	 List<Disc> disc=(List<Disc>) manager.createQuery("Select d FROM Disc d WHERE d._name = :discName").setParameter("discName", name).getResultList();
-    	 manager.close();
+    	 try {
+    		 disc=(List<Disc>) manager.createQuery("Select d FROM Disc d WHERE d._name = :discName").setParameter("discName", name).getResultList();
+	    	 manager.close();
+		} catch (PersistenceException e) {
+			if(manager != null)
+                manager.close();
+			
+			
+			// TODO: handle exception
+		}
+    	 
         return disc;
     }
 
@@ -110,20 +138,28 @@ public class DiscDAO extends Disc {
         
         Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),this.getArtist(),this.getSongs());
         disc.setId(this.getId());
+        try {
+        	 manager=Connect.getManager();
+             manager.getTransaction().begin();
+            
+             	
+             	manager.merge(disc);
+             	
+            
+             
+             manager.getTransaction().commit();
+             manager.close();
+             if(this.equals(disc)) {
+                 update=true;
+             }
+			
+		} catch (PersistenceException e) {
+			if(manager != null)
+                manager.close();
+			// TODO: handle exception
+		}
         
-        manager=Connect.getManager();
-        manager.getTransaction().begin();
-       
-        	
-        	manager.merge(disc);
-        	
-       
-        
-        manager.getTransaction().commit();
-        manager.close();
-        if(this.equals(disc)) {
-            update=true;
-        }
+    
 
         
         return update;
@@ -139,19 +175,26 @@ public class DiscDAO extends Disc {
     public static boolean remove(Integer id) {
     	 Disc disc=new Disc();
     	 boolean removed = false;
-         manager=Connect.getManager();
-         manager.getTransaction().begin();
-         
-         if(disc!=null) {
-          disc= manager.find(Disc.class, id);
-         manager.remove(disc);
-         removed=true;
-         }
-         
-        
-         
-         manager.getTransaction().commit();
-         manager.close();
+    	 try {
+    		  manager=Connect.getManager();
+    	         manager.getTransaction().begin();
+    	         
+    	         if(disc!=null) {
+    	          disc= manager.find(Disc.class, id);
+    	         manager.remove(disc);
+    	         removed=true;
+    	         }
+    	         
+    	        
+    	         
+    	         manager.getTransaction().commit();
+    	         manager.close();
+			
+		} catch (PersistenceException e) {
+			if(manager != null)
+                manager.close();
+		}
+       
    
 
          return removed;
@@ -165,16 +208,25 @@ public class DiscDAO extends Disc {
 
     public boolean remove() {
     	  boolean removed = false;
+    	  Disc disc=new Disc();
+    	  try {
+    		     EntityManager manager = Connect.getManager();
+    	          manager.getTransaction().begin();
+    	           disc = manager.find(Disc.class, this.getId());
+    	          if (disc != null) {
+    	              manager.remove(disc);
+    	              removed = true;
+    	          }
+    	          manager.getTransaction().commit();
+    	          manager.close();
+			
+		} catch (Exception e) {
+			if(manager != null)
+                manager.close();
+			// TODO: handle exception
+		}
 
-          EntityManager manager = Connect.getManager();
-          manager.getTransaction().begin();
-          Disc disc = manager.find(Disc.class, this.getId());
-          if (disc != null) {
-              manager.remove(disc);
-              removed = true;
-          }
-          manager.getTransaction().commit();
-          manager.close();
+          
 
           return removed;
     }
@@ -186,16 +238,25 @@ public class DiscDAO extends Disc {
      */
 
     public boolean save() {
+    	
     	   boolean saved = false;
     	   Disc disc=new Disc(this.getName(),this.getReleaseDate(),this.getPhoto(),this.getArtist(),this.getSongs());
-           EntityManager manager = Connect.getManager();
-           manager.getTransaction().begin();
-           disc.setArtist(manager.merge(disc.getArtist()));
-           
-           manager.persist(disc);
-           saved = manager.contains(disc);
-           manager.getTransaction().commit();
-           manager.close();
+    	   try {
+    		   EntityManager manager = Connect.getManager();
+               manager.getTransaction().begin();
+               disc.setArtist(manager.merge(disc.getArtist()));
+               
+               manager.persist(disc);
+               saved = manager.contains(disc);
+               manager.getTransaction().commit();
+               manager.close();
+			
+		} catch (PersistenceException e) {
+			if(manager != null)
+                manager.close();
+			// TODO: handle exception
+		}
+        
            return saved;
     }
 
@@ -207,15 +268,20 @@ public class DiscDAO extends Disc {
      */
 
     public static List<Disc> searchByAuthor(Artist artist) {
+    	List<Disc> disc= new ArrayList<>();
+    	try {
+    		 manager=Connect.getManager();
+    	  	  disc=(List<Disc>) manager.createQuery("SELECT d FROM Disc d JOIN d._artist Artist "
+    	     	 		+ "WHERE Artist._id = :id ").setParameter("id", artist.getId()).getResultList();
+    	  	 manager.close();
+			
+		} catch (PersistenceException e) {
+			if(manager != null)
+                manager.close();
+			// TODO: handle exception
+		}
        
-        manager=Connect.getManager();
-        
-   	 List<Disc> disc=(List<Disc>) manager.createQuery("SELECT d FROM Disc d JOIN d._artist Artist "
-   	 		+ "WHERE Artist._id = :id ").setParameter("id", artist.getId()).getResultList();
-  
-   	 manager.close();
-   	 
-  
+
    	 
 
         return disc;
@@ -229,27 +295,35 @@ public class DiscDAO extends Disc {
      */
 
     public boolean loadSongs() {
+    	Disc d= new Disc();
         boolean loaded = false;
-        
-        EntityManager manager = Connect.getManager();
-        manager.getTransaction().begin();
-      
-         Disc d= manager.find(Disc.class, this.getId());
+        try {
+        	  manager = Connect.getManager();
+              manager.getTransaction().begin();
+            
+                d= manager.find(Disc.class, this.getId());
+               
+               
+              
+               d.setId(this.getId());
+              
+               d.getSongs().forEach(song -> {
+               });
+               this.setSongs(d.getSongs());
+              
+              
+               manager.getTransaction().commit();
+               manager.close();
+               if(this.getSongs() != null){
+                   loaded = true;
+               }
+			
+		} catch (PersistenceException e) {
+			if(manager != null)
+                manager.close();
+			// TODO: handle exception
+		}
          
-         
-        
-         d.setId(this.getId());
-        
-         d.getSongs().forEach(song -> {
-         });
-         this.setSongs(d.getSongs());
-        
-        
-         manager.getTransaction().commit();
-         manager.close();
-         if(this.getSongs() != null){
-             loaded = true;
-         }
          
         
         
@@ -257,4 +331,6 @@ public class DiscDAO extends Disc {
         return loaded;
     }
 }
+
+
 
