@@ -7,7 +7,7 @@ import javax.persistence.Persistence;
 
 public class Connect {
 
-    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("aplicacion");
+    private static final EntityManagerFactory emf = Persistence.createEntityManagerFactory("MariaDB");
     private static EntityManager manager = null;
 
     public static EntityManager getManager() {
